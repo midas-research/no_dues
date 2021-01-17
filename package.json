@@ -1,0 +1,15 @@
+{
+  "name": "no_dues",
+  "version": "1.0.0",
+  "description": "A web app for automating no dues receipts for students leaving the college",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Soumyadeep Paul",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
