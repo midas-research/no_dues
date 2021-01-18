@@ -6,5 +6,10 @@
     </head>
     <body>
         <h1>Sign In Page</h1>
+        <form action="/user/createSession" method="POST">
+            <input type="text" name="email" placeholder="Enter email" required/>
+            <input type="password" name="password" placeholder="Enter password" required/>
+            <input type="submit" value="Sign In">
+        </form>
     </body>
 </html>
