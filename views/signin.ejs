@@ -2,14 +2,88 @@
 <html>
     <head>
         <title><%= title %></title>
-        <link rel="stylesheet" type="text/css" href="/css/signin.css"/>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/signup.css"/>
     </head>
     <body>
-        <h1>Sign In Page</h1>
-        <form action="/user/createSession" method="POST">
-            <input type="text" name="email" placeholder="Enter email" required/>
-            <input type="password" name="password" placeholder="Enter password" required/>
-            <input type="submit" value="Sign In">
-        </form>
+        <div class="form">
+            <form class="form-horizontal signin" method="GET" action="/user/auth/google">
+                <div class="form-wrap" style="position: relative;">
+                  <h2>Login</h2>
+                  <!-- <div class="form-group">
+                      <div class="relative">
+                          <input class="form-control" name="email" id="name" type="text" autofocus="" title="" autocomplete="" placeholder="Email Address">
+                          <i class="fa fa-user"></i>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="relative">
+                          <input class="form-control" name="password" type="password" placeholder="Password">
+                          <i class="fa fa-key"></i>
+                      </div>
+                      <span class="pull-right"><small><a href="#">Forgot Password?</a></small></span>
+                  </div> -->
+                  <div class="login-btn">
+                      <!-- <a href="#"><button class="movebtn movebtnsu" type="Submit">Login <i class="fa fa-fw fa-lock"></i></button></a>
+                      <div class="relative"><hr><span class="login-text">or login with</span></div>
+                      <div class="clearfix"></div> -->
+                      <div class="social-btn clearfix">
+                          <a href="/user/auth/google"><button class="movebtn google">Google <i class="fa fa-fw fa-google"></i></button></a>
+                      </div>
+                  </div>
+                  
+                </div>
+                <div class="sign-up">
+                    <small>Login with your IIITD account</small>
+                </div>
+            </form>
+            <form class="form-horizontal signup" method="POST" action="/user/create">
+                <div class="form-wrap" style="position: relative;">
+                  <h2>Sign Up</h2>
+        
+                  <!-- <div class="form-group">
+                      <div class="relative">
+                          <input class="form-control" name="email" id="name" type="text" required="" autofocus="" title="" autocomplete="" placeholder="Email Address">
+                          <i class="fa fa-envelope"></i>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="relative">
+                          <input class="form-control" name="name" id="name" type="text" required="" autofocus="" title="" autocomplete="" placeholder="Your name">
+                          <i class="fa fa-user"></i>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="relative">
+                          <input id="myinput" name="password" class="form-control" type="password" required="" placeholder="Password">
+                          <i class="fa fa-key"></i>
+                      </div>
+                      <span class="pull-right"><small><a href="#" id="showhide">show / hide</a></small></span>
+                  </div>
+                  <div class="form-group">
+                    <div class="relative">
+                        <input id="myinput" name="confirm_password" class="form-control" type="password" required="" placeholder="Confirm your password">
+                        <i class="fa fa-key"></i>
+                    </div>
+                    <span class="pull-right"><small><a href="#" id="showhide">show / hide</a></small></span>
+                </div> -->
+                  <div class="login-btn">
+                      <!-- <a href="#"><button class="movebtn movebtnsu" type="Submit">Submit <i class="fa fa-fw fa-paper-plane"></i></button></a>
+                      <div class="relative"><hr><span class="login-text">or signup with</span></div>
+                      <div class="clearfix"></div> -->
+                      <div class="social-btn clearfix">
+                          <a href="#"><button class="movebtn google" type="Submit">Google <i class="fa fa-fw fa-google"></i></button></a>
+                      </div>
+                  </div>
+                  
+                </div>
+                <div class="sign-up">
+                  <small>Login with your IIITD account</small>
+              </div>
+            </form>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="/js/signup.js"></script>
     </body>
 </html>
