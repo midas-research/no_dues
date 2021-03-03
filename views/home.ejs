@@ -19,11 +19,20 @@
             <div id="navbar_left">
                 <div id="navbar_left_i"><img src="/images/nd.png"/></div>
                 <div id="navbar_left_p">No Dues</div>
+                <div class="dropdown">
+                    <span class='icon-down'></span>
+                    <div class="dropdown-content">
+                        <a href="/user/signout">Logout</a>
+                    </div>
+                </div>
             </div>
             <div id="navbar_right">
                 <div id="navbar_right_p">Hello <%= locals.user.name %></div>
                 <div id="navbar_right_i"><img src=<%= locals.user.image%> /></div>
             </div>
+        </div>
+        <div id="main">
+            
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
