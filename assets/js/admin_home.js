@@ -13,3 +13,8 @@ function toggleAccordion() {
 }
 
 items.forEach(item => item.addEventListener('click', toggleAccordion));
+
+function approved(e) {
+  var r = e.parentElement.parentElement;
+  r.remove();
+}
