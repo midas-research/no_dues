@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/admin_home.css"/>
+    </head>
+    <body>
+        <div id="navbar">
+            <div id="navbar_left">
+                <div id="navbar_left_i"><img src="/images/nd.png"/></div>
+                <div id="navbar_left_p">No Dues</div>
+                <div class="dropdown">
+                    <span class='icon-down'></span>
+                    <div class="dropdown-content">
+                        <a href="/user/signout">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div id="navbar_right">
+                <div id="navbar_right_p">Hello Admin</div>
+                <div id="navbar_right_i"><img src=<%= locals.user.image%> /></div>
+            </div>
+        </div>
+
+        <div id="main">
+            <div class="container">
+                <h2>List of students</h2>
+                <div class="accordion">
+                  <div class="accordion-item">
+                    <button id="accordion-button-1" aria-expanded="false">
+                        <span class="accordion-title">soumyadeep18104@iiitd.ac.in - 2018104</span>
+                        <!-- <span class="send_request">Send</span> -->
+                        <i class="fas fa-check-circle send_request"></i>
+                        <span class="icon" aria-hidden="true"></span>
+                    </button>
+                    <div class="accordion-content">
+                      <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                      </div>
+                      <span class="message">You have not sent any message currently.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="/js/admin_home.js"></script>
+    </body>
+</html>

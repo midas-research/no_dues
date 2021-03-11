@@ -192,6 +192,7 @@ body {
   max-height: 9em;
   transition: all 200ms linear;
   will-change: opacity, max-height;
+  padding-bottom: 18px;
 }
 .accordion .accordion-content {
   opacity: 0;
@@ -219,4 +220,50 @@ body {
 
 .send_request:hover {
     background-color: gray;
+}
+
+.input-group {
+    height: 38px;
+    margin-top: 18px;
+}
+
+.input-group-append button {
+    height: 38px;
+    display: table-cell !important;
+    vertical-align: middle !important;
+    /* border: 1px solid red; */
+}
+
+.input-group-append {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: 5px;
+    border: 1px solid gray;
+    border-radius: 50%;
+    padding: 7px;
+    background-color: grey;
+}
+
+.fa-paper-plane {
+    font-size: 1.5rem !important;
+    border-radius: 50% !important;
+    color: white;
+}
+
+.fa-paper-plane:hover {
+    cursor: pointer;
+    color: #03b5d2;
+}
+
+.accordion-content {
+    padding-left: 2px;
+}
+
+.message {
+    padding-bottom: 18px !important;
+}
+
+.accordion-content {
+    /* padding-bottom: 18px; */
 }
