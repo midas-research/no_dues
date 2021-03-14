@@ -220,3 +220,15 @@ body {
 .send_request:hover {
     background-color: gray;
 }
+
+.fa-spinner {
+  color: blue;
+}
+
+.fa-times-circle {
+  color: red;
+}
+
+.fa-check-circle {
+  color: green;
+}

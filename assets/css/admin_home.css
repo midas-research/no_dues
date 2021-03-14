@@ -118,6 +118,8 @@ body {
 
 .container h2 {
     text-align: center;
+    margin-bottom: 25px;
+    margin-top: -20px;
 }
 
 .accordion .accordion-item {
@@ -264,6 +266,32 @@ body {
     padding-bottom: 18px !important;
 }
 
-.accordion-content {
-    /* padding-bottom: 18px; */
+#portfolio-flters {
+  padding: 0;
+  margin: 0 auto 20px auto;
+  list-style: none;
+  text-align: center;
+}
+
+#portfolio-filters li {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 15px 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #444444;
+  margin-bottom: 5px;
+  transition: all 0.3s ease-in-out;
+  border-radius: 3px;
+}
+
+#portfolio-filters li:hover, #portfolio-filters li.filter-active {
+  color: #151515;
+  background: #ffc451;
+}
+
+#portfolio-filters li:last-child {
+  margin-right: 0;
 }
