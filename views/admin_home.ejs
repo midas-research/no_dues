@@ -31,9 +31,9 @@
                   <div class="col-lg-12 d-flex justify-content-center">
                     <ul id="portfolio-filters">
                       <li data-filter="*" class="filter-active">All</li>
-                      <li data-filter=".filter-app">B. Tech</li>
-                      <li data-filter=".filter-card">M. Tech</li>
-                      <li data-filter=".filter-web">Ph.D.</li>
+                      <li data-filter=".filter-btech" class="filter-btech">B. Tech</li>
+                      <li data-filter=".filter-mtech" class="filter-mtech">M. Tech</li>
+                      <li data-filter=".filter-phd" class="filter-phd">Ph.D.</li>
                     </ul>
                   </div>
                 </div>
@@ -49,7 +49,7 @@
                       <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <i class="fas fa-paper-plane"></i>
+                            <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
                         </div>
                       </div>
                       <span class="message">You have not sent any message currently.</span>
@@ -66,7 +66,7 @@
                       <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <i class="fas fa-paper-plane"></i>
+                            <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
                         </div>
                       </div>
                       <span class="message">You have not sent any message currently.</span>
@@ -83,7 +83,7 @@
                       <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <i class="fas fa-paper-plane"></i>
+                            <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
                         </div>
                       </div>
                       <span class="message">You have issued an arduino and haven't returned it.</span>
@@ -100,7 +100,7 @@
                       <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <i class="fas fa-paper-plane"></i>
+                            <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
                         </div>
                       </div>
                       <span class="message">You have not sent any message currently.</span>
