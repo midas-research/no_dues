@@ -4,6 +4,28 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('../models/user');
 
+function isAdmin(email) {
+    const arr = [
+        'no-dues@iiitd.ac.in',
+        'rajendra@iiitd.ac.in',
+        'admin-facilities@iiitd.ac.in',
+        'abhinay@iiitd.ac.in',
+        'ravi@iiitd.ac.in',
+        'rahul@iiitd.ac.in',
+        'rashmil@iiitd.ac.in',
+        'geetagupta@iiitdic.in',
+        'varsha@iiitd.ac.in',
+        'admin-btech@iiitd.ac.in',
+        'admin-mtech@iiitd.ac.in',
+        'admin-phd@iiitd.ac.in',
+    ];
+    if (arr.includes(email)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 passport.use(new LocalStrategy({
     usernameField: 'email'
 }, (email, password, done) => {
@@ -18,7 +40,7 @@ passport.use(new LocalStrategy({
         }
         return done(null, user);
     })
-}
+    }
 ));
 
 //serialize the user to decide which key is to be kept in the cookies

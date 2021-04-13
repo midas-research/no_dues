@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="/css/home.css"/>
     </head>
     <body>
+        <p id="user" style="display:none"><%= user %></p>
         <div id="navbar">
             <div id="navbar_left">
                 <div id="navbar_left_i"><img src="/images/nd.png"/></div>
@@ -19,8 +20,8 @@
                 </div>
             </div>
             <div id="navbar_right">
-                <div id="navbar_right_p">Hello <%= locals.user.name %></div>
-                <div id="navbar_right_i"><img src=<%= locals.user.image%> /></div>
+                <div id="navbar_right_p">Hello <%= locals.name %></div>
+                <div id="navbar_right_i"><img src=<%= locals.image%> /></div>
             </div>
         </div>
         <div id="main">
@@ -31,12 +32,12 @@
                     <button id="accordion-button-1" aria-expanded="false">
                         <span class="accordion-title">Design Lab</span>
                         <!-- <span class="send_request">Send</span> -->
-                        <i class="fas fa-spinner send_request"></i>
+                        <i class="fas fa-spinner send_request designLabSymbol"></i>
                         <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Abhijeet Mishra [B-003 (R&D Block)]</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="designLabMessage">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">

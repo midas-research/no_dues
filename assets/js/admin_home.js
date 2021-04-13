@@ -1,3 +1,41 @@
+var adminName = document.getElementById('adminName').innerHTML;
+var id = document.getElementById('id').innerHTML;
+console.log(adminName);
+console.log(id);
+
+var accordion = document.getElementsByClassName('accordion')[0];
+var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
+console.log(studentList);
+// console.log(studentList);
+// console.log(typeof(studentList));
+for (var i in studentList) {
+  var message;
+  if (studentList[i][adminName+'Message']) {
+    message = studentList[i][adminName+'Message'];
+  } else {
+    message = 'You have not sent any message currently.';
+  }
+  if (!studentList[i][adminName]) {
+    accordion.innerHTML += `
+      <div class="accordion-item">
+        <button id="accordion-button-1" aria-expanded="false">
+            <span class="accordion-title">${studentList[i].email} - 2018104</span>
+            <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
+            <span class="icon" aria-hidden="true"></span>
+        </button>
+        <div class="accordion-content">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
+            </div>
+          </div>
+          <span class="message">${message}</span>
+        </div>
+      </div>`
+  }
+}
+
 const items = document.querySelectorAll(".accordion button");
 
 function toggleAccordion() {
@@ -16,6 +54,23 @@ items.forEach(item => item.addEventListener('click', toggleAccordion));
 
 function approved(e) {
   var r = e.parentElement.parentElement;
+  var emailroll = e.parentElement.childNodes[1].innerHTML;
+  var email = emailroll.substring(0, emailroll.indexOf(' -'));
+  var studentId;
+  for (var i in studentList) {
+    if (studentList[i]['email'] == email) {
+      studentId = studentList[i]['_id'];
+    }
+  }
+  console.log(studentId);
+  var obj = [];
+  obj.push({
+    admin : adminName,
+    email : email,
+    id: studentId
+  });
+  console.log(JSON.stringify(obj));
+  window.location.href = `http://localhost:8000/approveDues/${JSON.stringify(obj)}`;
   r.remove();
 }
 
@@ -50,60 +105,14 @@ function sendMessage(e) {
   var dues = e.target.parentElement.previousElementSibling.value;
   var message = e.target.parentElement.parentElement.nextElementSibling;
   message.innerHTML = dues;
+  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[1].textContent;
+  var index = email.indexOf(" ");
+  var obj = [];
+  obj.push({
+    admin : adminName,
+    message : dues,
+    email : email.substring(0, index)
+  });
+  console.log(JSON.stringify(obj));
+  window.location.href = `http://localhost:8000/sendMessage/${JSON.stringify(obj)}`;
 }
-
-// var accordion = document.getElementsByClassName('accordion')[0];
-// console.log(studentList);
-// for (var i=0; i<studentList.length; i++) {
-//   console.log(studentList[i]);
-//   var accordion_item = document.createElement('div');
-//   accordion_item.classList.add('accordion-item');
-//   var button = document.createElement('button');
-//   button.setAttribute('id', 'accordion-button-1');
-//   button.setAttribute('aria-expanded', "false");
-//   accordion_item.appendChild(button);
-//   var span = document.createElement('span');
-//   span.classList.add('accordion-title');
-//   span.innerHTML = `${studentList[i].email} - ${studentList[i].roll}`;
-//   button.appendChild(span);
-//   var i = document.createElement('i');
-//   i.setAttribute('class', 'fas fa-check-circle send_request');
-//   // i.setAttribute('onclick', `${event.stopPropagation() ;approved(this)}`);
-//   // i.addEventListener('click', (e) => {
-//   //   e.stopPropagation();
-//   //   approved(this)
-//   // });
-//   button.appendChild(i);
-//   var span2 = document.createElement('span');
-//   span2.setAttribute('class', 'icon');
-//   span2.setAttribute('aria-hidden', 'true');
-//   button.appendChild(span2);
-//   var accordion_content = document.createElement('div');
-//   accordion_content.classList.add('accordion-content');
-//   accordion_item.appendChild(accordion_content);
-//   var div2 = document.createElement('div');
-//   div2.setAttribute('class', 'input-group mb-3');
-//   accordion_content.appendChild(div2);
-//   var message_input = document.createElement('input');
-//   message_input.setAttribute('type', 'text');
-//   message_input.setAttribute('class', 'form-control');
-//   message_input.setAttribute('placeholder', 'Send a message ...');
-//   message_input.setAttribute('aria-label', "Recipient's username");
-//   message_input.setAttribute('aria-describedby', 'basic-addon2');
-//   div2.appendChild(message_input);
-//   var div3 = document.createElement('div');
-//   div3.classList.add('input-group-append');
-//   div2.appendChild(div3);
-//   var send = document.createElement('i');
-//   send.setAttribute('class', 'fas fa-paper-plane send');
-//   // send.setAttribute('onclick', `${sendMessage(event)}`);
-//   // send.addEventListener('click', (e) => {
-//   //   sendMessage(e);
-//   // });
-//   div3.appendChild(send);
-//   var message_text = document.createElement('span');
-//   message_text.classList.add('message');
-//   message_text.innerHTML = 'You have not sent any message currently.';
-//   accordion_content.appendChild(message_text);
-//   accordion.appendChild(accordion_item);
-// }
