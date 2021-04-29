@@ -2,6 +2,7 @@ const passport = require('passport');
 const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const crypto = require('crypto');
 const User = require('../models/user');
+const professors = require('../professors');
 
 function getAdminName(email) {
     if (email == 'no-dues@iiitd.ac.in') {
@@ -71,6 +72,28 @@ passport.use(new googleStrategy({
                     image: profile.photos[0].value,
                     type: 'Admin',
                     department: getAdminName(profile.emails[0].value)
+                }, (err, user) => {
+                    if (err) {
+                        console.log('Error in creating user google strategy-passport', err); return;
+                    }
+                    return done(null, user);
+                })
+            }
+        })
+    } else if (profile.emails[0].value in professors) {
+        User.findOne({email: profile.emails[0].value}).exec((err, user) => {
+            if (err) {
+                console.log('Error in google strategy passport', err); return;
+            }
+            if (user) {
+                return done(null, user);
+            } else {
+                User.create({
+                    name: profile.name["givenName"],
+                    email: profile.emails[0].value,
+                    password: crypto.randomBytes(20).toString('hex'),
+                    image: profile.photos[0].value,
+                    type: 'Proff',
                 }, (err, user) => {
                     if (err) {
                         console.log('Error in creating user google strategy-passport', err); return;

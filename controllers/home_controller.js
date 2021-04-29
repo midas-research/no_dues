@@ -1,4 +1,7 @@
 const User = require('../models/user');
+const message_mailer = require('../mailers/message_mailer');
+const approved_mailer = require('../mailers/approved_mailer');
+const sendBtpRequest_mailer = require('../mailers/sendBtpRequest_mailer');
 
 function getAdminName(email) {
   if (email == 'no-dues@iiitd.ac.in') {
@@ -83,7 +86,8 @@ module.exports.sendMessage = (req, res) => {
       user.save();
       console.log(user);
       return res.redirect('/admin_home');
-    })
+    });
+    message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
   })
   return;
 }
@@ -101,7 +105,51 @@ module.exports.approveDues = (req, res) => {
       user.save();
       console.log(user);
       return res.redirect('/admin_home');
-    })
+    });
+    approved_mailer.approvedDues(obj[0].admin, obj[0].email);
   })
   return;
+}
+
+module.exports.proffHome = (req, res) => {
+  var studentList = []
+  User.find({}, (err, users) => {
+    if (err) {
+      console.log('Error in loading all the users');
+      return;
+    }
+    for (var i in users) {
+      if (!users[i]['type']) {
+        studentList.push(users[i]);
+      }
+    }
+    return res.render('proff_home', {
+      title : 'Proff - Home',
+      studentList : JSON.stringify(studentList),
+      proffEmail : req.user.email,
+      id : req.user._id
+    })
+  })
+}
+
+module.exports.sendBtpRequest = (req, res) => {
+  var obj = JSON.parse(req.params.obj);
+  console.log(obj);
+  User.findOne({email : obj[0]['studentEmail']}, (err, user) => {
+    if (err) {
+      console.log('Error in finding student in sendBtpRequest: ', err);
+      return;
+    }
+    var id = user._id;
+    User.findByIdAndUpdate(id, {'btp': obj[0]['proffEmail']}, (err, user) => {
+      if (err) {
+        console.log('Error in saving proffEmail in sendBtpRequest: ', err);
+        return;
+      }
+      user.save();
+      console.log(user);
+    });
+    sendBtpRequest_mailer.sendBtpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'])
+  })
+  return res.redirect('/');
 }

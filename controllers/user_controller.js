@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const professors = require('../professors');
 
 function getAdminName(email) {
     if (email == 'no-dues@iiitd.ac.in') {
@@ -119,10 +120,13 @@ module.exports.createSession = (req, res) => {
     if (isAdmin(req.user.email)) {
         return res.redirect('/admin_home');
     }
+    if (req.user.email in professors) {
+        return res.redirect('/proff_home');
+    }
     return res.redirect('/');
 }
 
 module.exports.destroySession = (req, res) => {
     req.logout();
-    return res.redirect('/');
+    return res.redirect('/user/signin');
 }

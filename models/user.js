@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     image: { type: String, required: true, unique: true },
-    branch: { type: String },
+    branch: { type: String, required: true, default: 'btech' },
     degree: { type: String, enum: ['B. Tech', 'M. Tech', 'PhD'] },
     startYear: { type: Number },
     type: {type: String},
@@ -24,6 +24,8 @@ const userSchema = new mongoose.Schema({
     incubation: { type: Boolean },
     finance: { type: Boolean },
     academics: { type: Boolean },
+    ip: { type: String },
+    btp: { type: String },
     
     designLabAppliedAt: { type: Date },
     libraryAppliedAt: { type: Date },

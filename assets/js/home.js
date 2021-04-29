@@ -28,6 +28,7 @@ if (user[0].designLabMessage) {
   console.log(designLabSymbol.classList);
 }
 if (user[0].designLab) {
+  var designLabSymbol = document.getElementsByClassName('designLabSymbol')[0];
   if (designLabSymbol.classList.contains('fa-spinner')) {
     designLabSymbol.classList.remove('fa-spinner');
     designLabSymbol.classList.add('fa-check-circle');
@@ -38,3 +39,25 @@ if (user[0].designLab) {
   }
   designLabMessage.innerHTML = 'Your dues for this department is approved.';
 }
+
+var professorList = {
+  'Raghava Mutharaju' : 'scheduler@iiitd.ac.in',
+};
+
+var btp_sendRequest = document.getElementById('btp_sendRequest');
+var ip_sendRequest = document.getElementById('ip_sendRequest');
+btp_sendRequest.addEventListener('click', () => {
+  var btp_proff = document.getElementById('btp_proff');
+  if (btp_proff.value == 'None') {
+    alert('Kindly choose a professor!');
+    return;
+  }
+  var obj = [];
+  obj.push({
+    admin : 'btp',
+    proffEmail : professorList[btp_proff.value],
+    studentEmail: user[0]['email']
+  });
+  console.log(obj);
+  window.location.href = `http://localhost:8000/sendBtpRequest/${JSON.stringify(obj)}`;
+})
