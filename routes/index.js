@@ -12,6 +12,13 @@ router.get('/student_list', passport.checkAuthentication, homeController.student
 router.get('/sendMessage/:dues', passport.checkAuthentication, homeController.sendMessage);
 router.get('/approveDues/:dues', passport.checkAuthentication, homeController.approveDues);
 router.get('/sendBtpRequest/:obj', passport.checkAuthentication, homeController.sendBtpRequest);
+router.get('/sendMessageBtp/:dues', passport.checkAuthentication, homeController.sendMessageBtp);
+router.get('/btpApproved/:dues', passport.checkAuthentication, homeController.btpApproved);
+router.get('/sendIpRequest/:obj', passport.checkAuthentication, homeController.sendIpRequest);
+router.get('/sendMessageIp/:dues', passport.checkAuthentication, homeController.sendMessageIp);
+router.get('/ipApproved/:dues', passport.checkAuthentication, homeController.ipApproved);
+
+router.get('/download/:user', passport.checkAuthentication, homeController.download);
 
 router.use('/user', require('./user'));
 

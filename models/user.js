@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
     academics: { type: Boolean },
     ip: { type: String },
     btp: { type: String },
+    ipApproved: {type: Boolean},
+    btpApproved: {type: Boolean},
     
     designLabAppliedAt: { type: Date },
     libraryAppliedAt: { type: Date },
@@ -38,6 +40,8 @@ const userSchema = new mongoose.Schema({
     incubationAppliedAt: { type: Date },
     financeAppliedAt: { type: Date },
     academicsAppliedAt: { type: Date },
+    ipAppliedAt: { type: Date },
+    btpAppliedAt: { type: Date },
 
     designLabApprovedAt: { type: Date },
     libraryApprovedAt: { type: Date },
@@ -50,6 +54,8 @@ const userSchema = new mongoose.Schema({
     incubationApprovedAt: { type: Date },
     financeApprovedAt: { type: Date },
     academicsApprovedAt: { type: Date },
+    ipApprovedAt: { type: Date },
+    btpApprovedAt: { type: Date },
 
     designLabMessage: { type: String },
     libraryMessage: { type: String },
@@ -62,6 +68,8 @@ const userSchema = new mongoose.Schema({
     incubationMessage: { type: String },
     financeMessage: { type: String },
     academicsMessage: { type: String },
+    ipMessage: { type: String },
+    btpMessage: { type: String },
 }, {
     timestamps: true
 });

@@ -233,6 +233,10 @@ body {
   color: green;
 }
 
+.fa-dot-circle {
+  color: grey;
+}
+
 #btp_proff {
   margin-top: 30px;
 }
@@ -247,4 +251,8 @@ body {
 
 #ip_comment {
   margin-top: 10px;
+}
+
+#downloadbtn {
+  cursor: pointer;
 }

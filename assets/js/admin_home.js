@@ -139,19 +139,19 @@ function sendMessage(e) {
 var filterBtech = document.getElementsByClassName('filter-btech')[0];
 filterBtech.addEventListener('click', () => {
    accordion.innerHTML = '';
-   for (var i in studentList) {
+   for (var i in studentsListBtech) {
     var message;
-    if (studentList[i][adminName+'Message']) {
-      message = studentList[i][adminName+'Message'];
+    if (studentsListBtech[i][adminName+'Message']) {
+      message = studentsListBtech[i][adminName+'Message'];
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentList[i][adminName]) {
+    if (!studentsListBtech[i][adminName]) {
       accordion.innerHTML = '';
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentList[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsListBtech[i].email} - 2018104</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
