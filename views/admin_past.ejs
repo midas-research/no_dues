@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %></title>
+        <title>No-Dues given</title>
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
         <link rel="stylesheet" type="text/css" href="/css/admin_home.css"/>
     </head>
     <body>
-        <p id="adminName" style="display:none"><%= adminName %></p>
-        <p id="id" style="display:none"><%= id %></p>
+        <p id="admin" style="display:none"><%= admin %></p>
         <p id="studentList" style="display:none"><%= studentList %></p>
         <div id="navbar">
             <div id="navbar_left">
@@ -17,8 +16,7 @@
                 <div class="dropdown">
                     <span class='icon-down'></span>
                     <div class="dropdown-content">
-                        <a href="/user/signout">Logout</a> <br><hr>
-                        <a id="past">History</a>
+                        <a href="/user/signout">Logout</a>
                     </div>
                 </div>
             </div>
@@ -62,7 +60,7 @@
                 </div>
               </div>
         </div>
-        <script src="/js/admin_home.js"></script>
+        <script src="/js/admin_past.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>

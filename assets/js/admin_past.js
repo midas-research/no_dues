@@ -1,10 +1,18 @@
-var adminName = document.getElementById('adminName').innerHTML;
-var id = document.getElementById('id').innerHTML;
+var adminName = document.getElementById('admin').innerHTML;
+var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
 console.log(adminName);
-console.log(id);
+console.log(studentList);
+
+temp = [];
+for (var i in studentList) {
+    if (studentList[i][adminName]) {
+        temp.push(studentList[i]);
+    }
+}
+console.log(temp);
 
 var accordion = document.getElementsByClassName('accordion')[0];
-var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
+studentList = temp;
 console.log(studentList);
 
 var studentListBtech = [];
@@ -31,25 +39,20 @@ for (var i in studentList) {
   if (studentList[i][adminName+'Message']) {
     message = studentList[i][adminName+'Message'];
   } else {
-    message = 'You have not sent any message currently.';
+    message = 'You have not sent any message.';
   }
-  if (!studentList[i][adminName]) {
+  if (studentList[i][adminName]) {
     accordion.innerHTML = "";
     accordion.innerHTML += `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
             <span class="accordion-title">${studentList[i].email} - 2018104</span>
-            <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
             <span class="icon" aria-hidden="true"></span>
         </button>
         <div class="accordion-content">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-            </div>
-          </div>
-          <span class="message">${message}</span>
+          <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; ${studentList[i]['updatedAt'].substring(11, 16)}</span><br>
+          <span class="message">${message}</span><br>
+          <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; ${studentList[i]['createdAt'].substring(11, 16)}</span>
         </div>
       </div>`
   }
@@ -70,28 +73,6 @@ function toggleAccordion() {
 }
 
 items.forEach(item => item.addEventListener('click', toggleAccordion));
-
-function approved(e) {
-  var r = e.parentElement.parentElement;
-  var emailroll = e.parentElement.childNodes[1].innerHTML;
-  var email = emailroll.substring(0, emailroll.indexOf(' -'));
-  var studentId;
-  for (var i in studentList) {
-    if (studentList[i]['email'] == email) {
-      studentId = studentList[i]['_id'];
-    }
-  }
-  console.log(studentId);
-  var obj = [];
-  obj.push({
-    admin : adminName,
-    email : email,
-    id: studentId
-  });
-  console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/approveDues/${JSON.stringify(obj)}`;
-  r.remove();
-}
 
 var all = document.getElementsByClassName('filter-active')[0];
 var current = all;
@@ -120,22 +101,6 @@ all.addEventListener('click', () => {
   current = all;
 });
 
-function sendMessage(e) {
-  var dues = e.target.parentElement.previousElementSibling.value;
-  var message = e.target.parentElement.parentElement.nextElementSibling;
-  message.innerHTML = dues;
-  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[1].textContent;
-  var index = email.indexOf(" ");
-  var obj = [];
-  obj.push({
-    admin : adminName,
-    message : dues,
-    email : email.substring(0, index)
-  });
-  console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/sendMessage/${JSON.stringify(obj)}`;
-}
-
 var filterBtech = document.getElementsByClassName('filter-btech')[0];
 filterBtech.addEventListener('click', () => {
    accordion.innerHTML = '';
@@ -146,23 +111,18 @@ filterBtech.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentListBtech[i][adminName]) {
+    if (studentListBtech[i][adminName]) {
       accordion.innerHTML = '';
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentListBtech[i].email} - 2018104</span>
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
+            <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; ${studentList[i]['updatedAt'].substring(11, 16)}</span><br>
+            <span class="message">${message}</span><br>
+            <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; ${studentList[i]['createdAt'].substring(11, 16)}</span>
           </div>
         </div>`
     }
@@ -190,22 +150,17 @@ filterMtech.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentListMtech[i][adminName]) {
+    if (studentListMtech[i][adminName]) {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentListMtech[i].email} - 2018104</span>
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
+            <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; ${studentList[i]['updatedAt'].substring(11, 16)}</span><br>
+            <span class="message">${message}</span><br>
+            <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; ${studentList[i]['createdAt'].substring(11, 16)}</span>
           </div>
         </div>`
     }
@@ -233,22 +188,17 @@ filterPhd.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentListPhd[i][adminName]) {
+    if (studentListPhd[i][adminName]) {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentListPhd[i].email} - 2018104</span>
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
+            <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; ${studentList[i]['updatedAt'].substring(11, 16)}</span><br>
+            <span class="message">${message}</span><br>
+            <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; ${studentList[i]['createdAt'].substring(11, 16)}</span>
           </div>
         </div>`
     }
@@ -276,22 +226,17 @@ filterAll.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentList[i][adminName]) {
+    if (studentList[i][adminName]) {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentList[i].email} - 2018104</span>
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
+            <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; ${studentList[i]['updatedAt'].substring(11, 16)}</span><br>
+            <span class="message">${message}</span><br>
+            <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; ${studentList[i]['createdAt'].substring(11, 16)}</span>
           </div>
         </div>`
     }
@@ -307,14 +252,4 @@ filterAll.addEventListener('click', () => {
     }
   }
   items.forEach(item => item.addEventListener('click', toggleAccordion));
-});
-
-var past = document.getElementById('past');
-past.addEventListener('click', () => {
-  var obj = [];
-  obj.push({
-    admin : adminName,
-  });
-  console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/past/${JSON.stringify(obj)}`;
 });

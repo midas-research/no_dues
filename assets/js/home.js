@@ -144,7 +144,7 @@ ip_sendRequest.addEventListener('click', () => {
 
 var downloadbtn = document.getElementById('downloadbtn');
 downloadbtn.addEventListener('click', () => {
-  var obj = {};
-  obj.student = user;
-  window.location.href = `http://localhost:8000/download/${JSON.stringify(obj)}`;
+  // var obj = {};
+  // obj.student = user;
+  window.location.href = `http://localhost:8000/download`;
 })

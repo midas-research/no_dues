@@ -3,6 +3,8 @@ const message_mailer = require('../mailers/message_mailer');
 const approved_mailer = require('../mailers/approved_mailer');
 const sendBtpRequest_mailer = require('../mailers/sendBtpRequest_mailer');
 const sendIpRequest_mailer = require('../mailers/sendIpRequest_mailer');
+const btpApproved_mailer = require('../mailers/btpApproved_mailer');
+const sendBtpMessage_mailer = require('../mailers/sendBtpMessage_mailer');
 
 function getAdminName(email) {
   if (email == 'no-dues@iiitd.ac.in') {
@@ -42,6 +44,24 @@ module.exports.home = (req, res) => {
 }
 
 module.exports.adminHome = (req, res) => {
+  var studentList = []
+  User.find({}, (err, users) => {
+    if (err) {console.log('Error in loading all the users'); return;}
+    for (var i in users) {
+      if (!users[i]['type']) {
+        studentList.push(users[i]);
+      }
+    }
+    return res.render('admin_home', {
+      title : 'Admin - Home',
+      studentList : JSON.stringify(studentList),
+      adminName : getAdminName(req.user.email),
+      id : req.user._id
+    })
+  })
+}
+
+module.exports.superAdmin = (req, res) => {
   var studentList = []
   User.find({}, (err, users) => {
     if (err) {console.log('Error in loading all the users'); return;}
@@ -125,7 +145,7 @@ module.exports.sendBtpRequest = (req, res) => {
       if (err) {console.log('Error in saving proffEmail in sendBtpRequest: ', err); return;}
       user.save();
     });
-    sendBtpRequest_mailer.sendBtpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'])
+    sendBtpRequest_mailer.sendBtpRequest(obj[0]['proffEmail'], obj[0]['studentEmail']);
   })
   return res.redirect('/');
 }
@@ -134,10 +154,12 @@ module.exports.sendMessageBtp = (req, res) => {
   var obj = JSON.parse(req.params.dues);
   console.log(obj);
   var studentEmail = obj[0]['email'];
+  var proffEmail = obj[0]['proffEmail'];
   var message = obj[0]['message'];
   User.findOneAndUpdate({email : studentEmail}, {'btpMessage': message}, (err, user) => {
     if (err) {console.log('Error in finding student in sendMessageBtp: ', err); return;}
     user.save();
+    sendBtpMessage_mailer.sendBtpMessage_mailer(message, studentEmail, proffEmail);
     return res.redirect('/proff_home');
   });
 }
@@ -147,6 +169,7 @@ module.exports.btpApproved = (req, res) => {
   User.findByIdAndUpdate(obj[0]['id'], {btpApproved : true}, (err, user) => {
     if (err) {console.log('Error finding user in btpApproved: ', err); return;}
     user.save();
+    btpApproved_mailer.btpApproved_mailer(obj[0]['proffEmail'], obj[0]['email']);
     return res.redirect('/proff_home');
   });
 }
@@ -182,9 +205,24 @@ module.exports.ipApproved = (req, res) => {
 }
 
 module.exports.download = (req, res) => {
-  var obj = JSON.parse(req.params.user);
-  let doc = new jsPDF('p','pt','a4');
-  doc.addHTML(document.body,function() {
-      doc.save('../assets/pdf/pdf.html');
+  // var student = JSON.parse(req.params.student)[0];
+  // console.log(student);
+  return res.render('pdf');
+};
+
+module.exports.past = (req, res) => {
+  var admin = JSON.parse(req.params.admin)[0]['admin'];
+  var studentList = []
+  User.find({}, (err, users) => {
+    if (err) {console.log('Error in loading all the users'); return;}
+    for (var i in users) {
+      if (!users[i]['type']) {
+        studentList.push(users[i]);
+      }
+    }
+    return res.render('admin_past', {
+      studentList : JSON.stringify(studentList),
+      admin : admin
+    })
   });
 }

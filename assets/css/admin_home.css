@@ -294,3 +294,7 @@ body {
 #portfolio-filters li:last-child {
   margin-right: 0;
 }
+
+#past {
+  cursor: pointer;
+}

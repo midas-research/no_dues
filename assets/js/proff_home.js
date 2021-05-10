@@ -12,7 +12,8 @@ function sendMessageBtp(e) {
     obj.push({
       admin : 'btp',
       message : dues,
-      email : email.substring(0, index)
+      email : email.substring(0, index),
+      proffEmail: proffEmail
     });
     console.log(JSON.stringify(obj));
     window.location.href = `http://localhost:8000/sendMessageBtp/${JSON.stringify(obj)}`;
@@ -31,6 +32,7 @@ function btpApproved(e) {
     console.log(studentId);
     var obj = [];
     obj.push({
+      proffEmail: proffEmail,
       email : email,
       id: studentId
     });
