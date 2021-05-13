@@ -50,9 +50,9 @@ for (var i in studentList) {
             <span class="icon" aria-hidden="true"></span>
         </button>
         <div class="accordion-content">
-          <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; ${studentList[i]['updatedAt'].substring(11, 16)}</span><br>
+          <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; 15:53</span><br>
           <span class="message">${message}</span><br>
-          <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; ${studentList[i]['createdAt'].substring(11, 16)}</span>
+          <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; 16:01</span>
         </div>
       </div>`
   }
