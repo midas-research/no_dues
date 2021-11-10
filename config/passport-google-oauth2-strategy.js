@@ -9,7 +9,7 @@ const isAdmin = require('../data/isAdmin');
 passport.use(new googleStrategy({
     clientID: '417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com',
     clientSecret: 'tn3wI5iFPkAawIotSB9IHIX2',
-    callbackURL: 'http://localhost:8000/user/auth/google/callback'
+    callbackURL: 'https://bbee-103-25-231-107.ngrok.io/user/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
     if (isAdmin.isAdmin(profile.emails[0].value)) {
         User.findOne({email: profile.emails[0].value}).exec((err, user) => {
