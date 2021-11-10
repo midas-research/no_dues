@@ -5,6 +5,8 @@
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
         <link rel="stylesheet" type="text/css" href="/css/admin_home.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     </head>
     <body>
         <p id="adminName" style="display:none"><%= adminName %></p>
@@ -18,13 +20,22 @@
                     <span class='icon-down'></span>
                     <div class="dropdown-content">
                         <a href="/user/signout">Logout</a> <br><hr>
-                        <a id="past">History</a>
+                        <a id="past">History</a> <br><hr>
+                        <a id="sheet">Show Sheet</a> <br><hr>
+                        <a id="bankAccountDetails">Account Details</a> <br><hr>
+                        <a id="selectAll">Select All</a> <br><hr>
+                        <a id="unselectAll">Unselect All</a> <br><hr>
+                        <a id="sendAll">Send All</a> <br><hr>
+                        <% if (adminName == "hostel") { %>
+                          <a id="listBoys">Send Boys List</a> <br><hr>
+                          <a id="listGirls">Send Girls List</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
             <div id="navbar_right">
                 <div id="navbar_right_p">Hello Admin</div>
-                <div id="navbar_right_i"><img src=<%= locals.user.image%> /></div>
+                <div id="navbar_right_i"><img src=<%= locals.user.image %> /></div>
             </div>
         </div>
 

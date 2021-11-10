@@ -5,9 +5,34 @@
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
         <link rel="stylesheet" type="text/css" href="/css/home.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     </head>
     <body>
+      <!-- modal starts -->
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h4><strong>Enter your bank details below.</strong></h4>
+          <label for="bankName">Enter your Bank name</label>
+          <input type="text" id="bankName" name="firstname" placeholder="Bank name..">
+          <p class="warning" id="bankNameWarning">*Don't leave it empty.</p>
+          <label for="bankBranch">Enter your Bank branch</label>
+          <input type="text" id="bankBranch" name="firstname" placeholder="Branch name..">
+          <p class="warning" id="bankBranchWarning">*Don't leave it empty.</p>
+          <label for="bankAccountNo">Enter your Account No.</label>
+          <input type="text" id="bankAccountNo" name="firstname" placeholder="Account no..">
+          <p class="warning" id="bankAccountNoWarning">*Don't leave it empty.</p>
+          <label for="bankIfscCode">Enter your IFSC code</label>
+          <input type="text" id="bankIfscCode" name="firstname" placeholder="IFSC code..">
+          <p class="warning" id="bankIfscCodeWarning">*Don't leave it empty.</p>
+          <input type="submit" value="Submit">
+        </div>
+      </div>
+      
+      <!-- modal ends -->
         <p id="user" style="display:none"><%= user %></p>
+        <p id="admins" style="display:none"><%= admins %></p>
         <div id="navbar">
             <div id="navbar_left">
                 <div id="navbar_left_i"><img src="/images/nd.png"/></div>
@@ -16,7 +41,8 @@
                     <span class='icon-down'></span>
                     <div class="dropdown-content">
                         <a href="/user/signout">Logout</a> <br><hr>
-                        <a id="downloadbtn">Download</a>
+                        <a id="downloadbtn">Download</a> <br><hr>
+                        <a id="uploadBankDetails">Bank Details</a>
                     </div>
                 </div>
             </div>
@@ -28,141 +54,140 @@
         <div id="main">
             <div class="container">
                 <h2>Departments for No-Dues</h2>
-                <div class="accordion">
-                  <div class="accordion-item">
+                <div class="accordion" id="admins_list_container">
+                  <!-- <div class="accordion-item">
                     <button id="accordion-button-1" aria-expanded="false">
                         <span class="accordion-title">Design Lab</span>
-                        <!-- <span class="send_request">Send</span> -->
-                        <i class="fas fa-share request"></i>
-                        <i class="fas fa-spinner send_request designLabSymbol"></i>
+                        <i class="fas fa-share request" onclick="request(event)"></i>
+                        <i class="fas fa-dot-circle send_request designLabSymbol statusSymbol"></i>
                         <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Abhijeet Mishra [B-003 (R&D Block)]</p>
-                        <p id="designLabMessage">There are no comments from the admin of this department.</p>
+                        <p id="designLabMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-2" aria-expanded="false">
                         <span class="accordion-title">Library</span>
-                        <i class="fas fa-share request"></i>
-                        <i class="fas fa-spinner send_request"></i>
+                        <i class="fas fa-share request" onclick="request(event)"></i>
+                        <i class="fas fa-dot-circle send_request librarySymbol statusSymbol"></i>
                         <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Rajendra Singh [Library office]</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="libraryMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-3" aria-expanded="false">
                         <span class="accordion-title">Admin Facilities</span>
-                        <i class="fas fa-share request"></i>
-                        <i class="fas fa-check-circle send_request"></i>
+                        <i class="fas fa-share request" onclick="request(event)"></i>
+                        <i class="fas fa-dot-circle send_request adminFacilitiesSymbol statusSymbol"></i>
                         <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Sanjay Ray [BMS 2<sup>nd</sup> floor]</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="adminFacilitiesMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-4" aria-expanded="false">
                         <span class="accordion-title">System Admin & Networking</span>
-                        <i class="fas fa-share request"></i>
-                        <i class="fas fa-check-circle send_request"></i>
+                        <i class="fas fa-share request" onclick="request(event)"></i>
+                        <i class="fas fa-dot-circle send_request systemAdminSymbol statusSymbol"></i>
                         <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Abhinav Saxena [B-105 (Old Acad)]</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="systemAdminMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-5" aria-expanded="false">
                       <span class="accordion-title">Officer Sports & Student Facilities</span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-times-circle send_request"></i>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request sportsSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Ravi Bhasin [A-207-1 (Old Acad)]</p>
-                        <p>You once have been found guilty of breaking a cricket bat and you have to pay Rs 600.</p>
+                        <p id="sportsMessage" class="message">You once have been found guilty of breaking a cricket bat and you have to pay Rs 600.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-6" aria-expanded="false">
                       <span class="accordion-title">Hostel</span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-check-circle send_request"></i>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request hostelSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Ravi Bhasin [A-207-1 (Old Acad)]</p>
-                        <p>There are no comments from the admin of this department..</p>
+                        <p id="hostelMessage" class="message">There are no comments from the admin of this department..</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-7" aria-expanded="false">
                       <span class="accordion-title">Junior Research Engineer(ECE Labs)</span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-times-circle send_request"></i>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request eceLabsSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Rahul Gupta [B-304/5/2 (LHC)]</p>
-                        <p>You have issued an arduino and haven't returned it.</p>
+                        <p id="eceLabsMessage" class="message">You have issued an arduino and haven't returned it.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-8" aria-expanded="false">
-                      <span class="accordion-title">Placement in-charge </span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-spinner send_request"></i>
+                      <span class="accordion-title">Placement in-charge</span>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request placementSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Rashmil Mishra [B-311 (LHC)]</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="placementMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-9" aria-expanded="false">
                       <span class="accordion-title">Incubation center</span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-check-circle send_request"></i>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request incubationSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Geeta Gupta [Student center]</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="incubationMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-10" aria-expanded="false">
                       <span class="accordion-title">Finance & Accounts</span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-spinner send_request"></i>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request financeSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Admin - Varsha Aggarwal</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="financeMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
                   </div>
                   <div class="accordion-item">
                     <button id="accordion-button-11" aria-expanded="false">
                       <span class="accordion-title">Academics</span>
-                      <i class="fas fa-share request"></i>
-                      <i class="fas fa-check-circle send_request"></i>
+                      <i class="fas fa-share request" onclick="request(event)"></i>
+                      <i class="fas fa-dot-circle send_request academicsSymbol statusSymbol"></i>
                       <span class="icon" aria-hidden="true"></span>
                     </button>
                     <div class="accordion-content">
                         <p>Academics - Nisha Aggarwal(B.Tech), Ashutosh Brahma(M.Tech), Priti Patwal(Ph.D.)</p>
-                        <p>There are no comments from the admin of this department.</p>
+                        <p id="academicsMessage" class="message">There are no comments from the admin of this department.</p>
                     </div>
-                  </div>
-                  <div class="accordion-item">
+                  </div> -->
+                  <!-- <div class="accordion-item">
                     <button id="accordion-button-11" aria-expanded="false">
                       <span class="accordion-title">BTP / Scholarly Paper / Thesis</span>
                       <i class="fas fa-share request" id="btp_sendRequest"></i>
@@ -193,7 +218,7 @@
                         </select>
                         <p id="ip_comment">There are no comments from the professor.</p>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
         </div>
@@ -201,5 +226,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="/js/home.js"></script>
+        <script>
+          <% if (flash.success && flash.success.length>0) {%>
+            new Noty({
+              theme: 'relax',
+              text: "<%= flash.success %>",
+              type: 'success',
+              layout: 'topRight',
+              timeout: 1500
+            }).show();
+          <% } %>
+        </script>
     </body>
 </html>

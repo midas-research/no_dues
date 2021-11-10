@@ -253,3 +253,13 @@ filterAll.addEventListener('click', () => {
   }
   items.forEach(item => item.addEventListener('click', toggleAccordion));
 });
+
+var sheet = document.getElementById('sheet');
+sheet.addEventListener('click', () => {
+  window.location.href = "http://localhost:8000/sheet";
+});
+
+var bankAccountDetails = document.getElementById('bankAccountDetails');
+bankAccountDetails.addEventListener('click', () => {
+  window.location.href = "http://localhost:8000/bankAccountDetails";
+});

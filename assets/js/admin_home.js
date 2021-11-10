@@ -33,12 +33,13 @@ for (var i in studentList) {
   } else {
     message = 'You have not sent any message currently.';
   }
-  if (!studentList[i][adminName]) {
+  if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
     accordion.innerHTML = "";
     accordion.innerHTML += `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
             <span class="accordion-title">${studentList[i].email} - 2018104</span>
+            <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
             <span class="icon" aria-hidden="true"></span>
         </button>
@@ -146,12 +147,13 @@ filterBtech.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentListBtech[i][adminName]) {
+    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
       accordion.innerHTML = '';
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentListBtech[i].email} - 2018104</span>
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -190,11 +192,12 @@ filterMtech.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentListMtech[i][adminName]) {
+    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentListMtech[i].email} - 2018104</span>
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -233,11 +236,12 @@ filterPhd.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentListPhd[i][adminName]) {
+    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentListPhd[i].email} - 2018104</span>
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -276,11 +280,12 @@ filterAll.addEventListener('click', () => {
     } else {
       message = 'You have not sent any message currently.';
     }
-    if (!studentList[i][adminName]) {
+    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
               <span class="accordion-title">${studentList[i].email} - 2018104</span>
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -318,3 +323,70 @@ past.addEventListener('click', () => {
   console.log(JSON.stringify(obj));
   window.location.href = `http://localhost:8000/past/${JSON.stringify(obj)}`;
 });
+
+var sheet = document.getElementById('sheet');
+sheet.addEventListener('click', () => {
+  window.location.href = "http://localhost:8000/sheet";
+});
+
+var bankAccountDetails = document.getElementById('bankAccountDetails');
+bankAccountDetails.addEventListener('click', () => {
+  window.location.href = "http://localhost:8000/bankAccountDetails";
+});
+
+//code for selecting multiple students at a time
+var selectAll = document.getElementById('selectAll');
+var checkboxes = document.getElementsByClassName('tickbox');
+selectAll.addEventListener('click', () => {
+  for (var i in checkboxes) {
+    checkboxes[i].checked = true;
+  }
+});
+var unselectAll = document.getElementById('unselectAll');
+var checkboxes = document.getElementsByClassName('tickbox');
+unselectAll.addEventListener('click', () => {
+  for (var i in checkboxes) {
+    checkboxes[i].checked = false;
+  }
+});
+
+//code for sending multiple students at a time
+var sendAll = document.getElementById('sendAll');
+var checkboxes = document.getElementsByClassName('tickbox');
+console.log(checkboxes.length);
+sendAll.addEventListener('click', () => {
+  var obj = [];
+  for (var i in checkboxes) {
+    //sendRequestButtons[i].click();
+    if (checkboxes[i].checked == true) {
+      if (checkboxes[i].previousElementSibling) {
+        var text = checkboxes[i].previousElementSibling.innerHTML;
+        var index = text.indexOf(' ');
+        var studentEmail = text.substring(0,index);
+        obj.push({
+          studentEmail: studentEmail,
+          adminName: adminName
+        });
+      }
+    }
+  }
+  if (obj.length != 0) {
+    var obj2 = []; obj2.push(obj);
+    console.log(obj);
+    window.location.href = `http://localhost:8000/approveManyDues/${JSON.stringify(obj2)}`;
+  }
+});
+
+var listBoys = document.getElementById('listBoys');
+if (listBoys) {
+  listBoys.addEventListener('click', () => {
+    window.location.href = "http://localhost:8000/sendMailToBoysHostelAdmin";
+  });
+}
+
+var listGirls = document.getElementById('listGirls');
+if (listGirls) {
+  listGirls.addEventListener('click', () => {
+    window.location.href = "http://localhost:8000/sendMailToGirlsHostelAdmin";
+  });
+}

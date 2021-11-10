@@ -295,6 +295,20 @@ body {
   margin-right: 0;
 }
 
-#past {
+#past, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  right: 100px;
+  margin-top: 6px;
+}
+
+#listBoys {
+  cursor: pointer;
+}
+
+#listGirls {
   cursor: pointer;
 }

@@ -12,16 +12,30 @@ router.get('/student_list', passport.checkAuthentication, homeController.student
 
 router.get('/sendMessage/:dues', passport.checkAuthentication, homeController.sendMessage);
 router.get('/approveDues/:dues', passport.checkAuthentication, homeController.approveDues);
+router.get('/approveManyDues/:dues', passport.checkAuthentication, homeController.approveManyDues);
 router.get('/sendBtpRequest/:obj', passport.checkAuthentication, homeController.sendBtpRequest);
 router.get('/sendMessageBtp/:dues', passport.checkAuthentication, homeController.sendMessageBtp);
 router.get('/btpApproved/:dues', passport.checkAuthentication, homeController.btpApproved);
 router.get('/sendIpRequest/:obj', passport.checkAuthentication, homeController.sendIpRequest);
 router.get('/sendMessageIp/:dues', passport.checkAuthentication, homeController.sendMessageIp);
 router.get('/ipApproved/:dues', passport.checkAuthentication, homeController.ipApproved);
+router.get('/sendBankDetails/:bankDetails', passport.checkAuthentication, homeController.sendBankDetails);
 
 router.get('/download', passport.checkAuthentication, homeController.download);
 
 router.get('/past/:admin', passport.checkAuthentication, homeController.past);
+
+router.get('/sheet', passport.checkSheetAuthentication, homeController.sheet);
+
+router.get('/bankAccountDetails', passport.checkBankAuthentication, homeController.bankAccountDetails);
+
+router.get('/sendMailToBoysHostelAdmin', passport.checkAuthentication, homeController.sendMailToBoysHostelAdmin);
+router.get('/sendMailToGirlsHostelAdmin', passport.checkAuthentication, homeController.sendMailToGirlsHostelAdmin);
+
+router.get('/request/:obj', passport.checkAuthentication, homeController.request);
+
+router.get('/flowchart', passport.checkSuperAdminAuthentication, homeController.flowchart);
+router.get('/flowchart/nd', passport.checkSuperAdminAuthentication, homeController.flowchart_nd);
 
 router.use('/user', require('./user'));
 

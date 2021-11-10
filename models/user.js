@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     startYear: { type: Number },
     type: {type: String},
     department: { type: String },
+    roll: {type: Number},
 
     designLab: { type: Boolean },
     library: { type: Boolean },
@@ -28,6 +29,18 @@ const userSchema = new mongoose.Schema({
     btp: { type: String },
     ipApproved: {type: Boolean},
     btpApproved: {type: Boolean},
+
+    designLabApplied: { type: Boolean },
+    libraryApplied: { type: Boolean },
+    adminFacilitiesApplied: { type: Boolean },
+    systemAdminApplied: { type: Boolean },
+    sportsApplied: { type: Boolean },
+    hostelApplied: { type: Boolean },
+    eceLabsApplied: { type: Boolean },
+    placementApplied: { type: Boolean },
+    incubationApplied: { type: Boolean },
+    financeApplied: { type: Boolean },
+    academicsApplied: { type: Boolean },
     
     designLabAppliedAt: { type: Date },
     libraryAppliedAt: { type: Date },
@@ -70,6 +83,11 @@ const userSchema = new mongoose.Schema({
     academicsMessage: { type: String },
     ipMessage: { type: String },
     btpMessage: { type: String },
+
+    bankName: {type: String},
+    bankBranch: {type: String},
+    bankAccountNo: {type: String},
+    bankIfscCode: {type: String},
 }, {
     timestamps: true
 });

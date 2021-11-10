@@ -5,6 +5,8 @@
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
         <link rel="stylesheet" type="text/css" href="/css/admin_home.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     </head>
     <body>
         <p id="admin" style="display:none"><%= admin %></p>
@@ -16,7 +18,9 @@
                 <div class="dropdown">
                     <span class='icon-down'></span>
                     <div class="dropdown-content">
-                        <a href="/user/signout">Logout</a>
+                        <a href="/user/signout">Logout</a> <br><hr>
+                        <a id="sheet">Show Sheet</a> <br><hr>
+                        <a id="bankAccountDetails">Account Details</a>
                     </div>
                 </div>
             </div>

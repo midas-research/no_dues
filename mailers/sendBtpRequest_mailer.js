@@ -1,4 +1,5 @@
 const nodemailer = require('../config/nodemailer');
+const User = require('../models/user');
 
 function fetchStudentName(email) {
     var index = email.indexOf('@');
@@ -12,8 +13,17 @@ function fetchProffName(email) {
     return name[0].toUpperCase() + name.substring(1,);
 }
 
-exports.sendBtpRequest = (proffEmail, studentEmail) => {
+exports.sendBtpRequest = async (proffEmail, studentEmail) => {
     console.log('inside new message mailer');
+    var student = await User.findOne({email: studentEmail});
+    var obj = [];
+    obj.push({
+      proffEmail: proffEmail,
+      email : studentEmail,
+      id: student._id
+    });
+    console.log(JSON.stringify(obj));
+    var url = `http://localhost:8000/btpApproved/${JSON.stringify(obj)}`;
     let htmlString = `
     <div>
         <p>Hi ${fetchProffName(proffEmail)}!</p>
@@ -21,8 +31,9 @@ exports.sendBtpRequest = (proffEmail, studentEmail) => {
         <p>You have received the following message requesting dues clearance for 
         BTP/Schlar Paper/Thesis from ${fetchStudentName(studentEmail)} 
         (email - ${studentEmail}).</p>
+        <p>Click <a href=\`http://localhost:8000/btpApproved/${JSON.stringify(obj)}\`>here</a> to approve the dues.</p>
         <br>
-        <p>Thanks no-dues!</p>
+        <p>Thanks No-Dues!</p>
     </div>`
     console.log(htmlString);
     nodemailer.transporter.sendMail({

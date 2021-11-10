@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Super Admin</title>
+        <link rel="stylesheet" type="text/css" href="/css/flowchart_nd.css"/>
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/modal.css"/>
+    </head>
+    <body>
+        <div id="navbar">
+          <h1>Flowchart for Type-1 Apps!</h1>
+        </div>
+        <div class="container">
+            <ul>
+              <li class="dropdown">
+                <a data-toggle="dropdown">Choose Flowchart <i class="icon-arrow"></i></a>
+                <ul class="dropdown-menu">
+                  <li><a onclick="adminFlowchart()">No-Dues Flow</a></li>
+                  <li><a onclick="professorFlowchart()">IP/BTP Flow</a></li>
+                  <li><a onclick="dataFlowchart()">Database</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div id="myModal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <a href="https://docs.google.com/spreadsheets/d/1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU/edit?usp=sharing" target="_blank"<button type="button" class="btn btn-primary">Students Data</button></a>
+              <a href="https://docs.google.com/spreadsheets/d/1Z1iuQizDRU_P_tfED0ICzx1k-u-ZaLkO_cWSWOZjul8/edit?usp=sharing" target="_blank"<button type="button" class="btn btn-primary">Professors Data</button></a>
+              <a href="https://docs.google.com/spreadsheets/d/1fdqYc6YxhabH18J07hA0c5f4S_VA_aYfguvLltn17Aw/edit?usp=sharing" target="_blank"><button type="button" class="btn btn-primary" id="admins_data">Admins Data</button></a>
+            </div>
+          </div>
+          <img id="data_img" onclick="change_data()" src="/images/data_flowchart.png">
+          <img id="student_img" onclick="change_flow()" src="/images/student_flowchart.png">
+        <script type="text/javascript" src="/js/flowchart.js"></script>
+        <script type="text/javascript" src="/js/flowchart_nd.js"></script>
+    </body> 
+</html>
