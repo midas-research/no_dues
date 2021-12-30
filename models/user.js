@@ -1,97 +1,95 @@
-const mongoose = require('mongoose');
+const axios = require('axios');
+var XMLHttpRequest = require('xhr2');
+var xhr = new XMLHttpRequest();
+var admins_data;
+axios.get('http://localhost:8000/user/getAdmins').then(function (response) {
+    console.log(response.data);
+    admins_data = response.data;
+    console.log("the admin datas are ===>>>", admins_data);
 
-mongoose.set('useFindAndModify', false);
+    function changeNameFormat(name) {
+        if (name.substring(0,9) == 'Academics') {
+            return 'academics';
+        }
+        var arr = name.split(" ");
+        var newName = arr[0].toLowerCase();
+        for (var i=1; i<arr.length; i++) {
+            if (arr[i] == '&') {
+                arr[i] = 'and';
+            }
+            newName = newName + arr[i][0].toUpperCase() + arr[i].substring(1,);
+        }
+        return newName;
+    }
 
-const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    image: { type: String, required: true, unique: true },
-    branch: { type: String, required: true, default: 'btech' },
-    degree: { type: String, enum: ['B. Tech', 'M. Tech', 'PhD'] },
-    startYear: { type: Number },
-    type: {type: String},
-    department: { type: String },
-    roll: {type: Number},
+    var adminNames = {};
+    var names = [];
+    for (var i in admins_data) {
+        adminNames[admins_data[i][1]] = changeNameFormat(admins_data[i][0]);
+        names.push(changeNameFormat(admins_data[i][0]));
+    }
+    console.log("the names are ===>>>", names);
 
-    designLab: { type: Boolean },
-    library: { type: Boolean },
-    adminFacilities: { type: Boolean },
-    systemAdmin: { type: Boolean },
-    sports: { type: Boolean },
-    hostel: { type: Boolean },
-    eceLabs: { type: Boolean },
-    placement: { type: Boolean },
-    incubation: { type: Boolean },
-    finance: { type: Boolean },
-    academics: { type: Boolean },
-    ip: { type: String },
-    btp: { type: String },
-    ipApproved: {type: Boolean},
-    btpApproved: {type: Boolean},
+    const mongoose = require('mongoose');
 
-    designLabApplied: { type: Boolean },
-    libraryApplied: { type: Boolean },
-    adminFacilitiesApplied: { type: Boolean },
-    systemAdminApplied: { type: Boolean },
-    sportsApplied: { type: Boolean },
-    hostelApplied: { type: Boolean },
-    eceLabsApplied: { type: Boolean },
-    placementApplied: { type: Boolean },
-    incubationApplied: { type: Boolean },
-    financeApplied: { type: Boolean },
-    academicsApplied: { type: Boolean },
+    mongoose.set('useFindAndModify', false);
+
+    var schemaObject = {
+        name: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
+        image: { type: String, required: true, unique: true },
+        degree: { type: String },
+        startYear: { type: String },
+        type: { type: String },
+        branch: { type: String },
+        roll: { type: String },
+        gender: {type: String },
+
+        ip: { type: String },
+        btp: { type: String },
+        ipApproved: {type: Boolean},
+        btpApproved: {type: Boolean},
+        ipApplied: { type: String },
+        btpApplied: { type: String },
+        ipAppliedAt: { type: String },
+        btpAppliedAt: { type: String },
+        ipApprovedAt: { type: String },
+        btpApprovedAt: { type: String },
+        ipMessage: { type: String },
+        btpMessage: { type: String },
+        bankName: {type: String},
+        bankBranch: {type: String},
+        bankAccountNo: {type: String},
+        bankIfscCode: {type: String},
+        mobile: {type: String},
+        other_email: {type: String},
+        date_of_leaving: {type: String},
+        reason_of_leaving: {type: String},
+    }
+
+    for (var i=0; i<names.length-2; i++) {
+        schemaObject[names[i]] = { type: Boolean }
+        schemaObject[names[i]+'Applied'] = { type: Boolean }
+        schemaObject[names[i]+'AppliedAt'] = { type: String }
+        schemaObject[names[i]+'ApprovedAt'] = { type: String }
+        schemaObject[names[i]+'Message'] = { type: String }
+    }
+
+    const userSchema = new mongoose.Schema(schemaObject, {
+        timestamps: true
+    });
+    const User = mongoose.model('User', userSchema);
+    module.exports = User;
     
-    designLabAppliedAt: { type: Date },
-    libraryAppliedAt: { type: Date },
-    adminFacilitiesAppliedAt: { type: Date },
-    systemAdminAppliedAt: { type: Date },
-    sportsAppliedAt: { type: Date },
-    hostelAppliedAt: { type: Date },
-    eceLabsAppliedAt: { type: Date },
-    placementAppliedAt: { type: Date },
-    incubationAppliedAt: { type: Date },
-    financeAppliedAt: { type: Date },
-    academicsAppliedAt: { type: Date },
-    ipAppliedAt: { type: Date },
-    btpAppliedAt: { type: Date },
+    }).catch(function (error) {
+        console.log(error);
+    });
 
-    designLabApprovedAt: { type: Date },
-    libraryApprovedAt: { type: Date },
-    adminFacilitiesApprovedAt: { type: Date },
-    systemAdminApprovedAt: { type: Date },
-    sportsApprovedAt: { type: Date },
-    hostelApprovedAt: { type: Date },
-    eceLabsApprovedAt: { type: Date },
-    placementApprovedAt: { type: Date },
-    incubationApprovedAt: { type: Date },
-    financeApprovedAt: { type: Date },
-    academicsApprovedAt: { type: Date },
-    ipApprovedAt: { type: Date },
-    btpApprovedAt: { type: Date },
-
-    designLabMessage: { type: String },
-    libraryMessage: { type: String },
-    adminFacilitiesMessage: { type: String },
-    systemAdminMessage: { type: String },
-    sportsMessage: { type: String },
-    hostelMessage: { type: String },
-    eceLabsMessage: { type: String },
-    placementMessage: { type: String },
-    incubationMessage: { type: String },
-    financeMessage: { type: String },
-    academicsMessage: { type: String },
-    ipMessage: { type: String },
-    btpMessage: { type: String },
-
-    bankName: {type: String},
-    bankBranch: {type: String},
-    bankAccountNo: {type: String},
-    bankIfscCode: {type: String},
-}, {
-    timestamps: true
-});
-
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+// var request = new XMLHttpRequest();
+// request.open('GET', 'http://localhost:8000/user/getAdmins', false);
+// request.send(null);
+// if (request.status === 200) {
+//   adminsList = JSON.parse(request.responseText);
+//   admins_data = adminsList
+// }

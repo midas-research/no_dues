@@ -81,7 +81,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     values = [];
     values.push(['Name', 'Roll no.', 'Email', 'Design Lab', 'Library', 'Admin Facilities', 
         'System Admin', 'Sports', 'Hostel', 'ECE Labs', 'Placement', 'Incubation', 'Finance',
-        'Academics', 'IP1', 'IP2', 'BTP']);
+        'Academics', 'IP', 'BTP']);
     var docs = await User.find({});
     for (var i in docs) {
         if (!docs[i]['type']) {
@@ -92,17 +92,24 @@ passport.checkSheetAuthentication = async (req, res, next) => {
             temp.push(docs[i]['designLab']);
             temp.push(docs[i]['library']);
             temp.push(docs[i]['adminFacilities']);
-            temp.push(docs[i]['systemAdmin']);
-            temp.push(docs[i]['sports']);
+            temp.push(docs[i]['systemAdminAndNetworking']);
+            temp.push(docs[i]['sportsAndStudentFacilities']);
             temp.push(docs[i]['hostel']);
             temp.push(docs[i]['eceLabs']);
-            temp.push(docs[i]['placement']);
-            temp.push(docs[i]['incubation']);
+            temp.push(docs[i]['placementIncharge']);
+            temp.push(docs[i]['incubationCenter']);
             temp.push(docs[i]['finance']);
             temp.push(docs[i]['academics']);
-            temp.push('false');
-            temp.push('false');
-            temp.push(docs[i]['btpApproved']);
+            if (docs[i]['ipApproved']) {
+                temp.push(docs[i]['ipApproved']);
+            } else {
+                temp.push('false');
+            }
+            if (docs[i]['btpApproved']) {
+                temp.push(docs[i]['btpApproved']);
+            } else {
+                temp.push('false');
+            }
             values.push(temp);
         }
     }

@@ -5,11 +5,31 @@ const approved_mailer = require('../mailers/approved_mailer');
 const sendBtpRequest_mailer = require('../mailers/sendBtpRequest_mailer');
 const sendIpRequest_mailer = require('../mailers/sendIpRequest_mailer');
 const btpApproved_mailer = require('../mailers/btpApproved_mailer');
+const ipApproved_mailer = require('../mailers/ipApproved_mailer');
 const sendBtpMessage_mailer = require('../mailers/sendBtpMessage_mailer');
+const sendIpMessage_mailer = require('../mailers/sendIpMessage_mailer');
 const boysHostelNodues_mailer = require('../mailers/boysHostelNodues_mailer');
 const girlsHostelNodues_mailer = require('../mailers/girlsHostelNodues_mailer');
 const getAdminName = require('../data/getAdminName');
-const admins = require('../data/admins.json');
+const admins = require('../data/admins');
+var XMLHttpRequest = require('xhr2');
+var xhr = new XMLHttpRequest();
+const axios = require('axios');
+
+function modifyAdminName(s) {
+  if (s.substring(0, 9) == 'Academics') {
+    return 'academics';
+  }
+  var arr = s.split(" ");
+  var newName = arr[0].toLowerCase();
+  for (var i=1; i<arr.length; i++) {
+      if (arr[i]=='&' || arr[i]=='&amp;') {
+          arr[i] = 'and';
+      }
+      newName = newName + arr[i][0].toUpperCase() + arr[i].substring(1,);
+  }
+  return newName;
+}
 
 updateBoysNoDuesSheet = async () => {
   var spreadsheetId = "1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ";
@@ -90,7 +110,6 @@ updateBoysNoDuesSheet = async () => {
 
 module.exports.home = (req, res) => {
   var obj = [];
-  console.log(admins);
   obj.push(req.user);
     return res.render('home', {
         title : 'Home Page',
@@ -113,9 +132,9 @@ module.exports.adminHome = (req, res) => {
     return res.render('admin_home', {
       title : 'Admin - Home',
       studentList : JSON.stringify(studentList),
-      adminName : getAdminName.getAdminName(req.user.email),
+      adminName : getAdminName.adminNames[req.user.email],
       id : req.user._id
-    })
+    });
   })
 }
 
@@ -150,8 +169,10 @@ module.exports.sendMessage = (req, res) => {
     if (err) {console.log('Error in finding student from email id'); return;}
     var id = user._id;
     var attribute = obj[0].admin + "Message";
+    var updatedObject = {};
+    updatedObject[attribute] = obj[0].message;
     console.log(id, attribute);
-    User.findByIdAndUpdate(id, {designLabMessage : obj[0].message}, (err, user) => {
+    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       user.save();
       console.log(user);
       return res.redirect('/admin_home');
@@ -167,7 +188,12 @@ module.exports.approveDues = (req, res) => {
     if (err) {console.log('Error in finding student from email id'); return;}
     var id = user._id;
     var updateObject = {};
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
     updateObject[obj[0].admin] = true
+    updateObject[obj[0].admin+'ApprovedAt'] = dateTime;
     User.findByIdAndUpdate(id, updateObject, (err, user) => {
       user.save();
       return res.redirect('/admin_home');
@@ -185,10 +211,17 @@ module.exports.approveManyDues = (req, res) => {
     var adminName = obj[i].adminName;
     var updateObject = {};
     updateObject[adminName] = true;
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    updateObject[adminName+'ApprovedAt'] = dateTime;
     User.findOneAndUpdate({email: studentEmail}, updateObject, (err, user) => {
       user.save();
+      approved_mailer.approvedDues(adminName, studentEmail);
     });
   }
+  updateBoysNoDuesSheet();
   return res.redirect('/admin_home');
 }
 
@@ -215,7 +248,14 @@ module.exports.sendBtpRequest = (req, res) => {
   User.findOne({email : obj[0]['studentEmail']}, (err, user) => {
     if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
     var id = user._id;
-    User.findByIdAndUpdate(id, {'btp': obj[0]['proffEmail']}, (err, user) => {
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    var updatedObject = {};
+    updatedObject['btp'] = obj[0]['proffEmail'];
+    updatedObject['btpAppliedAt'] = dateTime;
+    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       if (err) {console.log('Error in saving proffEmail in sendBtpRequest: ', err); return;}
       user.save();
     });
@@ -224,9 +264,25 @@ module.exports.sendBtpRequest = (req, res) => {
   return res.redirect('/');
 }
 
+module.exports.sendIpRequest = (req, res) => {
+  var obj = JSON.parse(req.params.obj);
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
+  var updatedObject = {};
+  updatedObject['ip'] = obj[0]['proffEmail'];
+  updatedObject['ipAppliedAt'] = dateTime;
+  User.findOneAndUpdate({email : obj[0]['studentEmail']}, updatedObject, (err, user) => {
+    if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
+    user.save();
+    sendIpRequest_mailer.sendIpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'])
+  });
+  return res.redirect('/');
+}
+
 module.exports.sendMessageBtp = (req, res) => {
   var obj = JSON.parse(req.params.dues);
-  console.log(obj);
   var studentEmail = obj[0]['email'];
   var proffEmail = obj[0]['proffEmail'];
   var message = obj[0]['message'];
@@ -238,9 +294,30 @@ module.exports.sendMessageBtp = (req, res) => {
   });
 }
 
+module.exports.sendMessageIp = (req, res) => {
+  var obj = JSON.parse(req.params.dues);
+  var studentEmail = obj[0]['email'];
+  var proffEmail = obj[0]['proffEmail'];
+  var message = obj[0]['message'];
+  User.findOneAndUpdate({email : studentEmail}, {'ipMessage': message}, (err, user) => {
+    if (err) {console.log('Error in finding student in sendMessageIp: ', err); return;}
+    user.save();
+    sendIpMessage_mailer.sendIpMessage_mailer(message, studentEmail, proffEmail);
+    return res.redirect('/proff_home');
+  });
+}
+
 module.exports.btpApproved = (req, res) => {
   var obj = JSON.parse(req.params.dues);
-  User.findByIdAndUpdate(obj[0]['id'], {btpApproved : true}, (err, user) => {
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
+  var updatedObject = {};
+  updatedObject['btp'] = obj[0]['proffEmail'];
+  updatedObject['btpApprovedAt'] = dateTime;
+  updatedObject['btpApproved'] = true;
+  User.findByIdAndUpdate(obj[0]['id'], updatedObject, (err, user) => {
     if (err) {console.log('Error finding user in btpApproved: ', err); return;}
     user.save();
     btpApproved_mailer.btpApproved_mailer(obj[0]['proffEmail'], obj[0]['email']);
@@ -248,40 +325,45 @@ module.exports.btpApproved = (req, res) => {
   });
 }
 
-module.exports.sendIpRequest = (req, res) => {
-  var obj = JSON.parse(req.params.obj);
-  User.findOneAndUpdate({email : obj[0]['studentEmail']}, {'ip': obj[0]['proffEmail']}, (err, user) => {
-    if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
-    user.save();
-    sendIpRequest_mailer.sendIpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'])
-  });
-  return res.redirect('/');
-}
-
-module.exports.sendMessageIp = (req, res) => {
-  var obj = JSON.parse(req.params.dues);
-  var studentEmail = obj[0]['email'];
-  var message = obj[0]['message'];
-  User.findOneAndUpdate({email : studentEmail}, {'ipMessage': message}, (err, user) => {
-    if (err) {console.log('Error in finding student in sendMessageIp: ', err); return;}
-    user.save();
-    return res.redirect('/proff_home');
-  });
-}
-
 module.exports.ipApproved = (req, res) => {
   var obj = JSON.parse(req.params.dues);
-  User.findByIdAndUpdate(obj[0]['id'], {ipApproved : true}, (err, user) => {
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
+  var updatedObject = {};
+  updatedObject['ip'] = obj[0]['proffEmail'];
+  updatedObject['ipApprovedAt'] = dateTime;
+  updatedObject['ipApproved'] = true;
+  User.findByIdAndUpdate(obj[0]['id'], updatedObject, (err, user) => {
     if (err) {console.log('Error finding user in ipApproved: ', err); return;}
     user.save();
+    ipApproved_mailer.ipApproved_mailer(obj[0]['proffEmail'], obj[0]['email']);
     return res.redirect('/proff_home');
   });
 }
 
-module.exports.download = (req, res) => {
-  // var student = JSON.parse(req.params.student)[0];
-  // console.log(student);
-  return res.render('pdf');
+module.exports.download = async (req, res) => {
+  var admins_list;
+  await axios.get('http://localhost:8000/user/getAdmins')
+  .then(response => {
+    admins_list = response.data;
+  })
+  .catch(error => {
+    console.log(error);
+  });
+  var admins = [];
+  for (var i=0; i<admins_list.length-2; i++) {
+    admins.push(modifyAdminName(admins_list[i][0]));
+  }
+  var email = req.params.obj;
+  User.findOne({email: email}, (err, user) => {
+    if (err) {console.log('Error in finding user in download: ', err);return;}
+    return res.render('pdf', {
+      user: JSON.stringify(user),
+      admins: JSON.stringify(admins)
+    });
+  })
 };
 
 module.exports.past = (req, res) => {
@@ -310,7 +392,22 @@ module.exports.sendBankDetails = (req, res) => {
   updateObject.bankAccountNo = obj.bankAccountNo;
   updateObject.bankIfscCode = obj.bankIfscCode;
   User.findOneAndUpdate({email : obj['email']}, updateObject, (err, user) => {
-    if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
+    if (err) {console.log('Error in finding student in sendBankDetails: ', err); return;}
+    user.save();
+  });
+  return res.redirect('/');
+}
+
+module.exports.sendPersonalDetails = (req, res) => {
+  var obj = JSON.parse(req.params.personalDetails);
+  console.log(obj);
+  var updateObject = {};
+  updateObject.mobile = obj.personalMobile;
+  updateObject.other_email = obj.personalEmail;
+  updateObject.date_of_leaving = obj.leavingDate;
+  updateObject.reason_of_leaving = obj.leavingReason;
+  User.findOneAndUpdate({email : obj['email']}, updateObject, (err, user) => {
+    if (err) {console.log('Error in finding student in sendPersonalDetails: ', err); return;}
     user.save();
   });
   return res.redirect('/');
@@ -345,6 +442,11 @@ module.exports.request = (req, res) => {
   console.log(studentEmail, adminName);
   var updateObject = {};
   updateObject[adminName+'Applied'] = true;
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
+  updateObject[adminName+'AppliedAt'] = dateTime;
   User.findOneAndUpdate({email : obj['studentEmail']}, updateObject, (err, user) => {
     if (err) {console.log('Error in updating request status: ', err); return;}
     user.save();
@@ -358,4 +460,12 @@ module.exports.flowchart = (req, res) => {
 
 module.exports.flowchart_nd = (req, res) => {
   return res.render('flowchart_nd');
+}
+
+module.exports.nd_controls = (req, res) => {
+  return res.render('nd_controls');
+}
+
+module.exports.getFunction = (req, res) => {
+  return res.status(200).json(getAdminName.adminNames);
 }

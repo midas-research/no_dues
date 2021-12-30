@@ -11,13 +11,13 @@ var studentListBtech = [];
 var studentListMtech = [];
 var studentListPhd = [];
 for (var i in studentList) {
-  if (studentList[i]['branch'] == 'btech') {
+  if (studentList[i]['degree'] == 'B. Tech') {
     studentListBtech.push(studentList[i]);
   }
-  if (studentList[i]['branch'] == 'mtech') {
+  if (studentList[i]['degree'] == 'M. Tech') {
     studentListMtech.push(studentList[i]);
   }
-  if (studentList[i]['branch'] == 'phd') {
+  if (studentList[i]['degree'] == 'PhD') {
     studentListPhd.push(studentList[i]);
   }
 }
@@ -123,6 +123,9 @@ all.addEventListener('click', () => {
 
 function sendMessage(e) {
   var dues = e.target.parentElement.previousElementSibling.value;
+  if (dues == '') {
+    return;
+  }
   var message = e.target.parentElement.parentElement.nextElementSibling;
   message.innerHTML = dues;
   var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[1].textContent;

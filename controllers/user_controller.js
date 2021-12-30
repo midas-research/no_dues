@@ -2,6 +2,9 @@ const User = require('../models/user');
 const professors = require('../professors');
 const isAdmin = require('../data/isAdmin');
 const getAdminName = require('../data/getAdminName');
+const professorsList = require('../data/professors.json');
+const studentsList = require('../data/students.json');
+const adminsList = require('../data/admins.json');
 
 module.exports.profile = (req, res) => {
     return res.render('profile', {
@@ -88,4 +91,16 @@ module.exports.destroySession = (req, res) => {
     req.flash('success', 'Logged out successfully');
     req.logout();
     return res.redirect('/user/signin');
+}
+
+module.exports.getProfessors = (req, res) => {
+    return res.status(200).json(professorsList);
+}
+
+module.exports.getStudents = (req, res) => {
+    return res.status(200).json(studentsList);
+}
+
+module.exports.getAdmins = (req, res) => {
+    return res.status(200).json(adminsList);
 }

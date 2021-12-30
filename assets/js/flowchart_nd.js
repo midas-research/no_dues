@@ -3,7 +3,7 @@ function change_data() {
 }
 
 function change_flow() {
-
+    modal1.style.display = "block";
 }
 
 var data_img = document.getElementById('data_img');
@@ -19,11 +19,16 @@ dataFlowchart = () => {
 }
 
 var modal = document.getElementById("myModal");
+var modal1 = document.getElementById("myModal1");
 var closeModal = document.getElementsByClassName("close")[0];
+var closeModal1 = document.getElementsByClassName("close1")[0];
 
 // When the user clicks on <span> (x), close the modal
 closeModal.onclick = function() {
   modal.style.display = "none";
+}
+closeModal1.onclick = function() {
+  modal1.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it

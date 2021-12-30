@@ -4,13 +4,13 @@
   "description": "A web app for automating no dues receipts for students leaving the college",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ignore admins.json --ignore professors.json --ignore students.json index.js",
+    "start": "nodemon index.js --ignore data/getAdminName.js --ignore data/getProffName.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Soumyadeep Paul",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "cheerio": "^1.0.0-rc.10",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^3.2.0",
@@ -30,6 +30,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
     "puppeteer": "^10.4.0",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "xhr2": "^0.2.1"
   }
 }

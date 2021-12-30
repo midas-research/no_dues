@@ -295,7 +295,7 @@ body {
   margin-right: 0;
 }
 
-#past, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll {
+#past, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll, #back {
   cursor: pointer;
 }
 

@@ -26,7 +26,29 @@
           <label for="bankIfscCode">Enter your IFSC code</label>
           <input type="text" id="bankIfscCode" name="firstname" placeholder="IFSC code..">
           <p class="warning" id="bankIfscCodeWarning">*Don't leave it empty.</p>
-          <input type="submit" value="Submit">
+          <input type="submit" value="Submit" id="submitBankDetailsForm">
+        </div>
+      </div>
+
+      <div id="myModal1" class="modal1">
+        <div class="modal-content1">
+          <span class="close1">&times;</span>
+          <h4><strong>Enter your personal details below.</strong></h4>
+          <label for="personalMobile">Enter your Mobile number</label> <br>
+          <input type="text" id="personalMobile" name="personalMobile" placeholder="+91-XXXXXXXXXX"> <br>
+          <p class="warning" id="personalMobileWarning">*Don't leave it empty.</p>
+          <label for="personalEmail">Enter your Personal email(non-iiitd)</label>
+          <input type="text" id="personalEmail" name="personalEmail" placeholder="abc@xyz.com"> <br>
+          <p class="warning" id="personalEmailWarning">*Don't leave it empty.</p>
+          <label for="leavingDate">Enter date of leaving</label>
+          <input type="date" id="leavingDate" name="leavingDate" placeholder="DD-MM-YYYY"> <br>
+          <p class="warning" id="leavingDateWarning">*Don't leave it empty.</p>
+          <label for="completed">Completed</label>
+          <input type="radio" id="completed" name="reason" value="Completed"><br>
+          <label for="withdrawal">Withdrawal</label>
+          <input type="radio" id="withdrawal" name="reason" value="Withdrawal"><br>
+          <p class="warning" id="leavingReasonWarning">*Don't leave it empty.</p>
+          <input type="submit" value="Submit" id="submitPersonalDetailsForm">
         </div>
       </div>
       
@@ -42,7 +64,8 @@
                     <div class="dropdown-content">
                         <a href="/user/signout">Logout</a> <br><hr>
                         <a id="downloadbtn">Download</a> <br><hr>
-                        <a id="uploadBankDetails">Bank Details</a>
+                        <a id="uploadBankDetails">Bank Details</a> <br><hr>
+                        <a id="uploadPersonalDetails">Personal Details</a>
                     </div>
                 </div>
             </div>

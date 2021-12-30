@@ -20,14 +20,16 @@ router.get('/sendIpRequest/:obj', passport.checkAuthentication, homeController.s
 router.get('/sendMessageIp/:dues', passport.checkAuthentication, homeController.sendMessageIp);
 router.get('/ipApproved/:dues', passport.checkAuthentication, homeController.ipApproved);
 router.get('/sendBankDetails/:bankDetails', passport.checkAuthentication, homeController.sendBankDetails);
+router.get('/sendPersonalDetails/:personalDetails', passport.checkAuthentication, homeController.sendPersonalDetails);
 
-router.get('/download', passport.checkAuthentication, homeController.download);
+router.get('/download/:obj', passport.checkAuthentication, homeController.download);
 
 router.get('/past/:admin', passport.checkAuthentication, homeController.past);
 
 router.get('/sheet', passport.checkSheetAuthentication, homeController.sheet);
 
 router.get('/bankAccountDetails', passport.checkBankAuthentication, homeController.bankAccountDetails);
+router.get('/sendPersonalDetails', passport.checkBankAuthentication, homeController.sendPersonalDetails);
 
 router.get('/sendMailToBoysHostelAdmin', passport.checkAuthentication, homeController.sendMailToBoysHostelAdmin);
 router.get('/sendMailToGirlsHostelAdmin', passport.checkAuthentication, homeController.sendMailToGirlsHostelAdmin);
@@ -36,6 +38,9 @@ router.get('/request/:obj', passport.checkAuthentication, homeController.request
 
 router.get('/flowchart', passport.checkSuperAdminAuthentication, homeController.flowchart);
 router.get('/flowchart/nd', passport.checkSuperAdminAuthentication, homeController.flowchart_nd);
+router.get('/nd_controls', passport.checkSuperAdminAuthentication, homeController.nd_controls);
+
+router.get('/getFunction', passport.checkAuthentication, homeController.getFunction);
 
 router.use('/user', require('./user'));
 

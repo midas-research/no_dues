@@ -1,6 +1,38 @@
-var professorList = {
-    'scheduler@iiitd.ac.in' : 'Raghava Mutharaju',
-};
+// var professorList = {
+//     'scheduler@iiitd.ac.in' : 'Raghava Mutharaju',
+// };
+
+var professorsList;
+var adminsList;
+var studentsList;
+
+var request = new XMLHttpRequest();
+request.open('GET', 'http://localhost:8000/user/getProfessors', false);
+request.send(null);
+if (request.status === 200) {
+  professorsList = JSON.parse(request.responseText);
+}
+
+var request = new XMLHttpRequest();
+request.open('GET', 'http://localhost:8000/user/getAdmins', false);
+request.send(null);
+if (request.status === 200) {
+  adminsList = JSON.parse(request.responseText);
+}
+
+var request = new XMLHttpRequest();
+request.open('GET', 'http://localhost:8000/user/getStudents', false);
+request.send(null);
+if (request.status === 200) {
+  studentsList = JSON.parse(request.responseText);
+}
+
+var reverseProfessorList = {};
+var professorList = {};
+for (var i in professorsList) {
+  professorList[professorsList[i][1]] = professorsList[i][0];
+  reverseProfessorList[professorsList[i][0]] = professorsList[i][1];
+}
 
 function sendMessageBtp(e) {
     var dues = e.target.parentElement.previousElementSibling.value;
@@ -17,6 +49,23 @@ function sendMessageBtp(e) {
     });
     console.log(JSON.stringify(obj));
     window.location.href = `http://localhost:8000/sendMessageBtp/${JSON.stringify(obj)}`;
+}
+
+function sendMessageIp(e) {
+  var dues = e.target.parentElement.previousElementSibling.value;
+  var message = e.target.parentElement.parentElement.nextElementSibling;
+  message.innerHTML = dues;
+  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[1].textContent;
+  var index = email.indexOf(" ");
+  var obj = [];
+  obj.push({
+    admin : 'ip',
+    message : dues,
+    email : email.substring(0, index),
+    proffEmail: proffEmail
+  });
+  console.log(JSON.stringify(obj));
+  window.location.href = `http://localhost:8000/sendMessageIp/${JSON.stringify(obj)}`;
 }
 
 function btpApproved(e) {
@@ -41,22 +90,6 @@ function btpApproved(e) {
     r.remove();
 }
 
-function sendMessageIp(e) {
-    var dues = e.target.parentElement.previousElementSibling.value;
-    var message = e.target.parentElement.parentElement.nextElementSibling;
-    message.innerHTML = dues;
-    var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[1].textContent;
-    var index = email.indexOf(" ");
-    var obj = [];
-    obj.push({
-      admin : 'ip',
-      message : dues,
-      email : email.substring(0, index)
-    });
-    console.log(JSON.stringify(obj));
-    window.location.href = `http://localhost:8000/sendMessageIp/${JSON.stringify(obj)}`;
-}
-
 function ipApproved(e) {
     var r = e.parentElement.parentElement;
     var emailroll = e.parentElement.childNodes[1].innerHTML;
@@ -70,6 +103,7 @@ function ipApproved(e) {
     console.log(studentId);
     var obj = [];
     obj.push({
+      proffEmail: proffEmail,
       email : email,
       id: studentId
     });
@@ -90,25 +124,25 @@ var studentsPhd = []
 for (var i in studentList) {
     if (!('ipApproved' in studentList[i]) && studentList[i]['ip']==proffEmail) {
         studentsAll.push(studentList[i]);
-        if (studentList[i]['branch'] == 'btech') {
+        if (studentList[i]['degree'] == 'B. Tech') {
             studentsBtech.push(studentList[i]);
         }
-        if (studentList[i]['branch'] == 'mtech') {
+        if (studentList[i]['degree'] == 'M. Tech') {
             studentsBtech.push(studentList[i]);
         }
-        if (studentList[i]['branch'] == 'phd') {
+        if (studentList[i]['degree'] == 'PhD') {
             studentsBtech.push(studentList[i]);
         }
     }
     if (studentList[i]['btp']==proffEmail && !('btpApproved' in studentList[i])) {
         studentsAll.push(studentList[i]);
-        if (studentList[i]['branch'] == 'btech') {
+        if (studentList[i]['degree'] == 'B. Tech') {
             studentsBtech.push(studentList[i]);
         }
-        if (studentList[i]['branch'] == 'mtech') {
+        if (studentList[i]['degree'] == 'M. Tech') {
             studentsBtech.push(studentList[i]);
         }
-        if (studentList[i]['branch'] == 'phd') {
+        if (studentList[i]['degree'] == 'PhD') {
             studentsBtech.push(studentList[i]);
         }
     }
@@ -119,7 +153,15 @@ console.log(studentsMtech);
 console.log(studentsPhd);
 
 var accordion = document.getElementsByClassName('accordion')[0];
+var btpVisited = {};
+accordion.innerHTML = "";
 for (var i in studentsAll) {
+    if (studentsAll[i].email in btpVisited) {
+      continue;
+    } else {
+      btpVisited[studentsAll[i].email] = true;
+    }
+    console.log('btp', i);
     if (!('btp' in studentsAll[i]) || ('btpApproved' in studentsAll[i])) {
         continue;
     }
@@ -130,11 +172,10 @@ for (var i in studentsAll) {
       message = 'You have not sent any message currently.';
     }
     if (studentsAll[i]['btp']) {
-      accordion.innerHTML = "";
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsAll[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsAll[i].email} - ${studentsBtech[i].roll} - BTP</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;btpApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -150,7 +191,15 @@ for (var i in studentsAll) {
         </div>`
     }
   }
-  for (var i in studentsAll) {
+
+var ipVisited = {};
+for (var i in studentsAll) {
+    if (studentsAll[i].email in ipVisited) {
+      continue;
+    } else {
+      ipVisited[studentsAll[i].email] = true;
+    }
+    console.log('btp', i);
     if (!('ip' in studentsAll[i]) || ('ipApproved' in studentsAll[i])) {
         continue;
     }
@@ -161,11 +210,10 @@ for (var i in studentsAll) {
       message = 'You have not sent any message currently.';
     }
     if (studentsAll[i]['ip']) {
-      accordion.innerHTML = "";
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsAll[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsAll[i].email} - ${studentsBtech[i].roll} - IP/IS/UR</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;ipApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -198,7 +246,13 @@ for (var i in studentsAll) {
 var filterBtech = document.getElementsByClassName('filter-btech')[0];
 filterBtech.addEventListener('click', () => {
    accordion.innerHTML = '';
+   var btpVisited = {};
    for (var i in studentsBtech) {
+    if (studentsBtech[i].email in btpVisited) {
+      continue;
+    } else {
+      btpVisited[studentsBtech[i].email] = true;
+    }
     if (!('btp' in studentsBtech[i]) || ('btpApproved' in studentsBtech[i])) {
         continue;
     }
@@ -209,11 +263,10 @@ filterBtech.addEventListener('click', () => {
         message = 'You have not sent any message currently.';
       }
     if (studentsBtech[i]['btp']) {
-      accordion.innerHTML = '';
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsBtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsBtech[i].email} - ${studentsBtech[i].roll} - BTP</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;btpApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -229,7 +282,13 @@ filterBtech.addEventListener('click', () => {
         </div>`
     }
   }
+  var ipVisited = {};
   for (var i in studentsBtech) {
+    if (studentsBtech[i].email in ipVisited) {
+      continue;
+    } else {
+      ipVisited[studentsBtech[i].email] = true;
+    }
     if (!('ip' in studentsBtech[i]) || ('ipApproved' in studentsBtech[i])) {
         continue;
     }
@@ -240,11 +299,10 @@ filterBtech.addEventListener('click', () => {
         message = 'You have not sent any message currently.';
       }
     if (studentsBtech[i]['ip']) {
-      accordion.innerHTML = '';
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsBtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsBtech[i].email} - ${studentsBtech[i].roll} - IP/IS/UR</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;ipApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -276,7 +334,13 @@ filterBtech.addEventListener('click', () => {
 var filterMtech = document.getElementsByClassName('filter-mtech')[0];
 filterMtech.addEventListener('click', () => {
   accordion.innerHTML = '';
+  var btpVisited = {};
   for (var i in studentsMtech) {
+    if (studentsMtech[i].email in btpVisited) {
+      continue;
+    } else {
+      btpVisited[studentsMtech[i].email] = true;
+    }
     if (!('btp' in studentsMtech[i]) || ('btpApproved' in studentsMtech[i])) {
         continue;
     }
@@ -290,7 +354,7 @@ filterMtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsMtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsMtech[i].email} - ${studentsBtech[i].roll} - BTP</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;btpApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -306,7 +370,13 @@ filterMtech.addEventListener('click', () => {
         </div>`
     }
   }
+  var ipVisited = {};
   for (var i in studentsMtech) {
+    if (studentsMtech[i].email in ipVisited) {
+      continue;
+    } else {
+      ipVisited[studentsMtech[i].email] = true;
+    }
     if (!('ip' in studentsMtech[i]) || ('ipApproved' in studentsMtech[i])) {
         continue;
     }
@@ -320,7 +390,7 @@ filterMtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsMtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsMtech[i].email} - ${studentsBtech[i].roll} - IP/IS/UR</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;ipApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -352,7 +422,13 @@ filterMtech.addEventListener('click', () => {
 var filterPhd = document.getElementsByClassName('filter-phd')[0];
 filterPhd.addEventListener('click', () => {
   accordion.innerHTML = '';
+  var btpVisited = {};
   for (var i in studentsPhd) {
+    if (studentsPhd[i].email in btpVisited) {
+      continue;
+    } else {
+      btpVisited[studentsPhd[i].email] = true;
+    }
     if (!('btp' in studentsPhd[i]) || ('btpApproved' in studentsPhd[i])) {
         continue;
     }
@@ -366,7 +442,7 @@ filterPhd.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsPhd[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsPhd[i].email} - ${studentsBtech[i].roll} - BTP</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;btpApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -382,7 +458,13 @@ filterPhd.addEventListener('click', () => {
         </div>`
     }
   }
+  var ipVisited = {};
   for (var i in studentsPhd) {
+    if (studentsPhd[i].email in ipVisited) {
+      continue;
+    } else {
+      ipVisited[studentsPhd[i].email] = true;
+    }
     if (!('ip' in studentsPhd[i]) || ('ipApproved' in studentsPh[i])) {
         continue;
     }
@@ -396,7 +478,7 @@ filterPhd.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsPhd[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsPhd[i].email} - ${studentsBtech[i].roll} - IP/IS/UR</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;ipApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -428,7 +510,13 @@ filterPhd.addEventListener('click', () => {
 var filterAll = document.getElementsByClassName('filter-active')[0];
 filterAll.addEventListener('click', () => {
   accordion.innerHTML = '';
+  var btpVisited = {};
   for (var i in studentsAll) {
+    if (studentsAll[i].email in btpVisited) {
+      continue;
+    } else {
+      btpVisited[studentsAll[i].email] = true;
+    }
     if (!('btp' in studentsAll[i]) || ('btpApproved' in studentsAll[i])) {
         continue;
     }
@@ -442,7 +530,7 @@ filterAll.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsAll[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsAll[i].email} - ${studentsBtech[i].roll} - BTP</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;btpApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>
@@ -458,7 +546,13 @@ filterAll.addEventListener('click', () => {
         </div>`
     }
   }
+  var ipVisited = {};
   for (var i in studentsAll) {
+    if (studentsAll[i].email in ipVisited) {
+      continue;
+    } else {
+      ipVisited[studentsAll[i].email] = true;
+    }
     if (!('ip' in studentsAll[i]) || ('ipApproved' in studentsAll[i])) {
         continue;
     }
@@ -472,7 +566,7 @@ filterAll.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentsAll[i].email} - 2018104</span>
+              <span class="accordion-title">${studentsAll[i].email} - ${studentsBtech[i].roll} - IP/IS/UR</span>
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;ipApproved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
           </button>

@@ -19,13 +19,13 @@ var studentListBtech = [];
 var studentListMtech = [];
 var studentListPhd = [];
 for (var i in studentList) {
-  if (studentList[i]['branch'] == 'btech') {
+  if (studentList[i]['degree'] == 'B. Tech') {
     studentListBtech.push(studentList[i]);
   }
-  if (studentList[i]['branch'] == 'mtech') {
+  if (studentList[i]['degree'] == 'M. Tech') {
     studentListMtech.push(studentList[i]);
   }
-  if (studentList[i]['branch'] == 'phd') {
+  if (studentList[i]['degree'] == 'PhD') {
     studentListPhd.push(studentList[i]);
   }
 }
@@ -50,9 +50,9 @@ for (var i in studentList) {
             <span class="icon" aria-hidden="true"></span>
         </button>
         <div class="accordion-content">
-          <span class="message">Approved : ${studentList[i]['updatedAt'].substring(0, 10)} &emsp; 15:53</span><br>
+          <span class="message">Approved : ${studentList[i][adminName+'ApprovedAt']}</span><br>
           <span class="message">${message}</span><br>
-          <span class="message">Requested : ${studentList[i]['createdAt'].substring(0, 10)} &emsp; 16:01</span>
+          <span class="message">Requested : ${studentList[i][adminName+'AppliedAt']}</span>
         </div>
       </div>`
   }
@@ -263,3 +263,8 @@ var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
   window.location.href = "http://localhost:8000/bankAccountDetails";
 });
+
+var back = document.getElementById('back');
+back.addEventListener('click', () => {
+  history.back();
+})

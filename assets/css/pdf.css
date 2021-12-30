@@ -39,3 +39,7 @@ td, th {
     width: 600px;
     margin: auto;
 }
+
+.underline {
+    text-decoration: underline;
+}

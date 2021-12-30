@@ -8,12 +8,14 @@
         <link rel="stylesheet" type="text/css" href="/css/pdf.css"/>
     </head>
     <body>
+        <p id="user" style="display:none"><%= user %></p>
+        <p id="admins" style="display:none"><%= admins %></p>
         <h3>No-Dues Form for students</h3>
         <hr>
         <div id="details">
-            <p><strong>Name of the student:</strong> Soumyadeep Paul &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>Roll no.:</strong> 2018104 &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>Programme:</strong> B.Tech</p>
-            <p><strong>Phone No.:</strong> +91-9348482792 &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>E-mail(other than IIITD):</strong> soumyadeepsp@gmail.com</p>
-            <p><strong>Date of leaving IIITD:</strong> 01-08-2021 &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>Reason of leaving program:</strong> Completed</p>
+            <p><strong>Name of the student:</strong> <%= JSON.parse(user).name %> &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>Roll no:</strong> <%= JSON.parse(user).roll %> &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>Programme:</strong> <%= JSON.parse(user).degree %> </p>
+            <p><strong>Phone No.:</strong> <%= JSON.parse(user).mobile %> &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>E-mail(other than IIITD):</strong> <%= JSON.parse(user).other_email %></p>
+            <p><strong>Date of leaving IIITD:</strong> <%= JSON.parse(user).date_of_leaving %> &nbsp;&nbsp;&nbsp; || &nbsp;&nbsp;&nbsp; <strong>Reason of leaving program:</strong> <%= JSON.parse(user).reason_of_leaving %> </p>
         </div>
         <hr>
         <div id="table">
@@ -134,13 +136,13 @@
                 (if not paid earlier), Convocation Fee of &#x20B9; 1500/- and donation amount mentioned in the
                 Google form will be deducted and remaining amount will be transferred]
             </p>
-            <p>Bank Name and branch: _____________________</p>
-            <p>Account No.: _____________________</p>
-            <p>IFSC Code: _____________________</p>
+            <p>Bank Name and branch: <span class="underline"><%= JSON.parse(user).bankName %>, <%= JSON.parse(user).bankBranch %></span> </p>
+            <p>Account No.: <span class="underline"><%= JSON.parse(user).bankAccountNo %></span> </p>
+            <p>IFSC Code: <span class="underline"><%= JSON.parse(user).bankIfscCode %></span> </p>
             <p><strong>(Please attach a cancelled cheque for oyur bank account)</strong></p>
             <br>
-            <p>Date: ___________</p>
-            <p>Signature of the student: _____________________</p>
+            <p>Date: <span id="date" class="underline"></span> </p>
+            <p>Signature of the student: <span class="underline"><%= JSON.parse(user).name %></span> </p>
         </div>
         <hr>
         <div id="officeUse">

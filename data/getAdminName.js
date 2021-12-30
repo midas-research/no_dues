@@ -1,27 +1,9 @@
+var adminNames = {"admin-dilabs@iiitd.ac.in":"designLab","library@iiitd.ac.in":"library","admin-facilities@iiitd.ac.in":"adminFacilities","abhinay@iiitd.ac.in":"systemAdminAndNetworking","admin-sports@iiitd.ac.in":"sportsAndStudentFacilities","admin-hostel@iiitd.ac.in":"academics","rahul@iiitd.ac.in":"eceLabs","admin-placement@iiitd.ac.in":"placementIncharge","incubation@iiitd.ac.in":"incubationCenter","varsha@iiitd.ac.in":"finance","no-dues@iiitd.ac.in":"newDepartment","admin-btech@iiitd.ac.in":"academics","admin-phd@iiitd.ac.in":"academics"}
 module.exports.getAdminName = (email) => {
-    if (email == 'no-dues@iiitd.ac.in') {
-        return 'designLab';
-    } else if (email == 'rajendra@iiitd.ac.in') {
-        return 'library';
-    } else if (email == 'admin-facilities@iiitd.ac.in') {
-        return 'adminFacilities';
-    }  else if (email == 'ravi@iiitd.ac.in') {
-      return 'hostel';
-    } else if (email == 'abhinay@iiitd.ac.in') {
-        return 'systemAdmin';
-    } else if (email == 'ravi@iiitd.ac.in') {
-        return 'sports';
-    } else if (email == 'rahul@iiitd.ac.in') {
-        return 'eceLabs';
-    } else if (email == 'rashmil@iiitd.ac.in') {
-        return 'placement';
-    } else if (email == 'geetagupta@iiitdic.in') {
-        return 'incubation';
-    } else if (email == 'varsha@iiitd.ac.in') {
-        return 'finance';
-    } else if (email == 'admin-btech@iiitd.ac.in') {
-        return 'academics';
-    } else {
-        return 'student';
+        if (email in adminNames) {
+            return adminNames[email];
+        } else {
+            return 'student';
+        }
     }
-  }
+    module.exports.adminNames = adminNames;

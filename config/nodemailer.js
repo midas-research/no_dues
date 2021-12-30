@@ -9,7 +9,7 @@ let transporter = nodemailer.createTransport({
     secure : false,
     auth : {
         user : 'no-dues@iiitd.ac.in',
-        pass : 'getYourNoDues@IIITD'
+        pass : 'SangeetaPaul1!'
     }
 });
 
