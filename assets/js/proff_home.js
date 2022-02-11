@@ -147,10 +147,10 @@ for (var i in studentList) {
         }
     }
 }
-console.log(studentsAll);
-console.log(studentsBtech);
-console.log(studentsMtech);
-console.log(studentsPhd);
+// console.log(studentsAll);
+// console.log(studentsBtech);
+// console.log(studentsMtech);
+// console.log(studentsPhd);
 
 var accordion = document.getElementsByClassName('accordion')[0];
 var btpVisited = {};

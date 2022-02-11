@@ -329,7 +329,7 @@ past.addEventListener('click', () => {
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/sheet";
+  window.location.href = "http://localhost:8000/showSheet";
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');

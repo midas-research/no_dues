@@ -3,19 +3,18 @@ const port = 8000;
 const axios = require('axios');
 const db = require('./config/mongoose');
 const cookieParser = require('cookie-parser');
-const session= require('express-session');
+const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const mongoStore = require('connect-mongo')(session);
 const passportGoogle = require('./config/passport-google-oauth2-strategy');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
-const {google} = require('googleapis');
+const { google } = require('googleapis');
 //const request = require('request-promise');
 const cheerio = require('cheerio');
 const https = require('https');
 //const professorsList = require('./config/professors');
-const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 const app = express();
@@ -32,7 +31,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     cookie: {
-        maxAge: 1000*60*100
+        maxAge: 1000 * 60 * 100
     },
     store: new mongoStore({
         mongooseConnection: db,
@@ -63,7 +62,7 @@ app.listen(port, async (err) => {
         scopes: "https://www.googleapis.com/auth/spreadsheets"
     });
     var client = await auth.getClient();
-    var googleSheets = google.sheets({version: "v4", auth: client});
+    var googleSheets = google.sheets({ version: "v4", auth: client });
     var metadata = await googleSheets.spreadsheets.get({
         auth: auth,
         spreadsheetId: spreadsheetId
@@ -75,10 +74,10 @@ app.listen(port, async (err) => {
     });
     global.admins_data = data.data.values;
     fs.readFile('./data/admins.json', (err, data) => {
-        if (err) {console.log('Error in writing to admins file: ', err); return;}
+        if (err) { console.log('Error in writing to admins file: ', err); return; }
         if (data != JSON.stringify(global.admins_data)) {
             fs.writeFile('./data/admins.json', JSON.stringify(global.admins_data), (err) => {
-                if (err) {console.log('Error in writing to admins file: ', err); return;}
+                if (err) { console.log('Error in writing to admins file: ', err); return; }
             });
         }
     });
@@ -89,7 +88,7 @@ app.listen(port, async (err) => {
         scopes: "https://www.googleapis.com/auth/spreadsheets"
     });
     var client = await auth.getClient();
-    var googleSheets = google.sheets({version: "v4", auth: client});
+    var googleSheets = google.sheets({ version: "v4", auth: client });
     var metadata = await googleSheets.spreadsheets.get({
         auth: auth,
         spreadsheetId: spreadsheetId
@@ -101,10 +100,10 @@ app.listen(port, async (err) => {
     });
     professors_data = data.data.values;
     fs.readFile('./data/professors.json', (err, data) => {
-        if (err) {console.log('Error in writing to admins file: ', err); return;}
+        if (err) { console.log('Error in writing to admins file: ', err); return; }
         if (data != JSON.stringify(professors_data)) {
             fs.writeFile('./data/professors.json', JSON.stringify(professors_data), (err) => {
-                if (err) {console.log('Error in writing to admins file: ', err); return;}
+                if (err) { console.log('Error in writing to admins file: ', err); return; }
             });
         }
     });
@@ -116,8 +115,8 @@ app.listen(port, async (err) => {
         return adminNames[email];
     }
     module.exports.proffNames = proffNames;`
-    fs.writeFile('./data/getProffName.js', 'var proffNames = '+JSON.stringify(proffNames)+'\n'+text, (err) => {
-        if (err) {console.log('Error in writing to admins file: ', err); return;}
+    fs.writeFile('./data/getProffName.js', 'var proffNames = ' + JSON.stringify(proffNames) + '\n' + text, (err) => {
+        if (err) { console.log('Error in writing to admins file: ', err); return; }
     });
 
     var spreadsheetId = "1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU";
@@ -126,7 +125,7 @@ app.listen(port, async (err) => {
         scopes: "https://www.googleapis.com/auth/spreadsheets"
     });
     var client = await auth.getClient();
-    var googleSheets = google.sheets({version: "v4", auth: client});
+    var googleSheets = google.sheets({ version: "v4", auth: client });
     var metadata = await googleSheets.spreadsheets.get({
         auth: auth,
         spreadsheetId: spreadsheetId
@@ -138,21 +137,21 @@ app.listen(port, async (err) => {
     });
     students_data = data.data.values;
     fs.readFile('./data/students.json', (err, data) => {
-        if (err) {console.log('Error in writing to admins file: ', err); return;}
+        if (err) { console.log('Error in writing to admins file: ', err); return; }
         if (data != JSON.stringify(students_data)) {
             fs.writeFile('./data/students.json', JSON.stringify(students_data), (err) => {
-                if (err) {console.log('Error in writing to admins file: ', err); return;}
+                if (err) { console.log('Error in writing to admins file: ', err); return; }
             });
         }
     });
 
     function changeNameFormat(name) {
-        if (name.substring(0,9) == 'Academics') {
+        if (name.substring(0, 9) == 'Academics') {
             return 'academics';
         }
         var arr = name.split(" ");
         var newName = arr[0].toLowerCase();
-        for (var i=1; i<arr.length; i++) {
+        for (var i = 1; i < arr.length; i++) {
             if (arr[i] == '&') {
                 arr[i] = 'and';
             }
@@ -176,8 +175,8 @@ app.listen(port, async (err) => {
     }
     module.exports.adminNames = adminNames;`
     global.admins_data = adminNames;
-    fs.writeFile('./data/getAdminName.js', 'var adminNames = '+JSON.stringify(adminNames)+'\n'+text, (err) => {
-        if (err) {console.log('Error in writing to admins file: ', err); return;}
+    fs.writeFile('./data/getAdminName.js', 'var adminNames = ' + JSON.stringify(adminNames) + '\n' + text, (err) => {
+        if (err) { console.log('Error in writing to admins file: ', err); return; }
     });
 
 

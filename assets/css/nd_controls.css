@@ -70,3 +70,7 @@ h1 {
     outline: 0;
     border-color: #4697e4;
   }
+
+  .department {
+    font-weight: bolder;
+  }

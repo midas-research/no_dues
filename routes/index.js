@@ -38,9 +38,11 @@ router.get('/request/:obj', passport.checkAuthentication, homeController.request
 
 router.get('/flowchart', passport.checkSuperAdminAuthentication, homeController.flowchart);
 router.get('/flowchart/nd', passport.checkSuperAdminAuthentication, homeController.flowchart_nd);
-router.get('/nd_controls', passport.checkSuperAdminAuthentication, homeController.nd_controls);
+router.get('/nd_controls/mailContents', passport.checkSuperAdminAuthentication, homeController.nd_controls);
 
 router.get('/getFunction', passport.checkAuthentication, homeController.getFunction);
+
+router.get('/showSheet', passport.checkAuthentication, homeController.showSheet);
 
 router.use('/user', require('./user'));
 

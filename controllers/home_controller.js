@@ -163,7 +163,7 @@ module.exports.studentList = (req, res) => {
 }
 
 module.exports.sendMessage = (req, res) => {
-  var obj = JSON.parse(req.params.dues)
+  var obj = JSON.parse(req.params.dues);
   console.log(obj);
   User.findOne({email : obj[0].email}, (err, user) => {
     if (err) {console.log('Error in finding student from email id'); return;}
@@ -468,4 +468,8 @@ module.exports.nd_controls = (req, res) => {
 
 module.exports.getFunction = (req, res) => {
   return res.status(200).json(getAdminName.adminNames);
+}
+
+module.exports.showSheet = (req, res) => {
+  return res.render('showSheet');
 }

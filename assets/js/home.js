@@ -1,4 +1,4 @@
-const user = JSON.parse(document.getElementById('user').innerHTML);
+var user = JSON.parse(document.getElementById('user').innerHTML);
 console.log(user);
 const admins_list = JSON.parse(document.getElementById('admins').innerHTML);
 console.log(admins_list);
@@ -414,6 +414,45 @@ for (var i in admins) {
     document.getElementById(admins[i]+'Message').innerHTML = 'Dues for this department has been approved';
   }
 }
+setInterval(() => {
+  var request = new XMLHttpRequest();
+  request.open('GET', `http://localhost:8000/user/getUser/${user[0]._id}`, false);
+  request.send(null);
+  if (request.status === 200) {
+    user = [];
+    user.push(JSON.parse(request.responseText));
+  }
+
+  for (var i in admins) {
+    if (user[0][admins[i]+'Message'] && !user[0][admins[i]]) {
+      document.getElementById(admins[i]+'Message').innerHTML = user[0][admins[i]+'Message'];
+      var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
+      symbol.classList.remove('fa-spinner');
+      symbol.classList.add('fa-times-circle');
+    }
+    if (user[0][admins[i]+'Applied'] && !user[0][admins[i]]) {
+      var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
+      console.log(document.getElementsByClassName(admins[i]+'Symbol')[0]);
+      symbol.classList.remove('fa-dot-circle');
+      symbol.classList.add('fa-spinner');
+    }
+    if (user[0][admins[i]+'Applied'] && user[0][admins[i]]) {
+      var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
+      if (symbol.classList.contains('fa-spinner')) {
+        symbol.classList.remove('fa-spinner');
+        symbol.classList.add('fa-check-circle');
+      } else if (symbol.classList.contains('fa-times-circle')) {
+        symbol.classList.remove('fa-times-circle');
+        symbol.classList.add('fa-check-circle');
+      } else if (symbol.classList.contains('fa-dot-circle')) {
+        symbol.classList.remove('fa-dot-circle');
+        symbol.classList.add('fa-check-circle');
+      }
+      else {}
+      document.getElementById(admins[i]+'Message').innerHTML = 'Dues for this department has been approved';
+    }
+  }
+}, 5000);
 
 var reverseProfessorList = {};
 var professorList = {};

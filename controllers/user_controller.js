@@ -97,10 +97,25 @@ module.exports.getProfessors = (req, res) => {
     return res.status(200).json(professorsList);
 }
 
+module.exports.getUser = async (req, res) => {
+    var id = req.params.id;
+    await User.findById(id, (err, user) => {
+        if (err) {console.log('Error in finding user in getuser ', err); return;}
+        return res.status(200).json(user);
+    });
+}
+
 module.exports.getStudents = (req, res) => {
     return res.status(200).json(studentsList);
 }
 
 module.exports.getAdmins = (req, res) => {
     return res.status(200).json(adminsList);
+}
+
+module.exports.getStudentsLoggedIn = async (req, res) => {
+    await User.find({}, (err, users) => {
+        if (err) {console.log('Error in finding all users in getStudentsLoggedIn: ', err); return;}
+        return res.status(200).json(users);
+    });
 }

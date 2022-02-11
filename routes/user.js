@@ -18,5 +18,7 @@ router.get('/auth/google/callback', passport.authenticate('google', {failureRedi
 router.get('/getProfessors', userController.getProfessors);
 router.get('/getStudents', userController.getStudents);
 router.get('/getAdmins', userController.getAdmins);
+router.get('/getUser/:id', userController.getUser);
+router.get('/getStudentsLoggedIn', userController.getStudentsLoggedIn);
 
 module.exports = router;

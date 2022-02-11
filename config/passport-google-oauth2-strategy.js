@@ -6,7 +6,8 @@ const professors = require('../professors');
 const getAdminName = require('../data/getAdminName');
 const isAdmin = require('../data/isAdmin');
 const fs = require('fs');
-const {google} = require('googleapis');
+const { google } = require('googleapis');
+const students_data = require('../data/students.json');
 
 function getGender(email, students) {
     for (var i in students) {
@@ -16,41 +17,41 @@ function getGender(email, students) {
             var degree = students[i][0]
             var roll = students[i][1];
             var name = students[i][2];
-            if (gender=='m' || gender=='M' || gender=='male' || gender=='Male') {
+            if (gender == 'm' || gender == 'M' || gender == 'male' || gender == 'Male') {
                 gender = 'male';
-            } else if (gender=='f' || gender=='F' || gender=='female' || gender=='Female') {
+            } else if (gender == 'f' || gender == 'F' || gender == 'female' || gender == 'Female') {
                 gender = 'female';
             } else {
                 gender = 'others';
             }
-            if (branch=='Computer Science and Applied Mathematics' || branch=='Computer Science & Applied Mathematics' || branch=='CSAM') {
+            if (branch == 'Computer Science and Applied Mathematics' || branch == 'Computer Science & Applied Mathematics' || branch == 'CSAM') {
                 branch = 'CSAM';
             }
-            if (branch=='Computer Science and Engineering' || branch=='Computer Science & Engineering' || branch=='CSE') {
+            if (branch == 'Computer Science and Engineering' || branch == 'Computer Science & Engineering' || branch == 'CSE') {
                 branch = 'CSE';
             }
-            if (branch=='Computer Science and Design' || branch=='Computer Science & Design' || branch=='CSD') {
+            if (branch == 'Computer Science and Design' || branch == 'Computer Science & Design' || branch == 'CSD') {
                 branch = 'CSD';
             }
-            if (branch=='Electronics and Communication Engineering' || branch=='Electronics & Communication Engineering' || branch=='ECE') {
+            if (branch == 'Electronics and Communication Engineering' || branch == 'Electronics & Communication Engineering' || branch == 'ECE') {
                 branch = 'ECE';
             }
-            if (branch=='Computer Science and Biosciences' || branch=='Computer Science and Biosciences' || branch=='CSB') {
+            if (branch == 'Computer Science and Biosciences' || branch == 'Computer Science and Biosciences' || branch == 'CSB') {
                 branch = 'CSB';
             }
-            if (branch=='Computer Science and Artificial Intelligence' || branch=='Computer Science and Artificial Intelligence' || branch=='CSAI') {
+            if (branch == 'Computer Science and Artificial Intelligence' || branch == 'Computer Science and Artificial Intelligence' || branch == 'CSAI') {
                 branch = 'CSAI';
             }
-            if (branch=='Computer Science and Social Sciences' || branch=='Computer Science and Social Sciences' || branch=='CSSS') {
+            if (branch == 'Computer Science and Social Sciences' || branch == 'Computer Science and Social Sciences' || branch == 'CSSS') {
                 branch = 'CSSS';
             }
-            if (degree=='B.Tech' || degree=='B.Tech.') {
+            if (degree == 'B.Tech' || degree == 'B.Tech.') {
                 degree = 'B. Tech';
             }
-            if (degree=='M.Tech' || degree=='M.Tech.') {
+            if (degree == 'M.Tech' || degree == 'M.Tech.') {
                 degree = 'M. Tech';
             }
-            if (degree=='PhD') {
+            if (degree == 'PhD') {
                 degree = 'PhD';
             }
             return [gender, branch, degree, roll, name];
@@ -64,7 +65,7 @@ passport.use(new googleStrategy({
     callbackURL: 'http://localhost:8000/user/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
     if (isAdmin.isAdmin(profile.emails[0].value)) {
-        User.findOne({email: profile.emails[0].value}).exec((err, user) => {
+        User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
             }
@@ -87,7 +88,7 @@ passport.use(new googleStrategy({
             }
         })
     } else if (profile.emails[0].value in professors) {
-        User.findOne({email: profile.emails[0].value}).exec((err, user) => {
+        User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
             }
@@ -109,24 +110,24 @@ passport.use(new googleStrategy({
             }
         })
     } else {
-        var spreadsheetId = "1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU";
-        var auth = new google.auth.GoogleAuth({
-            keyFile: "credentials.json",
-            scopes: "https://www.googleapis.com/auth/spreadsheets"
-        });
-        var client = await auth.getClient();
-        var googleSheets = google.sheets({version: "v4", auth: client});
-        var metadata = await googleSheets.spreadsheets.get({
-            auth: auth,
-            spreadsheetId: spreadsheetId
-        });
-        var data = await googleSheets.spreadsheets.values.get({
-            auth: auth,
-            spreadsheetId: spreadsheetId,
-            range: "ALL"
-        });
-        students_data = data.data.values;
-        User.findOne({email: profile.emails[0].value}).exec((err, user) => {
+        // var spreadsheetId = "1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU";
+        // var auth = new google.auth.GoogleAuth({
+        //     keyFile: "credentials.json",
+        //     scopes: "https://www.googleapis.com/auth/spreadsheets"
+        // });
+        // var client = await auth.getClient();
+        // var googleSheets = google.sheets({ version: "v4", auth: client });
+        // var metadata = await googleSheets.spreadsheets.get({
+        //     auth: auth,
+        //     spreadsheetId: spreadsheetId
+        // });
+        // var data = await googleSheets.spreadsheets.values.get({
+        //     auth: auth,
+        //     spreadsheetId: spreadsheetId,
+        //     range: "ALL"
+        // });
+        // students_data = data.data.values;
+        User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
             }
