@@ -16,7 +16,8 @@ const cheerio = require('cheerio');
 const https = require('https');
 //const professorsList = require('./config/professors');
 const fs = require('fs');
-
+// g6d=Z8P%
+// ssh iiitd@192.168.1.240
 const app = express();
 
 app.set('view engine', 'ejs');
