@@ -13,8 +13,6 @@ function fetchProffName(email) {
 }
 
 exports.sendBtpMessage_mailer = (message, email, admin) => {
-    console.log('inside new message mailer');
-    //let htmlString = nodemailer.renderTemplate({data: message}, '/new_message');
     let htmlString = `
     <div>
         <p>Hi ${fetchStudentName(email)}!</p>
@@ -25,7 +23,6 @@ exports.sendBtpMessage_mailer = (message, email, admin) => {
         <br>
         <p>Thanks no-dues!</p>
     </div>`
-    console.log(htmlString);
     nodemailer.transporter.sendMail({
         from : 'no-dues@iiitd.ac.in',
         to : email,

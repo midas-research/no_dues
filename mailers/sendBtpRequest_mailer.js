@@ -14,7 +14,6 @@ function fetchProffName(email) {
 }
 
 exports.sendBtpRequest = async (proffEmail, studentEmail) => {
-    console.log('inside new message mailer');
     var student = await User.findOne({email: studentEmail});
     var obj = [];
     obj.push({
@@ -22,8 +21,6 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
       email : studentEmail,
       id: student._id
     });
-    console.log(JSON.stringify(obj));
-    // var url = `http://localhost:8000/btpApproved/${JSON.stringify(obj)}`;
     var url = 'http://localhost:8000/proff_home';
     let htmlString = `
     <div>
@@ -36,7 +33,6 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
         <br>
         <p>Thanks No-Dues!</p>
     </div>`
-    console.log(htmlString);
     nodemailer.transporter.sendMail({
         from : 'no-dues@iiitd.ac.in',
         to : proffEmail,

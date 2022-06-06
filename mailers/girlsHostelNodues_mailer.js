@@ -1,8 +1,6 @@
 const nodemailer = require('../config/nodemailer');
 
 exports.girlsHostelNodues_mailer = (email) => {
-    console.log('inside new message mailer');
-    //let htmlString = nodemailer.renderTemplate({data: message}, '/new_message');
     let htmlString = `
     <div>
         <p>Hello!</p>
@@ -14,7 +12,6 @@ exports.girlsHostelNodues_mailer = (email) => {
         <br>
         <p>Thanks no-dues!</p>
     </div>`
-    console.log(htmlString);
     nodemailer.transporter.sendMail({
         from : 'no-dues@iiitd.ac.in',
         to : email,

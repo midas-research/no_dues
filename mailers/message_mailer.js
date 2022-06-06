@@ -22,50 +22,46 @@ function fetchName(email) {
 }
 
 exports.newMessage = async (message, email, admin) => {
-    var request = new XMLHttpRequest();
-    request.open('GET', 'http://localhost:8000/user/getAdmins', false);
-    request.send(null);
-    if (request.status === 200) {
-    adminsList = JSON.parse(request.responseText);
-    }
-    var adminDetails = {};
-    for (var i in adminsList) {
-        adminDetails[changeNameFormat(adminsList[i][0])] = {
-            'name': adminsList[i][2]
-        };
-    }
-    console.log('inside new message mailer');
-    if (admin == 'academics') {
-        await User.findOne({email: email}, (err, user) => {
-            if (err) {console.log('Error in finding user in approveDues: ', err); return;}
-            if (user['degree'] == 'B. Tech') {admin = 'academicsBtech'}
-            if (user['degree'] == 'M. Tech') {admin = 'academicsMtech'}
-            if (user['degree'] == 'PhD') {admin = 'academicsPhd'}
-        });
-    }
-    //let htmlString = nodemailer.renderTemplate({data: message}, '/new_message');
-    let htmlString = `
-    <div>
-        <p>Hi ${fetchName(email)}!</p>
-        <br>
-        <p>You have received the following message regarding your dues in the ${admin[0].toUpperCase()+admin.substring(1,)} department.</p>
-        <br>
-        <p>Message - ${message}</p>
-        <br>
-        <p>Thanks ${adminDetails[admin]['name']}!</p>
-        <p>${adminDetails[admin]['address']}</p>
-    </div>`
-    console.log(htmlString);
-    nodemailer.transporter.sendMail({
-        from : 'no-dues@iiitd.ac.in',
-        to : email,
-        subject : 'No-Dues message',
-        html : htmlString
-    }, (err, info) => {
-        if (err) {
-            console.log('Error in sending mail', err);
-            return;
+    fetch('http://localhost:8000/user/getAdmins').then(function(response) {
+        return response.json();
+    }).then(async function(data) {
+        var adminDetails = {};
+        var adminsList = data;
+        for (var i in adminsList) {
+            adminDetails[changeNameFormat(adminsList[i][0])] = {
+                'name': adminsList[i][2]
+            };
         }
-        return;
+        if (admin == 'academics') {
+            await User.findOne({email: email}, (err, user) => {
+                if (err) {console.log('Error in finding user in approveDues: ', err); return;}
+                if (user['degree'] == 'B. Tech') {admin = 'academicsBtech'}
+                if (user['degree'] == 'M. Tech') {admin = 'academicsMtech'}
+                if (user['degree'] == 'PhD') {admin = 'academicsPhd'}
+            });
+        }
+        let htmlString = `
+        <div>
+            <p>Hi ${fetchName(email)}!</p>
+            <br>
+            <p>You have received the following message regarding your dues in the ${admin[0].toUpperCase()+admin.substring(1,)} department.</p>
+            <br>
+            <p>Message - ${message}</p>
+            <br>
+            <p>Thanks ${adminDetails[admin]['name']}!</p>
+            <p>${adminDetails[admin]['address']}</p>
+        </div>`
+        nodemailer.transporter.sendMail({
+            from : 'no-dues@iiitd.ac.in',
+            to : email,
+            subject : 'No-Dues message',
+            html : htmlString
+        }, (err, info) => {
+            if (err) {
+                console.log('Error in sending mail', err);
+                return;
+            }
+            return;
+        })
     })
 }

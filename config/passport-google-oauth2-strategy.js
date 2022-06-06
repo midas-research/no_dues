@@ -62,7 +62,7 @@ function getGender(email, students) {
 passport.use(new googleStrategy({
     clientID: '417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com',
     clientSecret: 'tn3wI5iFPkAawIotSB9IHIX2',
-    callbackURL: 'http://localhost:8000/user/auth/google/callback'
+    callbackURL: 'http://nodues.fh.iiitd.edu.in/user/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
     if (isAdmin.isAdmin(profile.emails[0].value)) {
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
@@ -84,7 +84,7 @@ passport.use(new googleStrategy({
                         console.log('Error in creating user google strategy-passport', err); return;
                     }
                     return done(null, user);
-                })
+                });
             }
         })
     } else if (profile.emails[0].value in professors) {
@@ -127,6 +127,7 @@ passport.use(new googleStrategy({
         //     range: "ALL"
         // });
         // students_data = data.data.values;
+        console.log(profile);
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -176,3 +177,9 @@ passport.use(new googleStrategy({
         })
     }
 }))
+
+//154450611333-1244ptq1pc3areh55vk6qo7el8boperv.apps.googleusercontent.com
+//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
+
+//417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com
+//tn3wI5iFPkAawIotSB9IHIX2
