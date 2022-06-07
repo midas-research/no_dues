@@ -21,7 +21,7 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
       email : studentEmail,
       id: student._id
     });
-    var url = 'http://localhost:8000/proff_home';
+    var url = 'http://nodues.fh.iiitd.edu.in/proff_home';
     let htmlString = `
     <div>
         <p>Hi ${fetchProffName(proffEmail)}!</p>
@@ -29,7 +29,7 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
         <p>You have received the following message requesting dues clearance for 
         BTP/Schlar Paper/Thesis from ${fetchStudentName(studentEmail)} 
         (email - ${studentEmail}).</p>
-        <p>Click <a href=\`http://localhost:8000/proff_home\`>here</a> to approve the dues.</p>
+        <p>Click <a href=\`http://nodues.fh.iiitd.edu.in/proff_home\`>here</a> to approve the dues.</p>
         <br>
         <p>Thanks No-Dues!</p>
     </div>`

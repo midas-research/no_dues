@@ -90,7 +90,7 @@ function approved(e) {
     id: studentId
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/approveDues/${JSON.stringify(obj)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/approveDues/${JSON.stringify(obj)}`;
   r.remove();
 }
 
@@ -137,7 +137,7 @@ function sendMessage(e) {
     email : email.substring(0, index)
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/sendMessage/${JSON.stringify(obj)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/sendMessage/${JSON.stringify(obj)}`;
 }
 
 var filterBtech = document.getElementsByClassName('filter-btech')[0];
@@ -324,17 +324,17 @@ past.addEventListener('click', () => {
     admin : adminName,
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/past/${JSON.stringify(obj)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/past/${JSON.stringify(obj)}`;
 });
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/showSheet";
+  window.location.href = "http://nodues.fh.iiitd.edu.in/showSheet";
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/bankAccountDetails";
+  window.location.href = "http://nodues.fh.iiitd.edu.in/bankAccountDetails";
 });
 
 //code for selecting multiple students at a time
@@ -376,20 +376,20 @@ sendAll.addEventListener('click', () => {
   if (obj.length != 0) {
     var obj2 = []; obj2.push(obj);
     console.log(obj);
-    window.location.href = `http://localhost:8000/approveManyDues/${JSON.stringify(obj2)}`;
+    window.location.href = `http://nodues.fh.iiitd.edu.in/approveManyDues/${JSON.stringify(obj2)}`;
   }
 });
 
 var listBoys = document.getElementById('listBoys');
 if (listBoys) {
   listBoys.addEventListener('click', () => {
-    window.location.href = "http://localhost:8000/sendMailToBoysHostelAdmin";
+    window.location.href = "http://nodues.fh.iiitd.edu.in/sendMailToBoysHostelAdmin";
   });
 }
 
 var listGirls = document.getElementById('listGirls');
 if (listGirls) {
   listGirls.addEventListener('click', () => {
-    window.location.href = "http://localhost:8000/sendMailToGirlsHostelAdmin";
+    window.location.href = "http://nodues.fh.iiitd.edu.in/sendMailToGirlsHostelAdmin";
   });
 }

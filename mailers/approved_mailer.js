@@ -23,7 +23,7 @@ function fetchName(email) {
 }
 
 exports.approvedDues = async (admin, email) => {
-    fetch('http://localhost:8000/user/getAdmins').then(function(response) {
+    fetch('http://nodues.fh.iiitd.edu.in/user/getAdmins').then(function(response) {
         return response.json();
     }).then(async function(data) {
         var adminDetails = {};

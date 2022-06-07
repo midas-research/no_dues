@@ -7,21 +7,21 @@ var adminsList;
 var studentsList;
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8000/user/getProfessors', false);
+request.open('GET', 'http://nodues.fh.iiitd.edu.in/user/getProfessors', false);
 request.send(null);
 if (request.status === 200) {
   professorsList = JSON.parse(request.responseText);
 }
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8000/user/getAdmins', false);
+request.open('GET', 'http://nodues.fh.iiitd.edu.in/user/getAdmins', false);
 request.send(null);
 if (request.status === 200) {
   adminsList = JSON.parse(request.responseText);
 }
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8000/user/getStudents', false);
+request.open('GET', 'http://nodues.fh.iiitd.edu.in/user/getStudents', false);
 request.send(null);
 if (request.status === 200) {
   studentsList = JSON.parse(request.responseText);
@@ -29,7 +29,7 @@ if (request.status === 200) {
 
 var request = new XMLHttpRequest();
 var getDeptShortName;
-request.open('GET', 'http://localhost:8000/getFunction', false);
+request.open('GET', 'http://nodues.fh.iiitd.edu.in/getFunction', false);
 request.send(null);
 if (request.status === 200) {
   getDeptShortName = JSON.parse(request.responseText);
@@ -76,7 +76,7 @@ function requestFunction(event) {
     studentEmail: user[0].email,
     adminName: adminName
   });
-  window.location.href = `http://localhost:8000/request/${JSON.stringify(obj)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/request/${JSON.stringify(obj)}`;
 }
 
 var container = document.getElementById('admins_list_container');
@@ -279,7 +279,7 @@ submitModal.onclick = function() {
   bankDetails.bankAccountNo = bankAccountNo;
   bankDetails.bankIfscCode = bankIfscCode;
   bankDetails.email = user[0]['email'];
-  window.location.href = `http://localhost:8000/sendBankDetails/${JSON.stringify(bankDetails)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/sendBankDetails/${JSON.stringify(bankDetails)}`;
   modal.style.display = "none";
 }
 submitModal1.onclick = function() {
@@ -319,7 +319,7 @@ submitModal1.onclick = function() {
   }
   console.log(personalDetails.leavingReason);
   personalDetails.email = user[0]['email'];
-  window.location.href = `http://localhost:8000/sendPersonalDetails/${JSON.stringify(personalDetails)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/sendPersonalDetails/${JSON.stringify(personalDetails)}`;
   modal1.style.display = "none";
 }
 
@@ -416,7 +416,7 @@ for (var i in admins) {
 }
 setInterval(() => {
   var request = new XMLHttpRequest();
-  request.open('GET', `http://localhost:8000/user/getUser/${user[0]._id}`, false);
+  request.open('GET', `http://nodues.fh.iiitd.edu.in/user/getUser/${user[0]._id}`, false);
   request.send(null);
   if (request.status === 200) {
     user = [];
@@ -520,7 +520,7 @@ btp_sendRequest.addEventListener('click', () => {
     studentEmail: user[0]['email']
   });
   console.log(obj);
-  window.location.href = `http://localhost:8000/sendBtpRequest/${JSON.stringify(obj)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/sendBtpRequest/${JSON.stringify(obj)}`;
 });
 
 var ip_proff = document.getElementById('ip_proff');
@@ -564,7 +564,7 @@ ip_sendRequest.addEventListener('click', () => {
     studentEmail: user[0]['email']
   });
   console.log(obj);
-  window.location.href = `http://localhost:8000/sendIpRequest/${JSON.stringify(obj)}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/sendIpRequest/${JSON.stringify(obj)}`;
 });
 
 var downloadbtn = document.getElementById('downloadbtn');
@@ -587,7 +587,7 @@ downloadbtn.addEventListener('click', () => {
   // if (c > 0) {
   //   alert('Kindly get the approvals from all departments!');
   // }
-  window.location.href = `http://localhost:8000/download/${user[0].email}`;
+  window.location.href = `http://nodues.fh.iiitd.edu.in/download/${user[0].email}`;
 });
 
 // document.onkeydown = function(e) {

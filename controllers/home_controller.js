@@ -345,7 +345,7 @@ module.exports.ipApproved = (req, res) => {
 
 module.exports.download = async (req, res) => {
   var admins_list;
-  await axios.get('http://localhost:8000/user/getAdmins')
+  await axios.get('http://nodues.fh.iiitd.edu.in/user/getAdmins')
   .then(response => {
     admins_list = response.data;
   })
