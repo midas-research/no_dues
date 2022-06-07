@@ -3,14 +3,9 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    background-image: url('/assets/bg.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-h2 {
-    text-align: center;
-    padding-top: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1 {
@@ -29,6 +24,7 @@ h1 {
     justify-content: space-between;
     align-items: center;
 }
+
 
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900");
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
@@ -49,10 +45,9 @@ body {
 
 .container {
   width: 350px;
-  margin: 50px auto;
+  margin: 30px auto;
   padding: 0 !important;
   width: 160px !important;
-  margin-top: 300px;
 }
 
 .container a {
@@ -391,4 +386,19 @@ body {
     -webkit-transform: scaleY(0);
     transform: scaleY(0);
   }
+}
+
+#data_img {
+  margin-top: 80px;
+  cursor: pointer;
+  display: none;
+}
+
+#student_img {
+  margin-top: 80px;
+  cursor: pointer;
+}
+
+li {
+  cursor: pointer;
 }

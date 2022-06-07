@@ -127,7 +127,6 @@ passport.use(new googleStrategy({
         //     range: "ALL"
         // });
         // students_data = data.data.values;
-        console.log(profile);
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
