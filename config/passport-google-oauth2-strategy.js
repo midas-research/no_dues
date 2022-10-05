@@ -2,7 +2,7 @@ const passport = require('passport');
 const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const crypto = require('crypto');
 const User = require('../models/user');
-const professors = require('../professors');
+const getProffName = require('../data/getProffName');
 const getAdminName = require('../data/getAdminName');
 const isAdmin = require('../data/isAdmin');
 const fs = require('fs');
@@ -59,12 +59,15 @@ function getGender(email, students) {
     }
 };
 
+
 passport.use(new googleStrategy({
-    clientID: '417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com',
-    clientSecret: 'tn3wI5iFPkAawIotSB9IHIX2',
-    callbackURL: 'http://nodues.fh.iiitd.edu.in/user/auth/google/callback'
+    clientID: '154450611333-1244ptq1pc3areh55vk6qo7el8boperv.apps.googleusercontent.com',
+    clientSecret: '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',
+    callbackURL: 'http://localhost:8000/user/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
+    console.log("entered");
     if (isAdmin.isAdmin(profile.emails[0].value)) {
+        // console.log("Admin found");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -87,7 +90,7 @@ passport.use(new googleStrategy({
                 });
             }
         })
-    } else if (profile.emails[0].value in professors) {
+    } else if (getProffName.isProff(profile.emails[0].value)) {
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;

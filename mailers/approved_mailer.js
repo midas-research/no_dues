@@ -1,5 +1,7 @@
 const nodemailer = require('../config/nodemailer');
 const User = require('../models/user');
+const axios=require('axios')
+
 
 function changeNameFormat(name) {
     if (name.substring(0,9) == 'Academics') {
@@ -23,8 +25,9 @@ function fetchName(email) {
 }
 
 exports.approvedDues = async (admin, email) => {
-    fetch('http://nodues.fh.iiitd.edu.in/user/getAdmins').then(function(response) {
-        return response.json();
+    await axios.get('http://localhost:8000/user/getAdmins').then(function(response) {
+        console.log(response.data);
+        return response.data;
     }).then(async function(data) {
         var adminDetails = {};
         var adminsList = data;

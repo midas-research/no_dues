@@ -112,10 +112,45 @@ app.listen(port, async (err) => {
     for (var i in professors_data) {
         proffNames[professors_data[i][1]] = professors_data[i][0];
     }
-    var text = `module.exports.getProffName = (email) => {
-        return adminNames[email];
+    var text =`    
+    const getProffName = (email) => {
+        return proffNamesNames[email];
     }
-    module.exports.proffNames = proffNames;`
+
+    module.exports.proffNames = proffNames;
+
+    const isProff = (email) => {
+        
+        if (email in proffNames) {
+            // console.log("Ofcourse prof!");
+            return true;
+        } else {
+            // console.log("NO Ji prof!");
+            return false;
+        }
+    } 
+    module.exports={getProffName,isProff}; 
+    `  
+    
+    
+    
+    // `module.exports.getProffName = (email) => {
+    //     return adminNames[email];
+    // }
+    // module.exports.proffNames = proffNames;
+
+    // module.exports.isProff = (email) => {
+    
+    //     if (email in proffNames) {
+    //         console.log("Ofcourse prof!");
+    //         return true;
+    //     } else {
+    //         console.log("NO Ji prof!");
+    //         return false;
+    //     }
+    // }    
+    
+    // `
     fs.writeFile('./data/getProffName.js', 'var proffNames = ' + JSON.stringify(proffNames) + '\n' + text, (err) => {
         if (err) { console.log('Error in writing to admins file: ', err); return; }
     });
@@ -167,14 +202,17 @@ app.listen(port, async (err) => {
         adminNames[global.admins_data[i][1]] = changeNameFormat(global.admins_data[i][0]);
         names.push(changeNameFormat(global.admins_data[i][0]));
     }
-    var text = `module.exports.getAdminName = (email) => {
+    var text =
+    `module.exports.getAdminName = (email) => {
         if (email in adminNames) {
             return adminNames[email];
         } else {
             return 'student';
         }
     }
-    module.exports.adminNames = adminNames;`
+    module.exports.adminNames = adminNames;  
+    
+    `
     global.admins_data = adminNames;
     fs.writeFile('./data/getAdminName.js', 'var adminNames = ' + JSON.stringify(adminNames) + '\n' + text, (err) => {
         if (err) { console.log('Error in writing to admins file: ', err); return; }

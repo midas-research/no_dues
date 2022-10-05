@@ -256,12 +256,12 @@ filterAll.addEventListener('click', () => {
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://nodues.fh.iiitd.edu.in/sheet";
+  window.location.href = "http://localhost:8000/sheet";
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
-  window.location.href = "http://nodues.fh.iiitd.edu.in/bankAccountDetails";
+  window.location.href = "http://localhost:8000/bankAccountDetails";
 });
 
 var back = document.getElementById('back');
