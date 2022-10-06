@@ -78,7 +78,7 @@ module.exports.createSession = (req, res) => {
     if (isAdmin.isAdmin(req.user.email)) {
         return res.redirect('/admin_home');
     }
-    if (req.user.email == 'cyborg@sc.iiitd.ac.in') {
+    if (req.user.email == 'no-dues.iiitd.ac.in') {
         return res.redirect('/super_admin');
     }
     if (req.user.email in professors) {

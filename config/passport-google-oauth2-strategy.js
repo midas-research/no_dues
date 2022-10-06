@@ -57,6 +57,7 @@ function getGender(email, students) {
             return [gender, branch, degree, roll, name];
         }
     }
+    return null;
 };
 
 
@@ -65,7 +66,7 @@ passport.use(new googleStrategy({
     clientSecret: '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',
     callbackURL: 'http://localhost:8000/user/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
-    console.log("entered");
+    // console.log("entered");
     if (isAdmin.isAdmin(profile.emails[0].value)) {
         // console.log("Admin found");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
@@ -76,7 +77,7 @@ passport.use(new googleStrategy({
                 return done(null, user);
             } else {
                 User.create({
-                    name: profile.name["givenName"],
+                    name: getAdminName.getAdminName(profile.emails[0].value),
                     email: profile.emails[0].value,
                     password: crypto.randomBytes(20).toString('hex'),
                     image: profile.photos[0].value,
@@ -138,6 +139,9 @@ passport.use(new googleStrategy({
                 return done(null, user);
             } else {
                 var details = getGender(profile.emails[0].value, students_data);
+                if(!details){
+                    return done(null,false);
+                }
                 User.create({
                     name: details[4],
                     email: profile.emails[0].value,
