@@ -64,6 +64,8 @@ updateBoysNoDuesSheet = async () => {
       }
       for (var i in users) {
         var c = 0;
+
+        //checking if user in boyshosteldata
         for (var j=1; j<boyshosteldata.length; j++) {
           if (users[i]['name'] == boyshosteldata[j][0]) {c=c+1;}
         }

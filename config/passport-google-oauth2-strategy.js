@@ -92,6 +92,7 @@ passport.use(new googleStrategy({
             }
         })
     } else if (getProffName.isProff(profile.emails[0].value)) {
+        // console.log("prog hee hai");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
