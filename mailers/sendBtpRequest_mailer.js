@@ -1,5 +1,7 @@
 const nodemailer = require('../config/nodemailer');
 const User = require('../models/user');
+const {CURRENT_URL,NODEMAILER_EMAIL_ID}= require('../config/config');
+
 
 function fetchStudentName(email) {
     var index = email.indexOf('@');
@@ -21,7 +23,7 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
       email : studentEmail,
       id: student._id
     });
-    var url = 'http://localhost:8000/proff_home';
+    var url = `${CURRENT_URL}/proff_home`;
     let htmlString = `
     <div>
         <p>Hi ${fetchProffName(proffEmail)}!</p>
@@ -29,12 +31,12 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
         <p>You have received the following message requesting dues clearance for 
         BTP/Schlar Paper/Thesis from ${fetchStudentName(studentEmail)} 
         (email - ${studentEmail}).</p>
-        <p>Click <a href=\`http://localhost:8000/proff_home\`>here</a> to approve the dues.</p>
+        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to approve the dues.</p>
         <br>
         <p>Thanks No-Dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
-        from : 'no-dues@iiitd.ac.in',
+        from : `${NODEMAILER_EMAIL_ID}`,
         to : proffEmail,
         subject : 'No-Dues request for BTP/Scholarly work/Thesis',
         html : htmlString

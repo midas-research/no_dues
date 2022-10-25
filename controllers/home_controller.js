@@ -15,6 +15,8 @@ const admins = require('../data/admins');
 var XMLHttpRequest = require('xhr2');
 var xhr = new XMLHttpRequest();
 const axios = require('axios');
+const {CURRENT_URL}= require('../config/config');
+
 
 function modifyAdminName(s) {
   if (s.substring(0, 9) == 'Academics') {
@@ -118,7 +120,8 @@ module.exports.home = (req, res) => {
         user : JSON.stringify(obj),
         name : req.user.name,
         image : req.user.image,
-        admins: JSON.stringify(admins)
+        admins: JSON.stringify(admins),
+        url:JSON.stringify(CURRENT_URL)
     });
 }
 
@@ -135,7 +138,8 @@ module.exports.adminHome = (req, res) => {
       title : 'Admin - Home',
       studentList : JSON.stringify(studentList),
       adminName : getAdminName.adminNames[req.user.email],
-      id : req.user._id
+      id : req.user._id,
+      url: JSON.stringify(CURRENT_URL)
     });
   })
 }
@@ -239,8 +243,11 @@ module.exports.proffHome = (req, res) => {
     return res.render('proff_home', {
       title : 'Proff - Home',
       studentList : JSON.stringify(studentList),
+      name: req.user.name,
       proffEmail : req.user.email,
-      id : req.user._id
+      image : req.user.image,
+      id : req.user._id,
+      url: JSON.stringify(CURRENT_URL)
     })
   })
 }
@@ -347,7 +354,7 @@ module.exports.ipApproved = (req, res) => {
 
 module.exports.download = async (req, res) => {
   var admins_list;
-  await axios.get('http://localhost:8000/user/getAdmins')
+  await axios.get(`${CURRENT_URL}/user/getAdmins`)
   .then(response => {
     admins_list = response.data;
   })
@@ -380,7 +387,8 @@ module.exports.past = (req, res) => {
     }
     return res.render('admin_past', {
       studentList : JSON.stringify(studentList),
-      admin : admin
+      admin : admin,
+      url: JSON.stringify(CURRENT_URL)
     })
   });
 }
@@ -473,5 +481,9 @@ module.exports.getFunction = (req, res) => {
 }
 
 module.exports.showSheet = (req, res) => {
-  return res.render('showSheet');
+  return res.render('showSheet',{
+    url: JSON.stringify(CURRENT_URL)
+  });
+  
+
 }

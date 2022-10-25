@@ -5,23 +5,24 @@
 var professorsList;
 var adminsList;
 var studentsList;
+const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8000/user/getProfessors', false);
+request.open('GET', `${CURRENT_URL}/user/getProfessors`, false);
 request.send(null);
 if (request.status === 200) {
   professorsList = JSON.parse(request.responseText);
 }
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8000/user/getAdmins', false);
+request.open('GET', `${CURRENT_URL}/user/getAdmins`, false);
 request.send(null);
 if (request.status === 200) {
   adminsList = JSON.parse(request.responseText);
 }
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8000/user/getStudents', false);
+request.open('GET', `${CURRENT_URL}/user/getStudents`, false);
 request.send(null);
 if (request.status === 200) {
   studentsList = JSON.parse(request.responseText);
@@ -48,7 +49,7 @@ function sendMessageBtp(e) {
       proffEmail: proffEmail
     });
     console.log(JSON.stringify(obj));
-    window.location.href = `http://localhost:8000/sendMessageBtp/${JSON.stringify(obj)}`;
+    window.location.href = `${CURRENT_URL}/sendMessageBtp/${JSON.stringify(obj)}`;
 }
 
 function sendMessageIp(e) {
@@ -65,7 +66,7 @@ function sendMessageIp(e) {
     proffEmail: proffEmail
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/sendMessageIp/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/sendMessageIp/${JSON.stringify(obj)}`;
 }
 
 function btpApproved(e) {
@@ -86,7 +87,7 @@ function btpApproved(e) {
       id: studentId
     });
     console.log(JSON.stringify(obj));
-    window.location.href = `http://localhost:8000/btpApproved/${JSON.stringify(obj)}`;
+    window.location.href = `${CURRENT_URL}/btpApproved/${JSON.stringify(obj)}`;
     r.remove();
 }
 
@@ -108,7 +109,7 @@ function ipApproved(e) {
       id: studentId
     });
     console.log(JSON.stringify(obj));
-    window.location.href = `http://localhost:8000/ipApproved/${JSON.stringify(obj)}`;
+    window.location.href = `${CURRENT_URL}/ipApproved/${JSON.stringify(obj)}`;
     r.remove();
 }
 

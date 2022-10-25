@@ -1,8 +1,10 @@
 const axios = require('axios');
 var XMLHttpRequest = require('xhr2');
+// const {CURRENT_URL}= require('../config/config');
+
 var xhr = new XMLHttpRequest();
 var admins_data;
-// axios.get('http://localhost:8000/user/getAdmins').then(function (response) {
+// axios.get(`${CURRENT_URL}/user/getAdmins`).then(function (response) {
 //     }).catch(function (error) {
 //         console.log(error);
 //     });
@@ -86,7 +88,7 @@ const User = mongoose.model('User', userSchema);
 module.exports = User;
 
 // var request = new XMLHttpRequest();
-// request.open('GET', 'http://localhost:8000/user/getAdmins', false);
+// request.open('GET', `${CURRENT_URL}/user/getAdmins`, false);
 // request.send(null);
 // if (request.status === 200) {
 //   adminsList = JSON.parse(request.responseText);

@@ -1,4 +1,5 @@
 const nodemailer = require('../config/nodemailer');
+const {NODEMAILER_EMAIL_ID}=require('../config/config');
 
 exports.girlsHostelNodues_mailer = (email) => {
     let htmlString = `
@@ -13,7 +14,7 @@ exports.girlsHostelNodues_mailer = (email) => {
         <p>Thanks no-dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
-        from : 'no-dues@iiitd.ac.in',
+        from : `${NODEMAILER_EMAIL_ID}`,
         to : email,
         subject : 'No-Dues for girls hostel',
         html : htmlString

@@ -2,7 +2,7 @@ var adminName = document.getElementById('adminName').innerHTML;
 var id = document.getElementById('id').innerHTML;
 console.log(adminName);
 console.log(id);
-
+const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 var accordion = document.getElementsByClassName('accordion')[0];
 var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
 console.log(studentList);
@@ -90,7 +90,7 @@ function approved(e) {
     id: studentId
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/approveDues/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/approveDues/${JSON.stringify(obj)}`;
   r.remove();
 }
 
@@ -137,7 +137,7 @@ function sendMessage(e) {
     email : email.substring(0, index)
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/sendMessage/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/sendMessage/${JSON.stringify(obj)}`;
 }
 
 var filterBtech = document.getElementsByClassName('filter-btech')[0];
@@ -324,17 +324,17 @@ past.addEventListener('click', () => {
     admin : adminName,
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://localhost:8000/past/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/past/${JSON.stringify(obj)}`;
 });
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/showSheet";
+  window.location.href = `${CURRENT_URL}/showSheet`;
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/bankAccountDetails";
+  window.location.href = `${CURRENT_URL}/bankAccountDetails`;
 });
 
 //code for selecting multiple students at a time
@@ -376,20 +376,20 @@ sendAll.addEventListener('click', () => {
   if (obj.length != 0) {
     var obj2 = []; obj2.push(obj);
     console.log(obj);
-    window.location.href = `http://localhost:8000/approveManyDues/${JSON.stringify(obj2)}`;
+    window.location.href = `${CURRENT_URL}/approveManyDues/${JSON.stringify(obj2)}`;
   }
 });
 
 var listBoys = document.getElementById('listBoys');
 if (listBoys) {
   listBoys.addEventListener('click', () => {
-    window.location.href = "http://localhost:8000/sendMailToBoysHostelAdmin";
+    window.location.href = `${CURRENT_URL}/sendMailToBoysHostelAdmin`;
   });
 }
 
 var listGirls = document.getElementById('listGirls');
 if (listGirls) {
   listGirls.addEventListener('click', () => {
-    window.location.href = "http://localhost:8000/sendMailToGirlsHostelAdmin";
+    window.location.href = `${CURRENT_URL}/sendMailToGirlsHostelAdmin`;
   });
 }

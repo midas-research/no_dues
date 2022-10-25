@@ -8,6 +8,9 @@ const isAdmin = require('../data/isAdmin');
 const fs = require('fs');
 const { google } = require('googleapis');
 const students_data = require('../data/students.json');
+const {CURRENT_URL, GOOGLE_SIGNIN_CLIENT_ID,GOOGLE_SIGNIN_SECRET_ID}= require('../config/config');
+
+// console.log({CURRENT_URL});
 
 function getGender(email, students) {
     for (var i in students) {
@@ -62,9 +65,9 @@ function getGender(email, students) {
 
 
 passport.use(new googleStrategy({
-    clientID: '154450611333-1244ptq1pc3areh55vk6qo7el8boperv.apps.googleusercontent.com',
-    clientSecret: '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',
-    callbackURL: 'http://localhost:8000/user/auth/google/callback'
+    clientID: `${GOOGLE_SIGNIN_CLIENT_ID}`,
+    clientSecret: `${GOOGLE_SIGNIN_SECRET_ID}`,
+    callbackURL: `${CURRENT_URL}/user/auth/google/callback`
 }, async (accessToken, refreshToken, profile, done) => {
     // console.log("entered");
     if (isAdmin.isAdmin(profile.emails[0].value)) {
@@ -185,8 +188,3 @@ passport.use(new googleStrategy({
     }
 }))
 
-//154450611333-1244ptq1pc3areh55vk6qo7el8boperv.apps.googleusercontent.com
-//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
-
-//417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com
-//tn3wI5iFPkAawIotSB9IHIX2

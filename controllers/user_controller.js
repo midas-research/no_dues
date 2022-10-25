@@ -5,6 +5,8 @@ const getAdminName = require('../data/getAdminName');
 const professorsList = require('../data/professors.json');
 const studentsList = require('../data/students.json');
 const adminsList = require('../data/admins.json');
+const {CURRENT_URL}=require('../config/config');
+
 
 module.exports.profile = (req, res) => {
     return res.render('profile', {

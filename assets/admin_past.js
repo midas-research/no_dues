@@ -2,6 +2,7 @@ var adminName = document.getElementById('admin').innerHTML;
 var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
 console.log(adminName);
 console.log(studentList);
+const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 
 temp = [];
 for (var i in studentList) {
@@ -256,12 +257,12 @@ filterAll.addEventListener('click', () => {
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/sheet";
+  window.location.href = `${CURRENT_URL}/sheet`;
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
-  window.location.href = "http://localhost:8000/bankAccountDetails";
+  window.location.href = `${CURRENT_URL}/bankAccountDetails`;
 });
 
 var back = document.getElementById('back');
