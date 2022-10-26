@@ -2,7 +2,7 @@ const passport = require('passport');
 const {google} = require('googleapis');
 const LocalStrategy = require('passport-local').Strategy;
 const isAdmin = require('../data/isAdmin');
-const getProff=require('../data/getProffName');
+const getProffName=require('../data/getProffName');
 
 const User = require('../models/user');
 const {EMAIL_ID}=require('../config/config');
@@ -57,7 +57,7 @@ passport.checkAdminAuthentication = (req, res, next) => {
             // console.log("Bhai hun mein admin");
             return next();
         }
-        else if(getProff.isProff(req.user.email)){
+        else if(getProffName.isProff(req.user.email)){
             // return res.redirect('/proff_home');
         }
         else{
@@ -78,7 +78,7 @@ passport.checkUserAuthentication = (req, res, next) => {
         if(isAdmin.isAdmin(req.user.email)) {
             return res.redirect('/admin_home');
         }
-        else if(getProff.isProff(req.user.email)){
+        else if(getProffName.isProff(req.user.email)){
             return res.redirect('/proff_home');
         }
         else{
@@ -96,7 +96,7 @@ passport.checkProffAuthentication = (req, res, next) => {
         if(isAdmin.isAdmin(req.user.email)) {
             return res.redirect('/admin_home');
         }
-        else if(getProff.isProff(req.user.email)){
+        else if(getProffName.isProff(req.user.email)){
             return next();
         }
         else{

@@ -1,11 +1,11 @@
 const User = require('../models/user');
-const professors = require('../professors');
+const getProffName = require('../data/getProffName');
 const isAdmin = require('../data/isAdmin');
 const getAdminName = require('../data/getAdminName');
 const professorsList = require('../data/professors.json');
 const studentsList = require('../data/students.json');
 const adminsList = require('../data/admins.json');
-const {CURRENT_URL}=require('../config/config');
+const {CURRENT_URL,NODEMAILER_EMAIL_ID}=require('../config/config');
 
 
 module.exports.profile = (req, res) => {
@@ -80,10 +80,10 @@ module.exports.createSession = (req, res) => {
     if (isAdmin.isAdmin(req.user.email)) {
         return res.redirect('/admin_home');
     }
-    if (req.user.email == 'no-dues.iiitd.ac.in') {
+    if (req.user.email == `${NODEMAILER_EMAIL_ID}`) {
         return res.redirect('/super_admin');
     }
-    if (req.user.email in professors) {
+    if (getProffName.isProff(req.user.email)) {
         return res.redirect('/proff_home');
     }
     return res.redirect('/');

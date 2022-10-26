@@ -11,6 +11,7 @@ const sendIpMessage_mailer = require('../mailers/sendIpMessage_mailer');
 const boysHostelNodues_mailer = require('../mailers/boysHostelNodues_mailer');
 const girlsHostelNodues_mailer = require('../mailers/girlsHostelNodues_mailer');
 const getAdminName = require('../data/getAdminName');
+const getProffName=require("../data/getProffName");
 const admins = require('../data/admins');
 var XMLHttpRequest = require('xhr2');
 var xhr = new XMLHttpRequest();
@@ -264,6 +265,7 @@ module.exports.sendBtpRequest = (req, res) => {
     var updatedObject = {};
     updatedObject['btp'] = obj[0]['proffEmail'];
     updatedObject['btpAppliedAt'] = dateTime;
+    updatedObject['btpProf']=getProffName.getProffName(obj[0]['proffEmail']);
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       if (err) {console.log('Error in saving proffEmail in sendBtpRequest: ', err); return;}
       user.save();
@@ -274,6 +276,7 @@ module.exports.sendBtpRequest = (req, res) => {
 }
 
 module.exports.sendIpRequest = (req, res) => {
+  console.log(obj);
   var obj = JSON.parse(req.params.obj);
   var today = new Date();
   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -282,6 +285,8 @@ module.exports.sendIpRequest = (req, res) => {
   var updatedObject = {};
   updatedObject['ip'] = obj[0]['proffEmail'];
   updatedObject['ipAppliedAt'] = dateTime;
+  updatedObject['ipProf']=getProffName.getProffName(obj[0]['proffEmail']);
+  console.log(updatedObject['ipProf']);
   User.findOneAndUpdate({email : obj[0]['studentEmail']}, updatedObject, (err, user) => {
     if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
     user.save();
@@ -368,6 +373,7 @@ module.exports.download = async (req, res) => {
   var email = req.params.obj;
   User.findOne({email: email}, (err, user) => {
     if (err) {console.log('Error in finding user in download: ', err);return;}
+   
     return res.render('pdf', {
       user: JSON.stringify(user),
       admins: JSON.stringify(admins)
