@@ -2,14 +2,18 @@ const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
 
+const {NODEMAILER_EMAIL_ID,NODEMAILER_PASS}=require('../config/config');
+
+
 let transporter = nodemailer.createTransport({
     service : 'gmail',
     host : 'smtp.gmail.com',
     port : 587,
     secure : false,
     auth : {
-        user : 'no-dues@iiitd.ac.in',
-        pass : 'NODUES_IIITD'
+        user : `${NODEMAILER_EMAIL_ID}`,
+        pass : `${NODEMAILER_PASS}`
+        
     }
 });
 

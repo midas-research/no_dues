@@ -2,12 +2,15 @@ const passport = require('passport');
 const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const crypto = require('crypto');
 const User = require('../models/user');
-const professors = require('../professors');
+const getProffName = require('../data/getProffName');
 const getAdminName = require('../data/getAdminName');
 const isAdmin = require('../data/isAdmin');
 const fs = require('fs');
 const { google } = require('googleapis');
 const students_data = require('../data/students.json');
+const {CURRENT_URL, GOOGLE_SIGNIN_CLIENT_ID,GOOGLE_SIGNIN_SECRET_ID}= require('../config/config');
+
+// console.log({CURRENT_URL});
 
 function getGender(email, students) {
     for (var i in students) {
@@ -57,14 +60,18 @@ function getGender(email, students) {
             return [gender, branch, degree, roll, name];
         }
     }
+    return null;
 };
 
+
 passport.use(new googleStrategy({
-    clientID: '417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com',
-    clientSecret: 'tn3wI5iFPkAawIotSB9IHIX2',
-    callbackURL: 'http://nodues.fh.iiitd.edu.in/user/auth/google/callback'
+    clientID: `${GOOGLE_SIGNIN_CLIENT_ID}`,
+    clientSecret: `${GOOGLE_SIGNIN_SECRET_ID}`,
+    callbackURL: `${CURRENT_URL}/user/auth/google/callback`
 }, async (accessToken, refreshToken, profile, done) => {
+    // console.log("entered");
     if (isAdmin.isAdmin(profile.emails[0].value)) {
+        // console.log("Admin found");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -73,7 +80,7 @@ passport.use(new googleStrategy({
                 return done(null, user);
             } else {
                 User.create({
-                    name: profile.name["givenName"],
+                    name: getAdminName.getAdminName(profile.emails[0].value),
                     email: profile.emails[0].value,
                     password: crypto.randomBytes(20).toString('hex'),
                     image: profile.photos[0].value,
@@ -87,7 +94,8 @@ passport.use(new googleStrategy({
                 });
             }
         })
-    } else if (profile.emails[0].value in professors) {
+    } else if (getProffName.isProff(profile.emails[0].value)) {
+        // console.log("prog hee hai");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -110,7 +118,7 @@ passport.use(new googleStrategy({
             }
         })
     } else {
-        // var spreadsheetId = "1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU";
+        // var spreadsheetId = "1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY";
         // var auth = new google.auth.GoogleAuth({
         //     keyFile: "credentials.json",
         //     scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -135,6 +143,9 @@ passport.use(new googleStrategy({
                 return done(null, user);
             } else {
                 var details = getGender(profile.emails[0].value, students_data);
+                if(!details){
+                    return done(null,false);
+                }
                 User.create({
                     name: details[4],
                     email: profile.emails[0].value,
@@ -177,8 +188,3 @@ passport.use(new googleStrategy({
     }
 }))
 
-//154450611333-1244ptq1pc3areh55vk6qo7el8boperv.apps.googleusercontent.com
-//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
-
-//417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com
-//tn3wI5iFPkAawIotSB9IHIX2

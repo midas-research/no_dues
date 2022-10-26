@@ -11,10 +11,13 @@ const sendIpMessage_mailer = require('../mailers/sendIpMessage_mailer');
 const boysHostelNodues_mailer = require('../mailers/boysHostelNodues_mailer');
 const girlsHostelNodues_mailer = require('../mailers/girlsHostelNodues_mailer');
 const getAdminName = require('../data/getAdminName');
+const getProffName=require("../data/getProffName");
 const admins = require('../data/admins');
 var XMLHttpRequest = require('xhr2');
 var xhr = new XMLHttpRequest();
 const axios = require('axios');
+const {CURRENT_URL,NODEMAILER_EMAIL_ID}= require('../config/config');
+
 
 function modifyAdminName(s) {
   if (s.substring(0, 9) == 'Academics') {
@@ -32,7 +35,7 @@ function modifyAdminName(s) {
 }
 
 updateBoysNoDuesSheet = async () => {
-  var spreadsheetId = "1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ";
+  var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -64,6 +67,8 @@ updateBoysNoDuesSheet = async () => {
       }
       for (var i in users) {
         var c = 0;
+
+        //checking if user in boyshosteldata
         for (var j=1; j<boyshosteldata.length; j++) {
           if (users[i]['name'] == boyshosteldata[j][0]) {c=c+1;}
         }
@@ -79,7 +84,7 @@ updateBoysNoDuesSheet = async () => {
       }
     });
 
-    var spreadsheetId = "1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ";
+    var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -116,7 +121,8 @@ module.exports.home = (req, res) => {
         user : JSON.stringify(obj),
         name : req.user.name,
         image : req.user.image,
-        admins: JSON.stringify(admins)
+        admins: JSON.stringify(admins),
+        url:JSON.stringify(CURRENT_URL)
     });
 }
 
@@ -133,7 +139,8 @@ module.exports.adminHome = (req, res) => {
       title : 'Admin - Home',
       studentList : JSON.stringify(studentList),
       adminName : getAdminName.adminNames[req.user.email],
-      id : req.user._id
+      id : req.user._id,
+      url: JSON.stringify(CURRENT_URL)
     });
   })
 }
@@ -237,8 +244,11 @@ module.exports.proffHome = (req, res) => {
     return res.render('proff_home', {
       title : 'Proff - Home',
       studentList : JSON.stringify(studentList),
+      name: req.user.name,
       proffEmail : req.user.email,
-      id : req.user._id
+      image : req.user.image,
+      id : req.user._id,
+      url: JSON.stringify(CURRENT_URL)
     })
   })
 }
@@ -255,6 +265,7 @@ module.exports.sendBtpRequest = (req, res) => {
     var updatedObject = {};
     updatedObject['btp'] = obj[0]['proffEmail'];
     updatedObject['btpAppliedAt'] = dateTime;
+    updatedObject['btpProf']=getProffName.getProffName(obj[0]['proffEmail']);
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       if (err) {console.log('Error in saving proffEmail in sendBtpRequest: ', err); return;}
       user.save();
@@ -265,6 +276,7 @@ module.exports.sendBtpRequest = (req, res) => {
 }
 
 module.exports.sendIpRequest = (req, res) => {
+  console.log(obj);
   var obj = JSON.parse(req.params.obj);
   var today = new Date();
   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -273,6 +285,8 @@ module.exports.sendIpRequest = (req, res) => {
   var updatedObject = {};
   updatedObject['ip'] = obj[0]['proffEmail'];
   updatedObject['ipAppliedAt'] = dateTime;
+  updatedObject['ipProf']=getProffName.getProffName(obj[0]['proffEmail']);
+  console.log(updatedObject['ipProf']);
   User.findOneAndUpdate({email : obj[0]['studentEmail']}, updatedObject, (err, user) => {
     if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
     user.save();
@@ -345,7 +359,7 @@ module.exports.ipApproved = (req, res) => {
 
 module.exports.download = async (req, res) => {
   var admins_list;
-  await axios.get('http://nodues.fh.iiitd.edu.in/user/getAdmins')
+  await axios.get(`${CURRENT_URL}/user/getAdmins`)
   .then(response => {
     admins_list = response.data;
   })
@@ -359,6 +373,7 @@ module.exports.download = async (req, res) => {
   var email = req.params.obj;
   User.findOne({email: email}, (err, user) => {
     if (err) {console.log('Error in finding user in download: ', err);return;}
+   
     return res.render('pdf', {
       user: JSON.stringify(user),
       admins: JSON.stringify(admins)
@@ -378,7 +393,8 @@ module.exports.past = (req, res) => {
     }
     return res.render('admin_past', {
       studentList : JSON.stringify(studentList),
-      admin : admin
+      admin : admin,
+      url: JSON.stringify(CURRENT_URL)
     })
   });
 }
@@ -414,23 +430,23 @@ module.exports.sendPersonalDetails = (req, res) => {
 }
 
 module.exports.sheet = (req, res) => {
-  return res.redirect('https://docs.google.com/spreadsheets/d/1yapIMuyvzPVX5Sy3n5p5kLJH5aqWdnLBoLbaw4AsVi8/edit?usp=sharing');
+  return res.redirect('https://docs.google.com/spreadsheets/d/1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk/edit?usp=sharing');
 }
 
 module.exports.bankAccountDetails = (req, res) => {
-  return res.redirect('https://docs.google.com/spreadsheets/d/1jKQsMLiwSW5KwcKP1uxL-cnpMFWG_gv9FP2fz3Ha3t4/edit?usp=sharing');
+  return res.redirect('https://docs.google.com/spreadsheets/d/1Fn5EplhqwEB5c0chYqhhWCal5Kzs7hT4zNFCwkAkZpE/edit?usp=sharing');
 }
 
 module.exports.sendMailToBoysHostelAdmin = async (req, res) => {
     //console.log("inside sendMailToBoysHostelAdmin =============>>>>>>>>>>>");
     updateBoysNoDuesSheet();
-  boysHostelNodues_mailer.boysHostelNodues_mailer('soumyadeepsp@gmail.com');
+  boysHostelNodues_mailer.boysHostelNodues_mailer(`${NODEMAILER_EMAIL_ID}`);
   return res.redirect('/admin_home');
 }
 
 module.exports.sendMailToGirlsHostelAdmin = (req, res) => {
   updateGirlsNoDuesSheet();
-  girlsHostelNodues_mailer.girlsHostelNodues_mailer('soumyadeepsp@gmail.com');
+  girlsHostelNodues_mailer.girlsHostelNodues_mailer(`${NODEMAILER_EMAIL_ID}`);
   return res.redirect('/admin_home');
 }
 
@@ -471,5 +487,9 @@ module.exports.getFunction = (req, res) => {
 }
 
 module.exports.showSheet = (req, res) => {
-  return res.render('showSheet');
+  return res.render('showSheet',{
+    url: JSON.stringify(CURRENT_URL)
+  });
+  
+
 }

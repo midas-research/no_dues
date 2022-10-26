@@ -1,5 +1,9 @@
 const nodemailer = require('../config/nodemailer');
 const User = require('../models/user');
+const axios=require('axios')
+const {CURRENT_URL,NODEMAILER_EMAIL_ID}= require('../config/config');
+
+
 
 function changeNameFormat(name) {
     if (name.substring(0,9) == 'Academics') {
@@ -23,8 +27,9 @@ function fetchName(email) {
 }
 
 exports.approvedDues = async (admin, email) => {
-    fetch('http://nodues.fh.iiitd.edu.in/user/getAdmins').then(function(response) {
-        return response.json();
+    await axios.get(`${CURRENT_URL}/user/getAdmins`).then(function(response) {
+        console.log(response.data);
+        return response.data;
     }).then(async function(data) {
         var adminDetails = {};
         var adminsList = data;
@@ -51,7 +56,7 @@ exports.approvedDues = async (admin, email) => {
             <p>${adminDetails[admin]['name']}</p>
         </div>`
         nodemailer.transporter.sendMail({
-            from : 'no-dues@iiitd.ac.in',
+            from : `${NODEMAILER_EMAIL_ID}`,
             to : email,
             subject : 'No-Dues approved',
             html : htmlString

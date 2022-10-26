@@ -55,6 +55,7 @@
       <!-- modal ends -->
         <p id="user" style="display:none"><%= user %></p>
         <p id="admins" style="display:none"><%= admins %></p>
+        <p id="CURRENT_URL" style="display:none"><%= url %></p>
         <div id="navbar">
             <div id="navbar_left">
                 <div id="navbar_left_i"><img src="/assets/nd.png"/></div>
@@ -248,9 +249,9 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/assets/home.js"></script>
+        <script src="../assets/home.js"></script>
         <script>
-          <% if (flash.success && flash.success.length>0) {%>
+          <% if (flash.success && flash.success.length>0){ %>
             new Noty({
               theme: 'relax',
               text: "<%= flash.success %>",

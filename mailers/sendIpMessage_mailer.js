@@ -1,4 +1,5 @@
 const nodemailer = require('../config/nodemailer');
+const {NODEMAILER_EMAIL_ID}=require('../config/config');
 
 function fetchStudentName(email) {
     var index = email.indexOf('@');
@@ -24,7 +25,7 @@ exports.sendIpMessage_mailer = (message, email, admin) => {
         <p>Thanks no-dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
-        from : 'no-dues@iiitd.ac.in',
+        from : `${NODEMAILER_EMAIL_ID}`,
         to : email,
         subject : 'No-Dues message',
         html : htmlString

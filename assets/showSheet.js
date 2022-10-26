@@ -4,7 +4,9 @@ values.push(['Name', 'Roll no.', 'Email', 'Design Lab', 'Library', 'Admin Facili
     'Academics', 'IP', 'BTP']);
 //var docs = await User.find({});
 var request = new XMLHttpRequest();
-request.open('GET', 'http://nodues.fh.iiitd.edu.in/user/getStudentsLoggedIn', false);
+const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
+
+request.open('GET', `${CURRENT_URL}/user/getStudentsLoggedIn`, false);
 request.send(null);
 if (request.status === 200) {
   docs = JSON.parse(request.responseText);

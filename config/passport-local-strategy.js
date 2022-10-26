@@ -2,8 +2,10 @@ const passport = require('passport');
 const {google} = require('googleapis');
 const LocalStrategy = require('passport-local').Strategy;
 const isAdmin = require('../data/isAdmin');
+const getProffName=require('../data/getProffName');
 
 const User = require('../models/user');
+const {EMAIL_ID}=require('../config/config');
 
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -38,16 +40,78 @@ passport.deserializeUser((id, done) => {
     })
 });
 
-//check if the user is authenticated
+//check if the incoming user is authenticated
 passport.checkAuthentication = (req, res, next) => {
+    // console.log("Mein idhar ja rha bye!");
     if (req.isAuthenticated()) {
         return next();
     }
     return res.redirect('/user/signin');
 }
 
+//check if it's admin
+passport.checkAdminAuthentication = (req, res, next) => {
+    // console.log("Bhai hun idhar!");
+    if (req.isAuthenticated()){
+        if(isAdmin.isAdmin(req.user.email)) {
+            // console.log("Bhai hun mein admin");
+            return next();
+        }
+        else if(getProffName.isProff(req.user.email)){
+            // return res.redirect('/proff_home');
+        }
+        else{
+            // console.log("Bhai user");
+            return res.redirect('/');
+        }
+    }
+
+    return res.redirect('/user/signin');
+    
+    
+}
+
+
+//check if it's a normal User
+passport.checkUserAuthentication = (req, res, next) => {
+    if (req.isAuthenticated()){
+        if(isAdmin.isAdmin(req.user.email)) {
+            return res.redirect('/admin_home');
+        }
+        else if(getProffName.isProff(req.user.email)){
+            return res.redirect('/proff_home');
+        }
+        else{
+            return next();
+        }
+    }
+    
+    return res.redirect('/user/signin');
+}
+
+
+//check if it's Proffesor
+passport.checkProffAuthentication = (req, res, next) => {
+    if (req.isAuthenticated()){
+        if(isAdmin.isAdmin(req.user.email)) {
+            return res.redirect('/admin_home');
+        }
+        else if(getProffName.isProff(req.user.email)){
+            return next();
+        }
+        else{
+            return res.redirect('/');
+        }
+    }
+    return res.redirect('/user/signin');
+}
+
+
+
+
+//check if superAdmin
 passport.checkSuperAdminAuthentication = async (req, res, next) => {
-    if (req.isAuthenticated() && req.user.email=='no-dues@iiitd.ac.in') {
+    if (req.isAuthenticated() && req.user.email==`${EMAIL_ID}`) {
         return next();
     }
     return res.redirect('/user/signin');
@@ -61,7 +125,8 @@ passport.setAuthenticatedUser = (req, res, next) => {
 }
 
 passport.checkSheetAuthentication = async (req, res, next) => {
-    const spreadsheetId = "1yapIMuyvzPVX5Sy3n5p5kLJH5aqWdnLBoLbaw4AsVi8";
+    //No Dues Details
+    const spreadsheetId = "1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk";
     const auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -72,7 +137,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
         auth: auth,
         spreadsheetId: spreadsheetId
     })
-    //console.log(metadata.data);
+    console.log(metadata.data);
     await googleSheets.spreadsheets.values.clear({
         auth: auth,
         spreadsheetId: spreadsheetId,
@@ -87,7 +152,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
         if (!docs[i]['type']) {
             var temp = [];
             temp.push(docs[i]['name']);
-            temp.push('2018104');
+            temp.push(docs[i]['roll']);
             temp.push(docs[i]['email']);
             temp.push(docs[i]['designLab']);
             temp.push(docs[i]['library']);
@@ -126,7 +191,8 @@ passport.checkSheetAuthentication = async (req, res, next) => {
 }
 
 passport.checkBankAuthentication = async (req, res, next) => {
-    const spreadsheetId = "1jKQsMLiwSW5KwcKP1uxL-cnpMFWG_gv9FP2fz3Ha3t4";
+    //Account Details
+    const spreadsheetId = "1Fn5EplhqwEB5c0chYqhhWCal5Kzs7hT4zNFCwkAkZpE";
     const auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -151,7 +217,7 @@ passport.checkBankAuthentication = async (req, res, next) => {
         if (!docs[i]['type']) {
             var temp = [];
             temp.push(docs[i]['name']);
-            temp.push('2018104');
+            temp.push(docs[i]['roll']);
             temp.push(docs[i]['email']);
             temp.push(docs[i]['bankName']);
             temp.push(docs[i]['bankBranch']);

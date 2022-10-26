@@ -2,7 +2,7 @@ var adminName = document.getElementById('admin').innerHTML;
 var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
 console.log(adminName);
 console.log(studentList);
-
+const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 temp = [];
 for (var i in studentList) {
     if (studentList[i][adminName]) {
@@ -46,7 +46,7 @@ for (var i in studentList) {
     accordion.innerHTML += `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${studentList[i].email} - 2018104</span>
+            <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
             <span class="icon" aria-hidden="true"></span>
         </button>
         <div class="accordion-content">
@@ -116,7 +116,7 @@ filterBtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListBtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListBtech[i].email} - ${studentListBtech[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -154,7 +154,7 @@ filterMtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListMtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListMtech[i].email} - ${studentListMtech[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -192,7 +192,7 @@ filterPhd.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListPhd[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListPhd[i].email} - ${studentListPhd[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -230,7 +230,7 @@ filterAll.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentList[i].email} - 2018104</span>
+              <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -256,12 +256,12 @@ filterAll.addEventListener('click', () => {
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://nodues.fh.iiitd.edu.in/sheet";
+  window.location.href = `${CURRENT_URL}/sheet`;
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
-  window.location.href = "http://nodues.fh.iiitd.edu.in/bankAccountDetails";
+  window.location.href = `${CURRENT_URL}/bankAccountDetails`;
 });
 
 var back = document.getElementById('back');

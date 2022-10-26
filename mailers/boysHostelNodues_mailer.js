@@ -1,4 +1,5 @@
 const nodemailer = require('../config/nodemailer');
+const {NODEMAILER_EMAIL_ID}=require('../config/config');
 
 exports.boysHostelNodues_mailer = (email) => {
     let htmlString = `
@@ -8,12 +9,12 @@ exports.boysHostelNodues_mailer = (email) => {
         <br>
         <p>Kindly look at the following excel sheet to validate the dues of these students.</p>
         <br>
-        <p>https://docs.google.com/spreadsheets/d/1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ/edit?usp=sharing</p>
+        <p>https://docs.google.com/spreadsheets/d/1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o/edit?usp=sharing</p>
         <br>
         <p>Thanks no-dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
-        from : 'no-dues@iiitd.ac.in',
+        from : `${NODEMAILER_EMAIL_ID}`,
         to : email,
         subject : 'No-Dues for boys hostel',
         html : htmlString

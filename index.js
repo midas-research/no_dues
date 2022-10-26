@@ -16,8 +16,7 @@ const cheerio = require('cheerio');
 const https = require('https');
 //const professorsList = require('./config/professors');
 const fs = require('fs');
-// g6d=Z8P%
-// ssh iiitd@192.168.1.240
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -57,7 +56,8 @@ app.listen(port, async (err) => {
     }
     console.log('Server is running perfectly fine on port: ', port);
 
-    var spreadsheetId = "1fdqYc6YxhabH18J07hA0c5f4S_VA_aYfguvLltn17Aw";
+    //Admin Details
+    var spreadsheetId = "1hXUEUHWGt3TyrhvWPh25U8KlmutxcTVx2qfAdPHyCEY";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -83,7 +83,8 @@ app.listen(port, async (err) => {
         }
     });
 
-    var spreadsheetId = "1Z1iuQizDRU_P_tfED0ICzx1k-u-ZaLkO_cWSWOZjul8";
+    //Professors List
+    var spreadsheetId = "1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -112,15 +113,52 @@ app.listen(port, async (err) => {
     for (var i in professors_data) {
         proffNames[professors_data[i][1]] = professors_data[i][0];
     }
-    var text = `module.exports.getProffName = (email) => {
-        return adminNames[email];
+    var text =`    
+    const getProffName = (email) => {
+        return proffNamesNames[email];
     }
-    module.exports.proffNames = proffNames;`
+
+    module.exports.proffNames = proffNames;
+
+    const isProff = (email) => {
+        
+        if (email in proffNames) {
+            // console.log("Ofcourse prof!");
+            return true;
+        } else {
+            // console.log("NO Ji prof!");
+            return false;
+        }
+    } 
+    module.exports={getProffName,isProff}; 
+    `  
+    
+    
+    
+    // `module.exports.getProffName = (email) => {
+    //     return adminNames[email];
+    // }
+    // module.exports.proffNames = proffNames;
+
+    // module.exports.isProff = (email) => {
+    
+    //     if (email in proffNames) {
+    //         console.log("Ofcourse prof!");
+    //         return true;
+    //     } else {
+    //         console.log("NO Ji prof!");
+    //         return false;
+    //     }
+    // }    
+    
+    // `
     fs.writeFile('./data/getProffName.js', 'var proffNames = ' + JSON.stringify(proffNames) + '\n' + text, (err) => {
         if (err) { console.log('Error in writing to admins file: ', err); return; }
     });
 
-    var spreadsheetId = "1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU";
+
+    //Students List
+    var spreadsheetId = "1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -134,7 +172,7 @@ app.listen(port, async (err) => {
     var data = await googleSheets.spreadsheets.values.get({
         auth: auth,
         spreadsheetId: spreadsheetId,
-        range: "ALL"
+        range: "Sheet1"
     });
     students_data = data.data.values;
     fs.readFile('./data/students.json', (err, data) => {
@@ -167,19 +205,20 @@ app.listen(port, async (err) => {
         adminNames[global.admins_data[i][1]] = changeNameFormat(global.admins_data[i][0]);
         names.push(changeNameFormat(global.admins_data[i][0]));
     }
-    var text = `module.exports.getAdminName = (email) => {
+    var text =
+    `module.exports.getAdminName = (email) => {
         if (email in adminNames) {
             return adminNames[email];
         } else {
             return 'student';
         }
     }
-    module.exports.adminNames = adminNames;`
+    module.exports.adminNames = adminNames;  
+    
+    `
     global.admins_data = adminNames;
     fs.writeFile('./data/getAdminName.js', 'var adminNames = ' + JSON.stringify(adminNames) + '\n' + text, (err) => {
         if (err) { console.log('Error in writing to admins file: ', err); return; }
     });
 });
 
-//client id = 417822814724-2klognhn6le7q43c0vc0tqpn0cbgu053.apps.googleusercontent.com
-//client secret = tn3wI5iFPkAawIotSB9IHIX2

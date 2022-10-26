@@ -1,8 +1,10 @@
 const axios = require('axios');
 var XMLHttpRequest = require('xhr2');
+// const {CURRENT_URL}= require('../config/config');
+
 var xhr = new XMLHttpRequest();
 var admins_data;
-// axios.get('http://nodues.fh.iiitd.edu.in/user/getAdmins').then(function (response) {
+// axios.get(`${CURRENT_URL}/user/getAdmins`).then(function (response) {
 //     }).catch(function (error) {
 //         console.log(error);
 //     });
@@ -48,13 +50,14 @@ var schemaObject = {
     branch: { type: String },
     roll: { type: String },
     gender: {type: String },
-
     ip: { type: String },
+    ipProf: { type: String },
+    btpProf: { type: String },
     btp: { type: String },
     ipApproved: {type: Boolean},
-    btpApproved: {type: Boolean},
-    ipApplied: { type: String },
-    btpApplied: { type: String },
+    btpApproved: {type: Boolean},    
+    ipApplied: { type: String },    
+    btpApplied: { type: String },  
     ipAppliedAt: { type: String },
     btpAppliedAt: { type: String },
     ipApprovedAt: { type: String },
@@ -86,7 +89,7 @@ const User = mongoose.model('User', userSchema);
 module.exports = User;
 
 // var request = new XMLHttpRequest();
-// request.open('GET', 'http://nodues.fh.iiitd.edu.in/user/getAdmins', false);
+// request.open('GET', `${CURRENT_URL}/user/getAdmins`, false);
 // request.send(null);
 // if (request.status === 200) {
 //   adminsList = JSON.parse(request.responseText);

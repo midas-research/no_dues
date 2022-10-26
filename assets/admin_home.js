@@ -1,3 +1,6 @@
+
+const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
+
 var adminName = document.getElementById('adminName').innerHTML;
 var id = document.getElementById('id').innerHTML;
 console.log(adminName);
@@ -38,7 +41,7 @@ for (var i in studentList) {
     accordion.innerHTML += `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${studentList[i].email} - 2018104</span>
+            <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
             <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
             <span class="icon" aria-hidden="true"></span>
@@ -90,7 +93,8 @@ function approved(e) {
     id: studentId
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://nodues.fh.iiitd.edu.in/approveDues/${JSON.stringify(obj)}`;
+  
+  window.location.href = `${CURRENT_URL}/approveDues/${JSON.stringify(obj)}`;
   r.remove();
 }
 
@@ -137,7 +141,7 @@ function sendMessage(e) {
     email : email.substring(0, index)
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://nodues.fh.iiitd.edu.in/sendMessage/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/sendMessage/${JSON.stringify(obj)}`;
 }
 
 var filterBtech = document.getElementsByClassName('filter-btech')[0];
@@ -155,7 +159,7 @@ filterBtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListBtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListBtech[i].email} - ${studentListBtech[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -199,7 +203,7 @@ filterMtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListMtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListMtech[i].email} - ${studentListMtech[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -243,7 +247,7 @@ filterPhd.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListPhd[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListPhd[i].email} - ${studentListPhd[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -287,7 +291,7 @@ filterAll.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentList[i].email} - 2018104</span>
+              <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -324,17 +328,17 @@ past.addEventListener('click', () => {
     admin : adminName,
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `http://nodues.fh.iiitd.edu.in/past/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/past/${JSON.stringify(obj)}`;
 });
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "http://nodues.fh.iiitd.edu.in/showSheet";
+  window.location.href = "/showSheet";
 });
 
 var bankAccountDetails = document.getElementById('bankAccountDetails');
 bankAccountDetails.addEventListener('click', () => {
-  window.location.href = "http://nodues.fh.iiitd.edu.in/bankAccountDetails";
+  window.location.href = `${CURRENT_URL}/bankAccountDetails`;
 });
 
 //code for selecting multiple students at a time
@@ -376,20 +380,20 @@ sendAll.addEventListener('click', () => {
   if (obj.length != 0) {
     var obj2 = []; obj2.push(obj);
     console.log(obj);
-    window.location.href = `http://nodues.fh.iiitd.edu.in/approveManyDues/${JSON.stringify(obj2)}`;
+    window.location.href = `${CURRENT_URL}/approveManyDues/${JSON.stringify(obj2)}`;
   }
 });
 
 var listBoys = document.getElementById('listBoys');
 if (listBoys) {
   listBoys.addEventListener('click', () => {
-    window.location.href = "http://nodues.fh.iiitd.edu.in/sendMailToBoysHostelAdmin";
+    window.location.href = `${CURRENT_URL}/sendMailToBoysHostelAdmin`;
   });
 }
 
 var listGirls = document.getElementById('listGirls');
 if (listGirls) {
   listGirls.addEventListener('click', () => {
-    window.location.href = "http://nodues.fh.iiitd.edu.in/sendMailToGirlsHostelAdmin";
+    window.location.href = `${CURRENT_URL}/sendMailToGirlsHostelAdmin`;
   });
 }

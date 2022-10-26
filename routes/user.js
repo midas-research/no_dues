@@ -4,7 +4,7 @@ const passport = require('passport');
 
 const router = express.Router();
 
-router.get('/profile', passport.checkAuthentication, userController.profile);
+// router.get('/profile', passport.checkAuthentication, userController.profile);
 router.get('/signup', userController.signup);
 router.get('/signin', userController.signin);
 router.post('/create', userController.create);
@@ -21,4 +21,6 @@ router.get('/getAdmins', userController.getAdmins);
 router.get('/getUser/:id', userController.getUser);
 router.get('/getStudentsLoggedIn', userController.getStudentsLoggedIn);
 
-module.exports = router;
+
+
+module.exports = router;    
