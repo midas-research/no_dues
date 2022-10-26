@@ -15,7 +15,7 @@ const admins = require('../data/admins');
 var XMLHttpRequest = require('xhr2');
 var xhr = new XMLHttpRequest();
 const axios = require('axios');
-const {CURRENT_URL}= require('../config/config');
+const {CURRENT_URL,NODEMAILER_EMAIL_ID}= require('../config/config');
 
 
 function modifyAdminName(s) {
@@ -34,7 +34,7 @@ function modifyAdminName(s) {
 }
 
 updateBoysNoDuesSheet = async () => {
-  var spreadsheetId = "1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ";
+  var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -83,7 +83,7 @@ updateBoysNoDuesSheet = async () => {
       }
     });
 
-    var spreadsheetId = "1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ";
+    var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -424,23 +424,23 @@ module.exports.sendPersonalDetails = (req, res) => {
 }
 
 module.exports.sheet = (req, res) => {
-  return res.redirect('https://docs.google.com/spreadsheets/d/1yapIMuyvzPVX5Sy3n5p5kLJH5aqWdnLBoLbaw4AsVi8/edit?usp=sharing');
+  return res.redirect('https://docs.google.com/spreadsheets/d/1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk/edit?usp=sharing');
 }
 
 module.exports.bankAccountDetails = (req, res) => {
-  return res.redirect('https://docs.google.com/spreadsheets/d/1jKQsMLiwSW5KwcKP1uxL-cnpMFWG_gv9FP2fz3Ha3t4/edit?usp=sharing');
+  return res.redirect('https://docs.google.com/spreadsheets/d/1Fn5EplhqwEB5c0chYqhhWCal5Kzs7hT4zNFCwkAkZpE/edit?usp=sharing');
 }
 
 module.exports.sendMailToBoysHostelAdmin = async (req, res) => {
     //console.log("inside sendMailToBoysHostelAdmin =============>>>>>>>>>>>");
     updateBoysNoDuesSheet();
-  boysHostelNodues_mailer.boysHostelNodues_mailer('soumyadeepsp@gmail.com');
+  boysHostelNodues_mailer.boysHostelNodues_mailer(`${NODEMAILER_EMAIL_ID}`);
   return res.redirect('/admin_home');
 }
 
 module.exports.sendMailToGirlsHostelAdmin = (req, res) => {
   updateGirlsNoDuesSheet();
-  girlsHostelNodues_mailer.girlsHostelNodues_mailer('soumyadeepsp@gmail.com');
+  girlsHostelNodues_mailer.girlsHostelNodues_mailer(`${NODEMAILER_EMAIL_ID}`);
   return res.redirect('/admin_home');
 }
 

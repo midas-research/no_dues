@@ -42,7 +42,7 @@ router.get('/nd_controls/mailContents', passport.checkSuperAdminAuthentication, 
 
 router.get('/getFunction', passport.checkAuthentication, homeController.getFunction);
 
-router.get('/showSheet', passport.checkAdminAuthentication, homeController.showSheet);
+router.get('/showSheet', passport.checkAdminAuthentication,passport.checkSheetAuthentication, homeController.showSheet);
 
 router.use('/user', require('./user'));
 

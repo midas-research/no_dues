@@ -5,6 +5,7 @@ const isAdmin = require('../data/isAdmin');
 const getProff=require('../data/getProffName');
 
 const User = require('../models/user');
+const {EMAIL_ID}=require('../config/config');
 
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -110,7 +111,7 @@ passport.checkProffAuthentication = (req, res, next) => {
 
 //check if superAdmin
 passport.checkSuperAdminAuthentication = async (req, res, next) => {
-    if (req.isAuthenticated() && req.user.email=='no-dues@iiitd.ac.in') {
+    if (req.isAuthenticated() && req.user.email==`${EMAIL_ID}`) {
         return next();
     }
     return res.redirect('/user/signin');
@@ -124,8 +125,8 @@ passport.setAuthenticatedUser = (req, res, next) => {
 }
 
 passport.checkSheetAuthentication = async (req, res, next) => {
-
-    const spreadsheetId = "1yapIMuyvzPVX5Sy3n5p5kLJH5aqWdnLBoLbaw4AsVi8";
+    //No Dues Details
+    const spreadsheetId = "1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk";
     const auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -136,7 +137,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
         auth: auth,
         spreadsheetId: spreadsheetId
     })
-    //console.log(metadata.data);
+    console.log(metadata.data);
     await googleSheets.spreadsheets.values.clear({
         auth: auth,
         spreadsheetId: spreadsheetId,
@@ -190,7 +191,8 @@ passport.checkSheetAuthentication = async (req, res, next) => {
 }
 
 passport.checkBankAuthentication = async (req, res, next) => {
-    const spreadsheetId = "1jKQsMLiwSW5KwcKP1uxL-cnpMFWG_gv9FP2fz3Ha3t4";
+    //Account Details
+    const spreadsheetId = "1Fn5EplhqwEB5c0chYqhhWCal5Kzs7hT4zNFCwkAkZpE";
     const auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"

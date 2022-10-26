@@ -56,7 +56,8 @@ app.listen(port, async (err) => {
     }
     console.log('Server is running perfectly fine on port: ', port);
 
-    var spreadsheetId = "1fdqYc6YxhabH18J07hA0c5f4S_VA_aYfguvLltn17Aw";
+    //Admin Details
+    var spreadsheetId = "1hXUEUHWGt3TyrhvWPh25U8KlmutxcTVx2qfAdPHyCEY";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -82,7 +83,8 @@ app.listen(port, async (err) => {
         }
     });
 
-    var spreadsheetId = "1Z1iuQizDRU_P_tfED0ICzx1k-u-ZaLkO_cWSWOZjul8";
+    //Professors List
+    var spreadsheetId = "1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -154,7 +156,9 @@ app.listen(port, async (err) => {
         if (err) { console.log('Error in writing to admins file: ', err); return; }
     });
 
-    var spreadsheetId = "1cBBIKCdmScEndsOtuSK4OZl4MyNhZxsPNAewyq6MikU";
+
+    //Students List
+    var spreadsheetId = "1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY";
     var auth = new google.auth.GoogleAuth({
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets"
@@ -168,7 +172,7 @@ app.listen(port, async (err) => {
     var data = await googleSheets.spreadsheets.values.get({
         auth: auth,
         spreadsheetId: spreadsheetId,
-        range: "ALL"
+        range: "Sheet1"
     });
     students_data = data.data.values;
     fs.readFile('./data/students.json', (err, data) => {

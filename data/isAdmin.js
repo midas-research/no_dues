@@ -3,7 +3,7 @@ adminNames=require('./getAdminName');
 module.exports.isAdmin = (email) => {
 
     // const arr = [
-    //     'no-dues@iiitd.ac.in',
+    //     'nodues-fh@iiitd.ac.in',
     //     'rajendra@iiitd.ac.in',
     //     'admin-facilities@iiitd.ac.in',
     //     'abhinay@iiitd.ac.in',

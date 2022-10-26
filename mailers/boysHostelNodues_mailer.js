@@ -9,7 +9,7 @@ exports.boysHostelNodues_mailer = (email) => {
         <br>
         <p>Kindly look at the following excel sheet to validate the dues of these students.</p>
         <br>
-        <p>https://docs.google.com/spreadsheets/d/1i4S4fbsVjBmpod-qplGgIH0BAhW_DsSj2B_2k0aHvaQ/edit?usp=sharing</p>
+        <p>https://docs.google.com/spreadsheets/d/1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o/edit?usp=sharing</p>
         <br>
         <p>Thanks no-dues!</p>
     </div>`

@@ -46,7 +46,7 @@ for (var i in studentList) {
     accordion.innerHTML += `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${studentList[i].email} - 2018104</span>
+            <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
             <span class="icon" aria-hidden="true"></span>
         </button>
         <div class="accordion-content">
@@ -116,7 +116,7 @@ filterBtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListBtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListBtech[i].email} - ${studentListBtech[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -154,7 +154,7 @@ filterMtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListMtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListMtech[i].email} - ${studentListMtech[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -192,7 +192,7 @@ filterPhd.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListPhd[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListPhd[i].email} - ${studentListPhd[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">
@@ -230,7 +230,7 @@ filterAll.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentList[i].email} - 2018104</span>
+              <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
               <span class="icon" aria-hidden="true"></span>
           </button>
           <div class="accordion-content">

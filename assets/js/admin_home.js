@@ -38,7 +38,7 @@ for (var i in studentList) {
     accordion.innerHTML += `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${studentList[i].email} - 2018104</span>
+            <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
             <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
             <span class="icon" aria-hidden="true"></span>
@@ -155,7 +155,7 @@ filterBtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListBtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListBtech[i].email} - ${studentListBtech[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -199,7 +199,7 @@ filterMtech.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListMtech[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListMtech[i].email} - ${studentListMtech[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -243,7 +243,7 @@ filterPhd.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListPhd[i].email} - 2018104</span>
+              <span class="accordion-title">${studentListPhd[i].email} - ${studentListPhd[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
@@ -287,7 +287,7 @@ filterAll.addEventListener('click', () => {
       accordion.innerHTML += `
         <div class="accordion-item filter-btech">
           <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentList[i].email} - 2018104</span>
+              <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
               <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
               <span class="icon" aria-hidden="true"></span>
