@@ -22,7 +22,7 @@ exports.sendIpMessage_mailer = (message, email, admin) => {
         <br>
         <p>Message - ${message}</p>
         <br>
-        <p>Thanks no-dues!</p>
+        <p>Thanks No-Dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,

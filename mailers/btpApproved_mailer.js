@@ -20,7 +20,7 @@ exports.btpApproved_mailer = (admin, email) => {
         <br>
         <p>Congratulations! Your No-Dues has been approved for the BTP/Scholarly Paper/Thesis work under ${fetchProffName(admin)}.</p>
         <br>
-        <p>Thanks no-dues!</p>
+        <p>Thanks No-Dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,
