@@ -51,8 +51,8 @@ exports.newMessage = async (message, email, admin) => {
             <br>
             <p>Message - ${message}</p>
             <br>
-            <p>Thanks ${adminDetails[admin]['name']}!</p>
-            <p>${adminDetails[admin]['address']}</p>
+            <p>Thanks!</p>
+            <p>${adminDetails[admin]['name']}</p>
         </div>`
         nodemailer.transporter.sendMail({
             from : `${NODEMAILER_EMAIL_ID}`,
