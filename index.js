@@ -115,7 +115,7 @@ app.listen(port, async (err) => {
     }
     var text =`    
     const getProffName = (email) => {
-        return proffNamesNames[email];
+        return proffNames[email];
     }
 
     module.exports.proffNames = proffNames;
