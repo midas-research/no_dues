@@ -84,6 +84,7 @@ body {
     text-decoration: none;
 }
 
+
 #main {
     height: 92vh;
     width: 100vw;
@@ -209,6 +210,8 @@ body {
   margin: 2em 0;
 }
 
+
+
 .send_request {
     /* border: 2px solid grey;
     background-color: lightgray; */
@@ -266,12 +269,12 @@ body {
     padding-bottom: 18px !important;
 }
 
-#portfolio-flters {
+/* #portfolio-filters {
   padding: 0;
   margin: 0 auto 20px auto;
   list-style: none;
   text-align: center;
-}
+} */
 
 #portfolio-filters li {
   cursor: pointer;
@@ -292,6 +295,51 @@ body {
 }
 
 #portfolio-filters li:last-child {
+  margin-right: 0;
+}
+
+#status-filters {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  
+}
+
+.row{  
+  padding-bottom: 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.row ul{
+  margin-bottom: 0;
+}
+
+.row ul li{
+  border: 1px solid #e5e5e5;
+  margin-right: 0px;
+  margin-left: 0px;
+
+}
+
+#status-filters li {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 15px 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: #444444;
+  margin-bottom: 5px;
+  transition: all 0.3s ease-in-out;
+  border-radius: 3px;
+  
+}
+
+#status-filters li:hover, #status-filters li.status-active {
+  color: #151515;
+  background: #6CCFF6;
+}
+
+#status-filters li:last-child {
   margin-right: 0;
 }
 

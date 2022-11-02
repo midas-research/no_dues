@@ -177,11 +177,11 @@ module.exports.sendMessage = (req, res) => {
     var id = user._id;
     var attribute = obj[0].admin + "Message";
     var updatedObject = {};
+    updatedObject[obj[0].admin] = false;
     updatedObject[attribute] = obj[0].message;
     console.log(id, attribute);
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       user.save();
-      console.log(user);
       return res.redirect('/admin_home');
     });
     message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
@@ -199,7 +199,7 @@ module.exports.approveDues = (req, res) => {
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
-    updateObject[obj[0].admin] = true
+    updateObject[obj[0].admin] = true;
     updateObject[obj[0].admin+'ApprovedAt'] = dateTime;
     User.findByIdAndUpdate(id, updateObject, (err, user) => {
       user.save();

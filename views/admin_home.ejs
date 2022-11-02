@@ -21,12 +21,13 @@
                     <span class='icon-down'></span>
                     <div class="dropdown-content">
                         <a href="/user/signout">Logout</a> <br><hr>
-                        <a id="past">History</a> <br><hr>
+                        <!-- <a id="past">Accepted</a> <br><hr> -->
                         <a id="sheet">Show Sheet</a> <br><hr>
                         <a id="bankAccountDetails">Account Details</a> <br><hr>
+                        
                         <a id="selectAll">Select All</a> <br><hr>
                         <a id="unselectAll">Unselect All</a> <br><hr>
-                        <a id="sendAll">Send All</a> <br><hr>
+                        <a id="sendAll">Send Selected</a> <br><hr>
                         <!-- <% if (adminName == "hostel") { %>
                           <a id="listBoys">Send Boys List</a> <br><hr>
                           <a id="listGirls">Send Girls List</a>
@@ -43,16 +44,29 @@
         <div id="main">
             <div class="container">
                 <h2>List of students</h2>
+
                 <div class="row" data-aos="fade-up" data-aos-delay="100">
-                  <div class="col-lg-12 d-flex justify-content-center">
+                  <div class="col-lg-6 d-flex justify-content-center">
+                    <ul id="status-filters">
+                        <li data-filter=".pending" class="status-active status-pending">Pending</li>
+                        <li data-filter=".rejected" class="status-reject">Rejected</li>
+                        <li data-filter=".accepted" class="status-accept">Accepted</li>
+                    </ul>                      
+                  </div>
+
+                  <div class="col-lg-6 d-flex justify-content-center">
                     <ul id="portfolio-filters">
-                      <li data-filter="*" class="filter-active">All</li>
+                      <li data-filter="*" class="filter-active filter-all">All</li>
                       <li data-filter=".filter-btech" class="filter-btech">B. Tech</li>
                       <li data-filter=".filter-mtech" class="filter-mtech">M. Tech</li>
                       <li data-filter=".filter-phd" class="filter-phd">Ph.D.</li>
-                    </ul>
+                    </ul>                    
                   </div>
+                  
                 </div>
+
+               
+
                 <div class="accordion">
                   
                   <!-- <div class="accordion-item">
@@ -72,7 +86,8 @@
                     </div>
                   </div> -->
                 </div>
-              </div>
+
+            </div>
         </div>
         <script src="../assets/admin_home.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

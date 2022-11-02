@@ -3,8 +3,8 @@ const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 
 var adminName = document.getElementById('adminName').innerHTML;
 var id = document.getElementById('id').innerHTML;
-console.log(adminName);
-console.log(id);
+// console.log(adminName);
+// console.log(id);
 
 var accordion = document.getElementsByClassName('accordion')[0];
 var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
@@ -24,56 +24,124 @@ for (var i in studentList) {
     studentListPhd.push(studentList[i]);
   }
 }
-console.log(studentListBtech);
-console.log(studentListMtech);
-console.log(studentListPhd);
+
+
+// console.log(studentListBtech);
+// console.log(studentListMtech);
+// console.log(studentListPhd);
 // console.log(studentList);
 // console.log(typeof(studentList));
-for (var i in studentList) {
-  var message;
-  if (studentList[i][adminName+'Message']) {
-    message = studentList[i][adminName+'Message'];
-  } else {
-    message = 'You have not sent any message currently.';
+
+
+var all = document.getElementsByClassName('filter-all')[0];
+var current = all;
+var currentList= studentList;
+var btech = document.getElementsByClassName('filter-btech')[0];
+var mtech = document.getElementsByClassName('filter-mtech')[0];
+var phd = document.getElementsByClassName('filter-phd')[0];
+
+var pending = document.getElementsByClassName('status-active')[0];
+var curr_status=pending;
+var accept = document.getElementsByClassName('status-accept')[0];
+var reject = document.getElementsByClassName('status-reject')[0];
+
+
+function check(student){
+  if(curr_status==pending){    
+    return student[adminName+'Applied'] && student[adminName]==null;
   }
-  if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
-    accordion.innerHTML = "";
-    accordion.innerHTML += `
-      <div class="accordion-item filter-btech">
+
+  else if(curr_status==accept){
+    return student[adminName];
+  }
+
+  else{
+    return student[adminName]==false;
+  }
+}
+
+
+
+function addAcceptCode(student,msg){
+  
+    return `<div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
-            <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-            <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
+            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name}</span>
             <span class="icon" aria-hidden="true"></span>
         </button>
         <div class="accordion-content">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-            </div>
-          </div>
-          <span class="message">${message}</span>
+          <span class="message">Approved : ${student[adminName+'ApprovedAt']}</span><br>
+          <span class="message">${msg}</span><br>
+          <span class="message">Requested : ${student[adminName+'AppliedAt']}</span>
         </div>
       </div>`
-  }
+  
 }
 
-const items = document.querySelectorAll(".accordion button");
+function clickFilter(){
 
-function toggleAccordion() {
-  const itemToggle = this.getAttribute('aria-expanded');
-  
-  for (i = 0; i < items.length; i++) {
-    items[i].setAttribute('aria-expanded', 'false');
+
+  if(curr_status==accept){
+    document.getElementById("selectAll").style.opacity=0.5;
+    document.getElementById("unselectAll").style.opacity=0.5;
+    document.getElementById("sendAll").style.opacity=0.5;
   }
-  
-  if (itemToggle == 'false') {
-    this.setAttribute('aria-expanded', 'true');
+  else{
+    document.getElementById("selectAll").style.opacity=1;
+    document.getElementById("unselectAll").style.opacity=1;
+    document.getElementById("sendAll").style.opacity=1;
   }
+  accordion.innerHTML = '';
+  for (var i in currentList) {
+   var message;
+   if (currentList[i][adminName+'Message']) {
+     message = currentList[i][adminName+'Message'];
+   } else {
+     message = 'You have not sent any message currently.';
+   }
+
+   if(check(currentList[i]) && curr_status==accept){
+     accordion.innerHTML = "";
+     accordion.innerHTML += addAcceptCode(studentListBtech[i],message);
+   }
+   else if (check(currentList[i])) {
+     accordion.innerHTML = '';
+     accordion.innerHTML += `
+       <div class="accordion-item filter-btech">
+         <button id="accordion-button-1" aria-expanded="false">
+             <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} -${currentList[i].name}</span>
+             <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+             <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
+             <span class="icon" aria-hidden="true"></span>
+         </button>
+         <div class="accordion-content">
+           <div class="input-group mb-3">
+             <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+             <div class="input-group-append">
+                 <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
+             </div>
+           </div>
+           <span class="message">${message}</span>
+         </div>
+       </div>`
+   }
+  }
+
+  const items = document.querySelectorAll(".accordion button");
+
+  function toggleAccordion() {
+    const itemToggle = this.getAttribute('aria-expanded');
+    for (i = 0; i < items.length; i++) {
+      items[i].setAttribute('aria-expanded', 'false');
+    }
+    if (itemToggle == 'false') {
+      this.setAttribute('aria-expanded', 'true');
+    }
+  }
+  items.forEach(item => item.addEventListener('click', toggleAccordion));
 }
 
-items.forEach(item => item.addEventListener('click', toggleAccordion));
+clickFilter();
 
 function approved(e) {
   var r = e.parentElement.parentElement;
@@ -98,31 +166,58 @@ function approved(e) {
   r.remove();
 }
 
-var all = document.getElementsByClassName('filter-active')[0];
-var current = all;
 
-var btech = document.getElementsByClassName('filter-btech')[0];
-var mtech = document.getElementsByClassName('filter-mtech')[0];
-var phd = document.getElementsByClassName('filter-phd')[0];
 btech.addEventListener('click', () => {
-  btech.classList.add('filter-active');
   current.classList.remove('filter-active');
+  btech.classList.add('filter-active');  
   current = btech;
+  currentList=studentListBtech;
+  clickFilter();
+  
 });
 mtech.addEventListener('click', () => {
-  mtech.classList.add('filter-active');
   current.classList.remove('filter-active');
+  mtech.classList.add('filter-active');  
   current = mtech;
+  currentList=studentListMtech;
+  clickFilter();
 });
 phd.addEventListener('click', () => {
-  phd.classList.add('filter-active');
   current.classList.remove('filter-active');
+  phd.classList.add('filter-active');  
   current = phd;
+  currentList=studentListPhd;
+  clickFilter();
 });
 all.addEventListener('click', () => {
-  all.classList.add('filter-active');
   current.classList.remove('filter-active');
+  all.classList.add('filter-active');  
   current = all;
+  currentList=studentList;
+  clickFilter();
+});
+
+accept.addEventListener('click', () => {
+  curr_status.classList.remove('status-active');
+  accept.classList.add('status-active');  
+  curr_status = accept;
+  clickFilter();
+ 
+});
+
+reject.addEventListener('click', () => {
+  curr_status.classList.remove('status-active');
+  reject.classList.add('status-active');  
+  curr_status = reject;
+  clickFilter();
+});
+
+pending.addEventListener('click', () => {
+  curr_status.classList.remove('status-active');
+  pending.classList.add('status-active');  
+  curr_status = pending;
+  clickFilter();
+  
 });
 
 function sendMessage(e) {
@@ -143,193 +238,6 @@ function sendMessage(e) {
   console.log(JSON.stringify(obj));
   window.location.href = `${CURRENT_URL}/sendMessage/${JSON.stringify(obj)}`;
 }
-
-var filterBtech = document.getElementsByClassName('filter-btech')[0];
-filterBtech.addEventListener('click', () => {
-   accordion.innerHTML = '';
-   for (var i in studentListBtech) {
-    var message;
-    if (studentListBtech[i][adminName+'Message']) {
-      message = studentListBtech[i][adminName+'Message'];
-    } else {
-      message = 'You have not sent any message currently.';
-    }
-    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
-      accordion.innerHTML = '';
-      accordion.innerHTML += `
-        <div class="accordion-item filter-btech">
-          <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListBtech[i].email} - ${studentListBtech[i].roll}</span>
-              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
-              <span class="icon" aria-hidden="true"></span>
-          </button>
-          <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
-          </div>
-        </div>`
-    }
-  }
-  const items = document.querySelectorAll(".accordion button");
-  function toggleAccordion() {
-    const itemToggle = this.getAttribute('aria-expanded');
-    for (i = 0; i < items.length; i++) {
-      items[i].setAttribute('aria-expanded', 'false');
-    }
-    if (itemToggle == 'false') {
-      this.setAttribute('aria-expanded', 'true');
-    }
-  }
-  items.forEach(item => item.addEventListener('click', toggleAccordion));
-});
-
-var filterMtech = document.getElementsByClassName('filter-mtech')[0];
-filterMtech.addEventListener('click', () => {
-  accordion.innerHTML = '';
-  for (var i in studentListMtech) {
-    var message;
-    if (studentListMtech[i][adminName+'Message']) {
-      message = studentListMtech[i][adminName+'Message'];
-    } else {
-      message = 'You have not sent any message currently.';
-    }
-    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
-      accordion.innerHTML += `
-        <div class="accordion-item filter-btech">
-          <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListMtech[i].email} - ${studentListMtech[i].roll}</span>
-              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
-              <span class="icon" aria-hidden="true"></span>
-          </button>
-          <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
-          </div>
-        </div>`
-    }
-  }
-  const items = document.querySelectorAll(".accordion button");
-  function toggleAccordion() {
-    const itemToggle = this.getAttribute('aria-expanded');
-    for (i = 0; i < items.length; i++) {
-      items[i].setAttribute('aria-expanded', 'false');
-    }
-    if (itemToggle == 'false') {
-      this.setAttribute('aria-expanded', 'true');
-    }
-  }
-  items.forEach(item => item.addEventListener('click', toggleAccordion));
-});
-
-var filterPhd = document.getElementsByClassName('filter-phd')[0];
-filterPhd.addEventListener('click', () => {
-  accordion.innerHTML = '';
-  for (var i in studentListPhd) {
-    var message;
-    if (studentListPhd[i][adminName+'Message']) {
-      message = studentListPhd[i][adminName+'Message'];
-    } else {
-      message = 'You have not sent any message currently.';
-    }
-    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
-      accordion.innerHTML += `
-        <div class="accordion-item filter-btech">
-          <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentListPhd[i].email} - ${studentListPhd[i].roll}</span>
-              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
-              <span class="icon" aria-hidden="true"></span>
-          </button>
-          <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
-          </div>
-        </div>`
-    }
-  }
-  const items = document.querySelectorAll(".accordion button");
-  function toggleAccordion() {
-    const itemToggle = this.getAttribute('aria-expanded');
-    for (i = 0; i < items.length; i++) {
-      items[i].setAttribute('aria-expanded', 'false');
-    }
-    if (itemToggle == 'false') {
-      this.setAttribute('aria-expanded', 'true');
-    }
-  }
-  items.forEach(item => item.addEventListener('click', toggleAccordion));
-});
-
-var filterAll = document.getElementsByClassName('filter-active')[0];
-filterAll.addEventListener('click', () => {
-  accordion.innerHTML = '';
-  for (var i in studentList) {
-    var message;
-    if (studentList[i][adminName+'Message']) {
-      message = studentList[i][adminName+'Message'];
-    } else {
-      message = 'You have not sent any message currently.';
-    }
-    if (studentList[i][adminName+'Applied'] && !studentList[i][adminName]) {
-      accordion.innerHTML += `
-        <div class="accordion-item filter-btech">
-          <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${studentList[i].email} - ${studentList[i].roll}</span>
-              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-              <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
-              <span class="icon" aria-hidden="true"></span>
-          </button>
-          <div class="accordion-content">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-              </div>
-            </div>
-            <span class="message">${message}</span>
-          </div>
-        </div>`
-    }
-  }
-  const items = document.querySelectorAll(".accordion button");
-  function toggleAccordion() {
-    const itemToggle = this.getAttribute('aria-expanded');
-    for (i = 0; i < items.length; i++) {
-      items[i].setAttribute('aria-expanded', 'false');
-    }
-    if (itemToggle == 'false') {
-      this.setAttribute('aria-expanded', 'true');
-    }
-  }
-  items.forEach(item => item.addEventListener('click', toggleAccordion));
-});
-
-var past = document.getElementById('past');
-past.addEventListener('click', () => {
-  var obj = [];
-  obj.push({
-    admin : adminName,
-  });
-  console.log(JSON.stringify(obj));
-  window.location.href = `${CURRENT_URL}/past/${JSON.stringify(obj)}`;
-});
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
