@@ -497,10 +497,10 @@ if ('btpApproved' in user[0]) {
   btp_comment.innerHTML = 'Your dues has been approved!';
 }
 var ip_comment = document.getElementById('ip_comment');
-if (!('ipApproved' in user[0]) && ('ipMessage' in user[0])) {
+if (!('ip' in user[0]) && ('ipMessage' in user[0])) {
   ip_comment.innerHTML = user[0]['ipMessage'];
 }
-if ('ipApproved' in user[0]) {
+if ('ip' in user[0]) {
   ip_comment.innerHTML = 'Your dues has been approved!';
 }
 
@@ -528,7 +528,7 @@ if ('ip' in user[0]) {
   ip_proff.value = reverseProfessorList[user[0]['ip']];
 }
 var ip_signal = document.getElementsByClassName('ip_signal')[0];
-if (user[0]['ip'] && !('ipApproved' in user[0])) {
+if (user[0]['ip'] && !('ip' in user[0])) {
   ip_signal.classList.remove('fa-dot-circle');
   ip_signal.classList.add('fa-spinner');
   ip_signal.style.color = 'blue';
@@ -540,7 +540,7 @@ if ('ipMessage' in user[0]) {
   ip_signal.classList.add('fa-times-circle');
   ip_signal.style.color = 'red';
 }
-if ('ipApproved' in user[0]) {
+if ('ip' in user[0]) {
   ip_signal.classList.remove('fa-spinnere');
   ip_signal.classList.remove('fa-times-circle');
   ip_signal.classList.remove('fa-dot-circle');

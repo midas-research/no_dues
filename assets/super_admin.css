@@ -3,6 +3,7 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 #navbar {
@@ -96,6 +97,7 @@ body {
   font-size: 1.15rem;
   font-weight: 400;
 }
+
 
 
 #main {
@@ -203,6 +205,7 @@ body {
   font-size: 15px;
   font-weight: 600;
   line-height: 1;
+  
 
   margin-bottom: 10px;
   transition: all 0.3s ease-in-out;
@@ -251,7 +254,8 @@ body {
 }
 .accordion button[aria-expanded=true] + .accordion-content {
   opacity: 1;
-  max-height: 15em;
+  max-height: 20em;
+  overflow-y: scroll;
   transition: all 200ms linear;
   will-change: opacity, max-height;
   padding-bottom: 18px;
@@ -393,9 +397,7 @@ body {
 .row{  
   padding-bottom: 0;
   border-bottom: 1px solid #e5e5e5;
-
 }
-
 
 .row ul{
   margin-bottom: 0;
@@ -433,7 +435,7 @@ body {
   margin-right: 0;
 } */
 
-#past, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll, #back {
+#past, #adminRequests, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll, #back {
   cursor: pointer;
 }
 

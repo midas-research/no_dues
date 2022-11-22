@@ -2,10 +2,23 @@ const passport = require('passport');
 const {google} = require('googleapis');
 const LocalStrategy = require('passport-local').Strategy;
 const isAdmin = require('../data/isAdmin');
+const admins = require('../data/admins');
 const getProffName=require('../data/getProffName');
 
 const User = require('../models/user');
-const {EMAIL_ID}=require('../config/config');
+const {EMAIL_ID, SUPER_ADMIN_EMAIL}=require('../config/config');
+
+function add(temp,x){    
+    
+    
+    if(x==null){
+        temp.array.push(false);
+    }
+    else{
+        temp.array.push(x);
+    }
+    
+}
 
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -53,7 +66,8 @@ passport.checkAuthentication = (req, res, next) => {
 passport.checkAdminAuthentication = (req, res, next) => {
     // console.log("Bhai hun idhar!");
     if (req.isAuthenticated()){
-        if(isAdmin.isAdmin(req.user.email)) {
+        
+        if(req.user.email==`${SUPER_ADMIN_EMAIL}` || isAdmin.isAdmin(req.user.email) ) {
             // console.log("Bhai hun mein admin");
             return next();
         }
@@ -74,8 +88,15 @@ passport.checkAdminAuthentication = (req, res, next) => {
 
 //check if it's a normal User
 passport.checkUserAuthentication = (req, res, next) => {
+    
+    console.log(req.user.email);
     if (req.isAuthenticated()){
-        if(isAdmin.isAdmin(req.user.email)) {
+        console.log(req.user.email);
+        if(req.user.email==`${SUPER_ADMIN_EMAIL}`){
+            return res.redirect('/super_admin');
+
+        }
+        else if(isAdmin.isAdmin(req.user.email)) {
             return res.redirect('/admin_home');
         }
         else if(getProffName.isProff(req.user.email)){
@@ -111,7 +132,7 @@ passport.checkProffAuthentication = (req, res, next) => {
 
 //check if superAdmin
 passport.checkSuperAdminAuthentication = async (req, res, next) => {
-    if (req.isAuthenticated() && req.user.email==`${EMAIL_ID}`) {
+    if (req.isAuthenticated() && req.user.email==`${SUPER_ADMIN_EMAIL}`) {
         return next();
     }
     return res.redirect('/user/signin');
@@ -123,6 +144,52 @@ passport.setAuthenticatedUser = (req, res, next) => {
     }
     next();
 }
+
+function modifyAdminName(s) {
+    if (s.substring(0, 9) == 'Academics') {
+      return 'academics';
+    }
+    var arr = s.split(" ");
+    var newName = arr[0].toLowerCase();
+    for (var i=1; i<arr.length; i++) {
+        if (arr[i]=='&' || arr[i]=='&amp;') {
+            arr[i] = 'and';
+        }
+        newName = newName + arr[i][0].toUpperCase() + arr[i].substring(1,);
+    }
+    return newName;
+  }
+
+function adminsLeft(student){
+    // console.log(student);
+    var admins_list=[];
+    for (var i=0; i<admins.length-2; i++) {
+        admins_list.push(modifyAdminName(admins[i][0]));
+    }
+    admins_list.push('ip');
+    admins_list.push('btp');
+
+    var check=true;
+  
+    for(var i in admins_list){
+        // console.log(admins_list[i]);
+        // console.log(student[admins_list[i]]);
+
+      if(!student[admins_list[i]]){
+        check=false;
+      }
+      else{
+        
+        check&=student[admins_list[i]];
+      }    
+  
+    }
+    // console.log(check);
+  
+    return Boolean(check);
+}
+
+
 
 passport.checkSheetAuthentication = async (req, res, next) => {
     //No Dues Details
@@ -137,45 +204,49 @@ passport.checkSheetAuthentication = async (req, res, next) => {
         auth: auth,
         spreadsheetId: spreadsheetId
     })
-    console.log(metadata.data);
+    // console.log(metadata.data);
     await googleSheets.spreadsheets.values.clear({
         auth: auth,
         spreadsheetId: spreadsheetId,
         range: "Sheet1"
     });
     values = [];
-    values.push(['Name', 'Roll no.', 'Email', 'Design Lab', 'Library', 'Admin Facilities', 
+    values.push(['Name', 'Roll no.', 'Email', 'Degree','Department','Batch','Design Lab', 'Library', 'Admin Facilities', 
         'System Admin', 'Sports', 'Hostel', 'ECE Labs', 'Placement', 'Incubation', 'Finance',
-        'Academics', 'IP', 'BTP']);
+        'Academics', 'IP', 'BTP','Overall','NoDues', 'Bank Name', 'Branch Name', 'Account Holder Name', 'Account No', 'IFSC Code']);
     var docs = await User.find({});
     for (var i in docs) {
         if (!docs[i]['type']) {
-            var temp = [];
-            temp.push(docs[i]['name']);
-            temp.push(docs[i]['roll']);
-            temp.push(docs[i]['email']);
-            temp.push(docs[i]['designLab']);
-            temp.push(docs[i]['library']);
-            temp.push(docs[i]['adminFacilities']);
-            temp.push(docs[i]['systemAdminAndNetworking']);
-            temp.push(docs[i]['sportsAndStudentFacilities']);
-            temp.push(docs[i]['hostel']);
-            temp.push(docs[i]['eceLabs']);
-            temp.push(docs[i]['placementIncharge']);
-            temp.push(docs[i]['incubationCenter']);
-            temp.push(docs[i]['finance']);
-            temp.push(docs[i]['academics']);
-            if (docs[i]['ipApproved']) {
-                temp.push(docs[i]['ipApproved']);
-            } else {
-                temp.push('false');
-            }
-            if (docs[i]['btpApproved']) {
-                temp.push(docs[i]['btpApproved']);
-            } else {
-                temp.push('false');
-            }
-            values.push(temp);
+            var temp = {array: []};
+            add(temp,docs[i]['name']);
+            add(temp,docs[i]['roll']);
+            add(temp,docs[i]['email']);
+            add(temp,docs[i]['degree']);
+            add(temp,docs[i]['department']);
+            add(temp,docs[i]['startYear']);
+            add(temp,docs[i]['designLab']);
+            add(temp,docs[i]['library']);
+            add(temp,docs[i]['adminFacilities']);
+            add(temp,docs[i]['systemAdminAndNetworking']);
+            add(temp,docs[i]['sportsAndStudentFacilities']);
+            add(temp,docs[i]['hostel']);
+            add(temp,docs[i]['eceLabs']);
+            add(temp,docs[i]['placementIncharge']);
+            add(temp,docs[i]['incubationCenter']);
+            add(temp,docs[i]['finance']);
+            add(temp,docs[i]['academics']);            
+            add(temp,docs[i]['ip']); 
+            add(temp,docs[i]['btp']);
+            add(temp,adminsLeft(docs[i]));
+            add(temp,docs[i]['nodues']);
+            add(temp,docs[i]['bankName']);
+            add(temp,docs[i]['bankBranch']);
+            add(temp,docs[i]['bankAccountHolder']);            
+            add(temp,docs[i]['bankAccountNo']);
+            add(temp,docs[i]['bankIfscCode']);
+            
+            
+            values.push(temp.array);
         }
     }
     await googleSheets.spreadsheets.values.append({
@@ -210,20 +281,20 @@ passport.checkBankAuthentication = async (req, res, next) => {
         range: "Sheet1"
     });
     values = [];
-    values.push(['Name', 'Roll no.', 'Email', 'Bank Name', 'Branch Name', 
-        'Account No', 'IFSC Code']);
+    values.push(['Name', 'Roll no.', 'Email', 'Bank Name', 'Branch Name', 'Account Holder Name', 'Account No', 'IFSC Code']);
     var docs = await User.find({});
     for (var i in docs) {
         if (!docs[i]['type']) {
-            var temp = [];
-            temp.push(docs[i]['name']);
-            temp.push(docs[i]['roll']);
-            temp.push(docs[i]['email']);
-            temp.push(docs[i]['bankName']);
-            temp.push(docs[i]['bankBranch']);
-            temp.push(docs[i]['bankAccountNo']);
-            temp.push(docs[i]['bankIfscCode']);
-            values.push(temp);
+            var temp = {array: []};
+            add(temp,docs[i]['name']);
+            add(temp,docs[i]['roll']);
+            add(temp,docs[i]['email']);
+            add(temp,docs[i]['bankName']);
+            add(temp,docs[i]['bankBranch']);
+            add(temp,docs[i]['bankAccountHolder']);            
+            add(temp,docs[i]['bankAccountNo']);
+            add(temp,docs[i]['bankIfscCode']);
+            values.push(temp.array);
         }
     }
     await googleSheets.spreadsheets.values.append({

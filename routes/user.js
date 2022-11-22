@@ -21,6 +21,11 @@ router.get('/getAdmins', userController.getAdmins);
 router.get('/getUser/:id', userController.getUser);
 router.get('/getStudentsLoggedIn', userController.getStudentsLoggedIn);
 
+router.all('*', function(req, res) {
+    res.status(404).send("Sorry! Couldn't find this URL");
+});
+
+
 
 
 module.exports = router;    

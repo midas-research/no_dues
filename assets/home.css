@@ -3,6 +3,7 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 #navbar {
@@ -175,7 +176,8 @@ body {
 }
 .accordion button[aria-expanded=true] + .accordion-content {
   opacity: 1;
-  max-height: 9em;
+  max-height: 20em;
+  /* overflow-y: scroll; */
   transition: all 200ms linear;
   will-change: opacity, max-height;
 }
@@ -262,11 +264,12 @@ body {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  left: 0px;
+  top: 0px;
+  margin:0;
+  /* width: 100%; Full width */
+  /* height: 100%; Full height */
+  /* overflow: auto; Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }

@@ -4,12 +4,13 @@
         <title><%= title %></title>
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/admin_home.css"/>
+        <link rel="stylesheet" type="text/css" href="/assets/super_admin_department.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     </head>
     <body>
         <p id="adminName" style="display:none"><%= adminName %></p>
+        <p id="adminList" style="display:none"><%= adminList %></p>
         <p id="id" style="display:none"><%= id %></p>
         <p id="studentList" style="display:none"><%= studentList %></p>
         <p id="CURRENT_URL" style="display:none"><%= url %></p>
@@ -20,71 +21,68 @@
                 <div id="navbar_left_p">No Dues</div>
                 <div class="dropdown">
                     <span class='icon-down'></span>
-                    <div class="dropdown-content">
-                        <a href="/user/signout">Logout</a> <br><hr>
-                        <!-- <a id="past">Accepted</a> <br><hr> -->
-                        <a id="sheet">Show Sheet</a>
-                        <!-- <a id="bankAccountDetails">Account Details</a> <br><hr> -->
-<!--                         
-                        <a id="selectAll">Select All</a> <br><hr>
-                        <a id="unselectAll">Unselect All</a> <br><hr>
-                        <a id="sendAll">Send Selected</a> <br><hr> -->
-                        <!-- <% if (adminName == "hostel") { %>
-                          <a id="listBoys">Send Boys List</a> <br><hr>
-                          <a id="listGirls">Send Girls List</a>
-                        <% } %> -->
+                    <div class="dropdown-content">                        
+                        <a id="superAdminHome">Home</a><br><hr>
+                        <a id="sheet">Show Sheet</a><br><hr>
+                        <a href="/user/signout">Logout</a><br>               
                     </div>
                 </div>
             </div>
             <div id="navbar_right">
-                <div id="navbar_right_p">Hello Admin</div>
+                <div id="navbar_right_p">Hello Super Admin</div>
                 <div id="navbar_right_i"><img src=<%= locals.user.image %> /></div>
             </div>
         </div>
 
         <div id="main">
             <div class="container">
-                <h2 style="margin-bottom: 40px;">List of students</h2>
-
-                <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                 
-                    <select class="filter" name="status" id="status">                      
-                      <option value="pending">Pending</option>
-                      <option value="rejected">Rejected</option>
-                      <option value="accepted">Accepted</option>          
-                    </select>
-
-                    <select class="filter" name="degree" id="degree">
-                      <option value="All"> Degree (All)</option>
-                      <option value="B. Tech">B.Tech</option>
-                      <option value="M. Tech">M.Tech</option>
-                      <option value="Phd">Phd</option>          
-                    </select>
-
-                    <select class="filter" name="department" id="department">
-                      <option value="All">Branch(All)</option>
-                      <option value="CSE">CSE</option>
-                      <option value="Mathematics">MATHS</option>
-                      <option value="CB">CB</option>
-                      <option value="SSH">SSH</option> 
-                      <option value="ECE">ECE</option>
-                      <option value="HCD">HCD</option>         
-                    </select>                 
-
-               
-                    <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH" >
+              
+                <h2 style="margin-bottom: 40px; text-align: center;">Admin Wise Requests</h2> 
                 
-                    <button class="filter" id="selectAll">Select All</button>
-                 
-                    <button class="filter" id="unselectAll">Unselect All </button>
-                
-                    <button class="filter" id="sendAll">Accept Selected</button>
-                
-                    <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> </button>                  
+                <div class="d-flex align-items-center justify-content-center" style="margin-bottom: 20px; " data-aos="fade-up" data-aos-delay="100">
+                  
+                  <h5 class="mr-3">Choose Admin:</h5>
+                  <select class="mr-5 filter" name="" id="admins"> </select>                 
+
+                  <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
 
                 </div>
 
-               
+                <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                
+                  <select class="filter" name="status" id="status">                      
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="accepted">Accepted</option>          
+                  </select>
+
+                  <select class="filter" name="degree" id="degree">
+                    <option value="All"> Degree (All)</option>
+                    <option value="B. Tech">B.Tech</option>
+                    <option value="M. Tech">M.Tech</option>
+                    <option value="Phd">Phd</option>          
+                  </select>
+
+                  <select class="filter" name="department" id="department">
+                    <option value="All">Branch(All)</option>
+                    <option value="CSE">CSE</option>
+                    <option value="Mathematics">MATHS</option>
+                    <option value="CB">CSB</option>
+                    <option value="SSH">SSH</option> 
+                    <option value="ECE">ECE</option>
+                    <option value="HCD">HCD</option>         
+                  </select>
+              
+                  <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH" >
+              
+                  <button class="filter" id="selectAll">Select All</button>
+                
+                  <button class="filter" id="unselectAll">Unselect All </button>
+              
+                  <button class="filter" id="sendAll">Accept Selected </button>       
+                                    
+
+                </div>
 
                 <div class="accordion">
                   
@@ -108,7 +106,7 @@
 
             </div>
         </div>
-        <script src="../assets/admin_home.js"></script>
+        <script src="../assets/super_admin_department.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>

@@ -2,6 +2,8 @@ const User = require('../models/user');
 const {google} = require('googleapis');
 const message_mailer = require('../mailers/message_mailer');
 const approved_mailer = require('../mailers/approved_mailer');
+const super_message_mailer = require('../mailers/super_message_mailer');
+const super_approved_mailer = require('../mailers/super_approved_mailer');
 const sendBtpRequest_mailer = require('../mailers/sendBtpRequest_mailer');
 const sendIpRequest_mailer = require('../mailers/sendIpRequest_mailer');
 const btpApproved_mailer = require('../mailers/btpApproved_mailer');
@@ -35,82 +37,83 @@ function modifyAdminName(s) {
 }
 
 updateBoysNoDuesSheet = async () => {
-  var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
-    var auth = new google.auth.GoogleAuth({
-        keyFile: "credentials.json",
-        scopes: "https://www.googleapis.com/auth/spreadsheets"
-    });
-    var client = await auth.getClient();
-    var googleSheets = google.sheets({version: "v4", auth: client});
-    var metadata = await googleSheets.spreadsheets.get({
-        auth: auth,
-        spreadsheetId: spreadsheetId
-    })
-    //console.log(metadata.data);
-    var data = await googleSheets.spreadsheets.values.get({
-        auth: auth,
-        spreadsheetId: spreadsheetId,
-        range: "Sheet1"
-    });
-    //console.log("found the data =============>>>>>>>>>>>");
-    var boyshosteldata = data.data.values;
-    var newboyshosteldata = [];
-    newboyshosteldata.push(boyshosteldata[0]);
-    User.find({}, (err, users) => {
-      if (err) {console.log('Error in loading all the users'); return;}
-      for (var i=1; i<boyshosteldata.length; i++) {
-        for (var j in users) {
-          if (boyshosteldata[i][0]==users[j]['name'] && users[j]['hostel']==false) {
-            newboyshosteldata.push(boyshosteldata[i]);
-          }
-        }
-      }
-      for (var i in users) {
-        var c = 0;
+  // var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
+  //   var auth = new google.auth.GoogleAuth({
+  //       keyFile: "credentials.json",
+  //       scopes: "https://www.googleapis.com/auth/spreadsheets"
+  //   });
+  //   var client = await auth.getClient();
+  //   var googleSheets = google.sheets({version: "v4", auth: client});
+  //   var metadata = await googleSheets.spreadsheets.get({
+  //       auth: auth,
+  //       spreadsheetId: spreadsheetId
+  //   })
+  //   //console.log(metadata.data);
+  //   var data = await googleSheets.spreadsheets.values.get({
+  //       auth: auth,
+  //       spreadsheetId: spreadsheetId,
+  //       range: "Sheet1"
+  //   });
+  //   //console.log("found the data =============>>>>>>>>>>>");
+  //   var boyshosteldata = data.data.values;
+  //   var newboyshosteldata = [];
+  //   // newboyshosteldata.push(boyshosteldata[0]);
+  //   User.find({}, (err, users) => {
+  //     if (err) {console.log('Error in loading all the users'); return;}
+  //     for (var i=1; i<boyshosteldata.length; i++) {
+  //       for (var j in users) {
+  //         if (boyshosteldata[i][0]==users[j]['name'] && users[j]['hostel']==false) {
+  //           newboyshosteldata.push(boyshosteldata[i]);
+  //         }
+  //       }
+  //     }
+  //     for (var i in users) {
+  //       var c = 0;
 
-        //checking if user in boyshosteldata
-        for (var j=1; j<boyshosteldata.length; j++) {
-          if (users[i]['name'] == boyshosteldata[j][0]) {c=c+1;}
-        }
-        if (c==0 && users[i]['type']!='Admin' && users[i]['type']!='Proff') {
-          temp = [];
-          temp.push(users[i]['name']);
-          ind = users[i]['email'].indexOf('@');
-          temp.push('20'+users[i]['email'].substring(ind-5,ind));
-          temp.push(users[i]['email']);
-          temp.push('');
-          newboyshosteldata.push(temp);
-        }
-      }
-    });
+  //       //checking if user in boyshosteldata
+  //       for (var j=1; j<boyshosteldata.length; j++) {
+  //         if (users[i]['name'] == boyshosteldata[j][0]) {c=c+1;}
+  //       }
+  //       if (c==0 && users[i]['type']!='Admin' && users[i]['type']!='Proff') {
+  //         temp = [];
+  //         temp.push(users[i]['name']);
+  //         ind = users[i]['email'].indexOf('@');
+  //         temp.push('20'+users[i]['email'].substring(ind-5,ind));
+  //         temp.push(users[i]['email']);
+  //         temp.push('');
+  //         newboyshosteldata.push(temp);
+  //       }
+  //     }
+    // }
+    // );
 
-    var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
-    var auth = new google.auth.GoogleAuth({
-        keyFile: "credentials.json",
-        scopes: "https://www.googleapis.com/auth/spreadsheets"
-    });
-    var client = await auth.getClient();
-    var googleSheets = google.sheets({version: "v4", auth: client});
-    var metadata = await googleSheets.spreadsheets.get({
-        auth: auth,
-        spreadsheetId: spreadsheetId
-    })
-    //console.log(metadata.data);
-    await googleSheets.spreadsheets.values.clear({
-        auth: auth,
-        spreadsheetId: spreadsheetId,
-        range: "Sheet1"
-    });
-    console.log(newboyshosteldata);
-    await googleSheets.spreadsheets.values.append({
-      auth: auth,
-      spreadsheetId: spreadsheetId,
-      range: "Sheet1",
-      valueInputOption: "USER_ENTERED",
-      resource: {
-          values: newboyshosteldata
-      }
-  });
+  //   var spreadsheetId = "1Tk6j9MmqSBOclnMr5XIQ1qGBa_pFXvjfKPmB9QCAG4o";
+  //   var auth = new google.auth.GoogleAuth({
+  //       keyFile: "credentials.json",
+  //       scopes: "https://www.googleapis.com/auth/spreadsheets"
+  //   });
+  //   var client = await auth.getClient();
+  //   var googleSheets = google.sheets({version: "v4", auth: client});
+  //   var metadata = await googleSheets.spreadsheets.get({
+  //       auth: auth,
+  //       spreadsheetId: spreadsheetId
+  //   })
+    
+  //   await googleSheets.spreadsheets.values.clear({
+  //       auth: auth,
+  //       spreadsheetId: spreadsheetId,
+  //       range: "Sheet1"
+  //   });
+  //   console.log(newboyshosteldata);
+  //   await googleSheets.spreadsheets.values.append({
+  //     auth: auth,
+  //     spreadsheetId: spreadsheetId,
+  //     range: "Sheet1",
+  //     valueInputOption: "USER_ENTERED",
+  //     resource: {
+  //         values: newboyshosteldata
+  //     }
+  // });
 }
 
 module.exports.home = (req, res) => {
@@ -145,7 +148,35 @@ module.exports.adminHome = (req, res) => {
   })
 }
 
+module.exports.request = (req, res) => {
+  var obj = JSON.parse(req.params.obj)[0];
+  console.log(obj);
+  var studentEmail = obj.studentEmail;
+  var adminName = obj.adminName;
+  console.log(studentEmail, adminName);
+  var updateObject = {};
+  updateObject[adminName+'Applied'] = true;
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
+  updateObject[adminName+'AppliedAt'] = dateTime;
+  User.findOneAndUpdate({email : obj['studentEmail']}, updateObject, (err, user) => {
+    if (err) {console.log('Error in updating request status: ', err); return;}
+    user.save();
+  });
+  return res.redirect('/');
+}
+
 module.exports.superAdmin = (req, res) => {
+  var admins_list=[];
+  for (var i=0; i<admins.length-2; i++) {
+    admins_list.push(modifyAdminName(admins[i][0]));
+  }
+  admins_list.push('ip');
+  admins_list.push('btp');
+  
+  
   var studentList = []
   User.find({}, (err, users) => {
     if (err) {console.log('Error in loading all the users'); return;}
@@ -154,11 +185,42 @@ module.exports.superAdmin = (req, res) => {
         studentList.push(users[i]);
       }
     }
-    return res.render('admin_home', {
-      title : 'Admin - Home',
+    // console.log(admins_list);
+    // console.log(studentList);
+    return res.render('super_admin', {
+      title : 'Super-Admin',
       studentList : JSON.stringify(studentList),
-      adminName : getAdminName.getAdminName(req.user.email),
-      id : req.user._id
+      adminList :  JSON.stringify(admins_list),
+      adminName: 'nodues',
+      id : req.user._id,
+      url: JSON.stringify(CURRENT_URL)
+    })
+  })
+}
+
+module.exports.superAdminDepartment = (req, res) => {
+  var admins_list=[];
+  for (var i=0; i<admins.length-2; i++) {
+    admins_list.push(modifyAdminName(admins[i][0]));
+  }
+  // admins_list.push('ip');
+  // admins_list.push('btp');
+
+  var studentList = []
+  User.find({}, (err, users) => {
+    if (err) {console.log('Error in loading all the users'); return;}
+    for (var i in users) {
+      if (!users[i]['type']) {
+        studentList.push(users[i]);
+      }
+    }
+    return res.render('super_admin_department', {
+      title : 'Requests To Admins',
+      studentList : JSON.stringify(studentList),
+      adminList :  JSON.stringify(admins_list),
+      adminName: 'nodues',
+      id : req.user._id,
+      url: JSON.stringify(CURRENT_URL)
     })
   })
 }
@@ -167,6 +229,27 @@ module.exports.studentList = (req, res) => {
     return res.render('student_list', {
         'title' : 'No-Dues List'
     });
+}
+module.exports.superSendMessage = (req, res) => {
+  var obj = JSON.parse(req.params.dues);
+  console.log(obj);
+  User.findOne({email : obj[0].email}, (err, user) => {
+    if (err) {console.log('Error in finding student from email id'); return;}
+    var id = user._id;
+    var attribute = obj[0].admin + "Message";
+    var updatedObject = {};
+    updatedObject[obj[0].admin] = false;
+    updatedObject[attribute] = obj[0].message;
+    updatedObject[obj[0].admin+"ApprovedAt"]=null;
+
+    console.log(id, attribute);
+    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
+      user.save();
+      return res.redirect('/super_admin');
+    });
+    super_message_mailer.newMessage(obj[0].message, obj[0].email);
+  })
+  return;
 }
 
 module.exports.sendMessage = (req, res) => {
@@ -179,6 +262,8 @@ module.exports.sendMessage = (req, res) => {
     var updatedObject = {};
     updatedObject[obj[0].admin] = false;
     updatedObject[attribute] = obj[0].message;
+    updatedObject[obj[0].admin+"ApprovedAt"]=null;
+    
     console.log(id, attribute);
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       user.save();
@@ -189,7 +274,57 @@ module.exports.sendMessage = (req, res) => {
   return;
 }
 
-module.exports.approveDues = (req, res) => {
+
+module.exports.superApproveDues = (req, res) => {
+  console.log("Entered super approve");
+  var obj = JSON.parse(req.params.dues);
+  User.findOne({email : obj[0].email}, (err, user) => {
+
+    if (err) {console.log('Error in finding student from email id'); return;}
+
+    var id = user._id;
+    var updateObject = {};
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    updateObject[obj[0].admin] = true;
+    updateObject[obj[0].admin+'ApprovedAt'] = dateTime;
+    
+    User.findByIdAndUpdate(id, updateObject, (err, user) => {
+      user.save();
+      return res.redirect('/super_admin');
+    });
+    super_approved_mailer.approvedDues(obj[0].email);
+    // updateBoysNoDuesSheet();
+  });
+  return;
+}
+
+module.exports.superApproveManyDues = (req, res) => {
+  var obj = JSON.parse(req.params.dues)[0];
+  for (var i in obj) {
+    var studentEmail = obj[i].studentEmail;
+    var adminName = obj[i].adminName;
+    var updateObject = {};
+    updateObject[adminName] = true;
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    updateObject[adminName+'ApprovedAt'] = dateTime;
+
+    User.findOneAndUpdate({email: studentEmail}, updateObject, (err, user) => {
+      user.save();
+      super_approved_mailer.approvedDues(studentEmail);
+    });
+  }
+  // updateBoysNoDuesSheet();
+  return res.redirect('/super_admin');
+}
+
+module.exports.approveAdmin = (req, res) => {
+
   var obj = JSON.parse(req.params.dues);
   User.findOne({email : obj[0].email}, (err, user) => {
     if (err) {console.log('Error in finding student from email id'); return;}
@@ -201,6 +336,77 @@ module.exports.approveDues = (req, res) => {
     var dateTime = date+' '+time;
     updateObject[obj[0].admin] = true;
     updateObject[obj[0].admin+'ApprovedAt'] = dateTime;
+    
+    User.findByIdAndUpdate(id, updateObject, (err, user) => {
+      user.save();
+      return res.redirect('/super_admin/adminRequests');
+    });
+    approved_mailer.approvedDues(obj[0].admin, obj[0].email);
+    updateBoysNoDuesSheet();
+  });
+  return;
+}
+
+module.exports.sendAdminMessage = (req, res) => {
+  var obj = JSON.parse(req.params.dues);
+  console.log(obj);
+  User.findOne({email : obj[0].email}, (err, user) => {
+    if (err) {console.log('Error in finding student from email id'); return;}
+    var id = user._id;
+    var attribute = obj[0].admin + "Message";
+    var updatedObject = {};
+    updatedObject[obj[0].admin] = false;
+    updatedObject[attribute] = obj[0].message;
+    updatedObject[obj[0].admin+"ApprovedAt"]=null;
+    
+    console.log(id, attribute);
+    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
+      user.save();
+      return res.redirect('/super_admin/adminRequests');
+    });
+    message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
+  })
+  return;
+}
+
+module.exports.approveManyAdmins = (req, res) => {
+
+  var obj = JSON.parse(req.params.dues)[0];
+  for (var i in obj) {
+    var studentEmail = obj[i].studentEmail;
+    var adminName = obj[i].adminName;
+    var updateObject = {};
+    updateObject[adminName] = true;
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    updateObject[adminName+'ApprovedAt'] = dateTime;
+    
+    
+    User.findOneAndUpdate({email: studentEmail}, updateObject, (err, user) => {
+      user.save();
+      approved_mailer.approvedDues(adminName, studentEmail);
+    });
+  }
+  updateBoysNoDuesSheet();
+  return res.redirect('/super_admin/adminRequests');
+}
+
+module.exports.approveDues = (req, res) => {
+
+  var obj = JSON.parse(req.params.dues);
+  User.findOne({email : obj[0].email}, (err, user) => {
+    if (err) {console.log('Error in finding student from email id'); return;}
+    var id = user._id;
+    var updateObject = {};
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    updateObject[obj[0].admin] = true;
+    updateObject[obj[0].admin+'ApprovedAt'] = dateTime;
+    
     User.findByIdAndUpdate(id, updateObject, (err, user) => {
       user.save();
       return res.redirect('/admin_home');
@@ -210,6 +416,8 @@ module.exports.approveDues = (req, res) => {
   });
   return;
 }
+
+
 
 module.exports.approveManyDues = (req, res) => {
   var obj = JSON.parse(req.params.dues)[0];
@@ -223,6 +431,7 @@ module.exports.approveManyDues = (req, res) => {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
     updateObject[adminName+'ApprovedAt'] = dateTime;
+    
     User.findOneAndUpdate({email: studentEmail}, updateObject, (err, user) => {
       user.save();
       approved_mailer.approvedDues(adminName, studentEmail);
@@ -230,6 +439,37 @@ module.exports.approveManyDues = (req, res) => {
   }
   updateBoysNoDuesSheet();
   return res.redirect('/admin_home');
+}
+
+module.exports.approveManyProffs = (req, res) => {
+  var obj = JSON.parse(req.params.dues)[0];
+  for (var i in obj) {
+    var studentEmail=obj[i].studentEmail;
+    var adminName = obj[i].admin;
+    var updateObject = {};
+    updateObject[adminName] = true;
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    updateObject[adminName]=true;
+    updateObject[adminName+'ApprovedAt'] = dateTime;
+    updateObject[adminName+'Prof']=obj[0]['proffEmail'];
+    
+    User.findOneAndUpdate({email: studentEmail}, updateObject, (err, user) => {
+      if (err) {console.log('Error in saving proffEmail in sendBtpRequest: ', err); return;}
+      user.save();
+      console.log("saving");
+      if(adminName=='btp'){
+        btpApproved_mailer.btpApproved_mailer(obj[0]['proffEmail'], obj[0]['studentEmail']);
+      }
+      if(adminName=='ip'){
+        ipApproved_mailer.ipApproved_mailer(obj[0]['proffEmail'], obj[0]['studentEmail']);
+      }
+      
+    });
+  }
+  return res.redirect('/proff_home');
 }
 
 module.exports.proffHome = (req, res) => {
@@ -263,34 +503,43 @@ module.exports.sendBtpRequest = (req, res) => {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
     var updatedObject = {};
-    updatedObject['btp'] = obj[0]['proffEmail'];
+    updatedObject['btpApplied'] = true;
     updatedObject['btpAppliedAt'] = dateTime;
-    updatedObject['btpProf']=getProffName.getProffName(obj[0]['proffEmail']);
+    updatedObject['btpProf']=obj[0]['proffEmail'];
+    updatedObject['btpProjectName']=obj[0]['projectName'];
+    updatedObject['btpProjectDescription']=obj[0]['projectDescription'];
+    console.log(id);
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
       if (err) {console.log('Error in saving proffEmail in sendBtpRequest: ', err); return;}
       user.save();
+      console.log("saving");
+      sendBtpRequest_mailer.sendBtpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'],obj[0]['projectName'], obj[0]['projectDescription']);
     });
-    sendBtpRequest_mailer.sendBtpRequest(obj[0]['proffEmail'], obj[0]['studentEmail']);
+    
   })
   return res.redirect('/');
 }
 
 module.exports.sendIpRequest = (req, res) => {
-  console.log(obj);
+  
   var obj = JSON.parse(req.params.obj);
+  console.log(obj);
   var today = new Date();
   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date+' '+time;
   var updatedObject = {};
-  updatedObject['ip'] = obj[0]['proffEmail'];
+  updatedObject['ipApplied'] = true;
   updatedObject['ipAppliedAt'] = dateTime;
-  updatedObject['ipProf']=getProffName.getProffName(obj[0]['proffEmail']);
-  console.log(updatedObject['ipProf']);
+  updatedObject['ipProf']=obj[0]['proffEmail'];
+  updatedObject['ipProjectName']=obj[0]['projectName'];
+  updatedObject['ipProjectDescription']=obj[0]['projectDescription'];
+
   User.findOneAndUpdate({email : obj[0]['studentEmail']}, updatedObject, (err, user) => {
     if (err) {console.log('Error in finding student in sendBtpRequest: ', err); return;}
     user.save();
-    sendIpRequest_mailer.sendIpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'])
+    console.log("saving");
+    sendIpRequest_mailer.sendIpRequest(obj[0]['proffEmail'], obj[0]['studentEmail'], obj[0]['projectName'], obj[0]['projectDescription'])
   });
   return res.redirect('/');
 }
@@ -300,7 +549,12 @@ module.exports.sendMessageBtp = (req, res) => {
   var studentEmail = obj[0]['email'];
   var proffEmail = obj[0]['proffEmail'];
   var message = obj[0]['message'];
-  User.findOneAndUpdate({email : studentEmail}, {'btpMessage': message}, (err, user) => {
+
+  var updatedObject = {};
+  updatedObject['btp'] = false;
+  updatedObject['btpMessage'] = message; 
+  
+  User.findOneAndUpdate({email : studentEmail},updatedObject, (err, user) => {
     if (err) {console.log('Error in finding student in sendMessageBtp: ', err); return;}
     user.save();
     sendBtpMessage_mailer.sendBtpMessage_mailer(message, studentEmail, proffEmail);
@@ -313,7 +567,14 @@ module.exports.sendMessageIp = (req, res) => {
   var studentEmail = obj[0]['email'];
   var proffEmail = obj[0]['proffEmail'];
   var message = obj[0]['message'];
-  User.findOneAndUpdate({email : studentEmail}, {'ipMessage': message}, (err, user) => {
+
+  var updatedObject = {};
+  updatedObject['ip'] = false;
+  updatedObject['ipMessage'] = message;
+  
+  
+  
+  User.findOneAndUpdate({email : studentEmail},updatedObject, (err, user) => {
     if (err) {console.log('Error in finding student in sendMessageIp: ', err); return;}
     user.save();
     sendIpMessage_mailer.sendIpMessage_mailer(message, studentEmail, proffEmail);
@@ -321,22 +582,25 @@ module.exports.sendMessageIp = (req, res) => {
   });
 }
 
-module.exports.btpApproved = (req, res) => {
+
+module.exports.btpApproved=(req,res)=>{
   var obj = JSON.parse(req.params.dues);
   var today = new Date();
   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date+' '+time;
   var updatedObject = {};
-  updatedObject['btp'] = obj[0]['proffEmail'];
+  updatedObject['btp'] = true;
   updatedObject['btpApprovedAt'] = dateTime;
-  updatedObject['btpApproved'] = true;
+  updatedObject['btpProf'] = true;
+  
   User.findByIdAndUpdate(obj[0]['id'], updatedObject, (err, user) => {
     if (err) {console.log('Error finding user in btpApproved: ', err); return;}
     user.save();
     btpApproved_mailer.btpApproved_mailer(obj[0]['proffEmail'], obj[0]['email']);
     return res.redirect('/proff_home');
   });
+
 }
 
 module.exports.ipApproved = (req, res) => {
@@ -346,11 +610,14 @@ module.exports.ipApproved = (req, res) => {
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date+' '+time;
   var updatedObject = {};
-  updatedObject['ip'] = obj[0]['proffEmail'];
+  updatedObject['ipProf'] = obj[0]['proffEmail'];
   updatedObject['ipApprovedAt'] = dateTime;
-  updatedObject['ipApproved'] = true;
+  updatedObject['ip'] = true;
+  
+  
   User.findByIdAndUpdate(obj[0]['id'], updatedObject, (err, user) => {
     if (err) {console.log('Error finding user in ipApproved: ', err); return;}
+    
     user.save();
     ipApproved_mailer.ipApproved_mailer(obj[0]['proffEmail'], obj[0]['email']);
     return res.redirect('/proff_home');
@@ -407,6 +674,7 @@ module.exports.sendBankDetails = (req, res) => {
   updateObject.bankBranch = obj.bankBranch;
   updateObject.bankAccountNo = obj.bankAccountNo;
   updateObject.bankIfscCode = obj.bankIfscCode;
+  updateObject.bankAccountHolder=obj.bankAccountHolder;
   User.findOneAndUpdate({email : obj['email']}, updateObject, (err, user) => {
     if (err) {console.log('Error in finding student in sendBankDetails: ', err); return;}
     user.save();
@@ -450,25 +718,7 @@ module.exports.sendMailToGirlsHostelAdmin = (req, res) => {
   return res.redirect('/admin_home');
 }
 
-module.exports.request = (req, res) => {
-  var obj = JSON.parse(req.params.obj)[0];
-  console.log(obj);
-  var studentEmail = obj.studentEmail;
-  var adminName = obj.adminName;
-  console.log(studentEmail, adminName);
-  var updateObject = {};
-  updateObject[adminName+'Applied'] = true;
-  var today = new Date();
-  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var dateTime = date+' '+time;
-  updateObject[adminName+'AppliedAt'] = dateTime;
-  User.findOneAndUpdate({email : obj['studentEmail']}, updateObject, (err, user) => {
-    if (err) {console.log('Error in updating request status: ', err); return;}
-    user.save();
-  });
-  return res.redirect('/');
-}
+
 
 module.exports.flowchart = (req, res) => {
   return res.render('flowchart');
@@ -483,13 +733,16 @@ module.exports.nd_controls = (req, res) => {
 }
 
 module.exports.getFunction = (req, res) => {
+  // console.log(getAdminName.adminNames);
   return res.status(200).json(getAdminName.adminNames);
 }
 
 module.exports.showSheet = (req, res) => {
-  return res.render('showSheet',{
-    url: JSON.stringify(CURRENT_URL)
-  });
+
+  return res.redirect('https://docs.google.com/spreadsheets/d/1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk/edit?usp=sharing'); 
+  // return res.render('showSheet',{
+  //   url: JSON.stringify(CURRENT_URL)
+  // });
   
 
 }

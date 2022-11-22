@@ -31,17 +31,50 @@
         <div id="main">
             <div class="container">
                 <h2>List of students</h2>
-                <div class="row" data-aos="fade-up" data-aos-delay="100">
-                  <div class="col-lg-12 d-flex justify-content-center">
-                    <ul id="portfolio-filters">
-                      <li data-filter="*" class="filter-active">All</li>
-                      <li data-filter=".filter-btech" class="filter-btech">B. Tech</li>
-                      <li data-filter=".filter-mtech" class="filter-mtech">M. Tech</li>
-                      <li data-filter=".filter-phd" class="filter-phd">Ph.D.</li>
-                    </ul>
-                  </div>
+                
+                <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
+                 
+                  <select class="filter" name="status" id="status">                      
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="accepted">Accepted</option>          
+                  </select>
+
+                  <select class="filter" name="degree" id="degree">
+                    <option value="All"> Degree (All)</option>
+                    <option value="B. Tech">B.Tech</option>
+                    <option value="M. Tech">M.Tech</option>
+                    <option value="Phd">Phd</option>          
+                  </select>
+
+                  <select class="filter" name="department" id="department">
+                    <option value="All">Branch(All)</option>
+                    <option value="CSE">CSE</option>
+                    <option value="Mathematics">MATHS</option>
+                    <option value="CB">CSB</option>
+                    <option value="SSH">SSH</option> 
+                    <option value="ECE">ECE</option>
+                    <option value="HCD">HCD</option>         
+                  </select>
+                  
+                  <select class="filter" name="ip/btp" id="ip/btp">
+                    <option value="all">IP/BTP</option>
+                    <option value="btp">BTP</option>
+                    <option value="ip">IP</option> 
+                  </select>
+             
+                  <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH"> 
+
+                  <button class="filter" id="selectAll">Select All</button>
+                 
+                  <button class="filter" id="unselectAll">Unselect All </button>
+                
+                  <button class="filter" id="sendAll">Accept Selected</button>
+                  
+                  <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> </button>                  
+
                 </div>
-                <div class="accordion">
+              <div class="accordion">
                   
                   <!-- <div class="accordion-item">
                     <button id="accordion-button-1" aria-expanded="false">
@@ -59,8 +92,8 @@
                       <span class="message">You have not sent any message currently.</span>
                     </div>
                   </div> -->
-                </div>
               </div>
+            </div>
         </div>
         <script src="../assets/proff_home.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

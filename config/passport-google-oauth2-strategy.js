@@ -8,15 +8,16 @@ const isAdmin = require('../data/isAdmin');
 const fs = require('fs');
 const { google } = require('googleapis');
 const students_data = require('../data/students.json');
-const {CURRENT_URL, GOOGLE_SIGNIN_CLIENT_ID,GOOGLE_SIGNIN_SECRET_ID}= require('../config/config');
+const {CURRENT_URL, GOOGLE_SIGNIN_CLIENT_ID,GOOGLE_SIGNIN_SECRET_ID, SUPER_ADMIN_EMAIL}= require('../config/config');
 
 // console.log({CURRENT_URL});
 
 function getGender(email, students) {
     for (var i in students) {
         if (students[i][5] == email) {
+            // console.log(students[i]);
             var gender = students[i][4];
-            var branch = students[i][3];
+            var department = students[i][3];
             var degree = students[i][0]
             var roll = students[i][1];
             var name = students[i][2];
@@ -27,26 +28,26 @@ function getGender(email, students) {
             } else {
                 gender = 'others';
             }
-            if (branch == 'Computer Science and Applied Mathematics' || branch == 'Computer Science & Applied Mathematics' || branch == 'CSAM') {
-                branch = 'CSAM';
+            if (department == 'Computer Science and Applied Mathematics' || department == 'Computer Science & Applied Mathematics' || department == 'CSAM') {
+                department = 'Mathematics';
             }
-            if (branch == 'Computer Science and Engineering' || branch == 'Computer Science & Engineering' || branch == 'CSE') {
-                branch = 'CSE';
+            if (department == 'Computer Science and Engineering' || department == 'Computer Science & Engineering' || department == 'CSE') {
+                department = 'CSE';
             }
-            if (branch == 'Computer Science and Design' || branch == 'Computer Science & Design' || branch == 'CSD') {
-                branch = 'CSD';
+            if (department == 'Computer Science and Design' || department == 'Computer Science & Design' || department == 'CSD') {
+                department = 'HCD';
             }
-            if (branch == 'Electronics and Communication Engineering' || branch == 'Electronics & Communication Engineering' || branch == 'ECE') {
-                branch = 'ECE';
+            if (department == 'Electronics and Communication Engineering' || department == 'Electronics & Communication Engineering' || department == 'ECE') {
+                department = 'ECE';
             }
-            if (branch == 'Computer Science and Biosciences' || branch == 'Computer Science and Biosciences' || branch == 'CSB') {
-                branch = 'CSB';
+            if (department == 'Computer Science and Biosciences' || department == 'Computer Science and Biosciences' || department == 'CSB') {
+                department = 'CB';
             }
-            if (branch == 'Computer Science and Artificial Intelligence' || branch == 'Computer Science and Artificial Intelligence' || branch == 'CSAI') {
-                branch = 'CSAI';
+            if (department == 'Computer Science and Artificial Intelligence' || department == 'Computer Science and Artificial Intelligence' || department == 'CSAI') {
+                department = 'CSE';
             }
-            if (branch == 'Computer Science and Social Sciences' || branch == 'Computer Science and Social Sciences' || branch == 'CSSS') {
-                branch = 'CSSS';
+            if (department == 'Computer Science and Social Sciences' || department == 'Computer Science and Social Sciences' || department == 'CSSS') {
+                department = 'SSH';
             }
             if (degree == 'B.Tech' || degree == 'B.Tech.') {
                 degree = 'B. Tech';
@@ -57,7 +58,7 @@ function getGender(email, students) {
             if (degree == 'PhD') {
                 degree = 'PhD';
             }
-            return [gender, branch, degree, roll, name];
+            return [gender, department, degree, roll, name];
         }
     }
     return null;
@@ -69,9 +70,37 @@ passport.use(new googleStrategy({
     clientSecret: `${GOOGLE_SIGNIN_SECRET_ID}`,
     callbackURL: `${CURRENT_URL}/user/auth/google/callback`
 }, async (accessToken, refreshToken, profile, done) => {
-    // console.log("entered");
-    if (isAdmin.isAdmin(profile.emails[0].value)) {
-        // console.log("Admin found");
+    
+
+    if(profile.emails[0].value==SUPER_ADMIN_EMAIL){
+        console.log("super-admin");
+
+        User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
+            if (err) {
+                console.log('Error in google strategy passport', err); return;
+            }
+            if (user) {
+                return done(null, user);
+            } else {
+                User.create({
+                    name: profile.name["givenName"],
+                    email: profile.emails[0].value,
+                    password: crypto.randomBytes(20).toString('hex'),
+                    image: profile.photos[0].value,
+                    type: 'Super Admin'
+                }, (err, user) => {
+                    if (err) {
+                        console.log('Error in creating user google strategy-passport', err); return;
+                    }
+                    return done(null, user);
+                });
+            }
+        })
+        
+    }
+
+    else if (isAdmin.isAdmin(profile.emails[0].value) ) {
+        console.log("Admin found");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -95,7 +124,7 @@ passport.use(new googleStrategy({
             }
         })
     } else if (getProffName.isProff(profile.emails[0].value)) {
-        // console.log("prog hee hai");
+        console.log("prog hee hai");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -135,6 +164,7 @@ passport.use(new googleStrategy({
         //     range: "ALL"
         // });
         // students_data = data.data.values;
+        console.log("user");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -151,18 +181,7 @@ passport.use(new googleStrategy({
                     name: details[4],
                     email: profile.emails[0].value,
                     password: crypto.randomBytes(20).toString('hex'),
-                    image: profile.photos[0].value,
-                    // designLab: false,
-                    // library: false,
-                    // adminFacilities: false,
-                    // systemAdminAndNetworking: false,
-                    // sportsAndStudentFacilities: false,
-                    // hostel: false,
-                    // eceLabs: false,
-                    // placementIncharge: false,
-                    // incubationCenter: false,
-                    // finance: false,
-                    // academics: false,
+                    image: profile.photos[0].value,                   
                     designLabApplied: false,
                     libraryApplied: false,
                     adminFacilitiesApplied: false,
@@ -172,12 +191,16 @@ passport.use(new googleStrategy({
                     eceLabsApplied: false,
                     placementInchargeApplied: false,
                     incubationCenterApplied: false,
+                    researchAndProjectApplied:false,
                     financeApplied: false,
                     academicsApplied: false,
+                    ipApplied: false,
+                    btpApplied: false,
                     gender: details[0],
-                    branch: details[1],
+                    department: details[1],
                     degree: details[2],
-                    roll: details[3]
+                    roll: details[3],
+                    batch: Number(details[3].substring(0,4))+4
                 }, (err, user) => {
                     if (err) {
                         console.log('Error in creating user google strategy-passport', err); return;

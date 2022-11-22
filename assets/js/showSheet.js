@@ -10,7 +10,7 @@ request.send(null);
 if (request.status === 200) {
   docs = JSON.parse(request.responseText);
 }
-console.log(docs);
+// console.log(docs);
 for (var i in docs) {
     if (docs[i]['type'] === undefined) {
         var temp = [];
@@ -27,17 +27,9 @@ for (var i in docs) {
         temp.push(docs[i]['placementIncharge']);
         temp.push(docs[i]['incubationCenter']);
         temp.push(docs[i]['finance']);
-        temp.push(docs[i]['academics']);
-        if (docs[i]['ipApproved']) {
-            temp.push(docs[i]['ipApproved']);
-        } else {
-            temp.push('false');
-        }
-        if (docs[i]['btpApproved']) {
-            temp.push(docs[i]['btpApproved']);
-        } else {
-            temp.push('false');
-        }
+        temp.push(docs[i]['academics']);     
+        temp.push(docs[i]['ip']);        
+        temp.push(docs[i]['btp']);        
         values.push(temp);
     }
 }

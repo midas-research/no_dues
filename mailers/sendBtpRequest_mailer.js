@@ -15,8 +15,8 @@ function fetchProffName(email) {
     return name[0].toUpperCase() + name.substring(1,);
 }
 
-exports.sendBtpRequest = async (proffEmail, studentEmail) => {
-    var student = await User.findOne({email: studentEmail});
+exports.sendBtpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDescription) => {
+    var student = await User.findOne({email: studentEmail});    
     var obj = [];
     obj.push({
       proffEmail: proffEmail,
@@ -31,7 +31,13 @@ exports.sendBtpRequest = async (proffEmail, studentEmail) => {
         <p>You have received the following message requesting dues clearance for 
         BTP/Schlar Paper/Thesis from ${fetchStudentName(studentEmail)} 
         (email - ${studentEmail}).</p>
-        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to approve the dues.</p>
+        <h5>Description: </h5>
+            <ul>
+                <li>Project Name: ${ProjectName}</li>
+                <li>Project Description: ${ProjectDescription}</li>
+            </ul>
+        <p>Click <a href=\`${CURRENT_URL}/btpResponse/ ${JSON.stringify(obj)} \`>here</a> to approve the dues.</p>
+        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to message and reject the dues.</p>        
         <br>
         <p>Thanks No-Dues!</p>
     </div>`
