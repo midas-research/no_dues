@@ -10,7 +10,7 @@ var admins_data;
 //     });
 
 var admins_data = require('../data/admins.json');
-console.log("the admin datas are ===>>>", admins_data);
+// console.log("the admin datas are ===>>>", admins_data);
 
 function changeNameFormat(name) {
     if (name.substring(0,9) == 'Academics') {
@@ -33,7 +33,7 @@ for (var i in admins_data) {
     adminNames[admins_data[i][1]] = changeNameFormat(admins_data[i][0]);
     names.push(changeNameFormat(admins_data[i][0]));
 }
-console.log("the names are ===>>>", names);
+// console.log("the names are ===>>>", names);
 
 const mongoose = require('mongoose');
 

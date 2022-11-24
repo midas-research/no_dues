@@ -98,22 +98,34 @@ function clickFilter(){
       currentList.push(studentList[i]);
     } 
   }
+
+  if(curr_status=='accepted'){
+    console.log(document.getElementById("selectAll").style.display);
+    document.getElementById("selectAll").disabled=true;
+    document.getElementById("unselectAll").disabled=true;
+    document.getElementById("sendAll").disabled=true;
+    
+    document.getElementById("selectAll").style.display="none";
+    document.getElementById("unselectAll").style.display="none";
+    document.getElementById("sendAll").style.display="none";
+    
+  }
+  else{
+    document.getElementById("selectAll").disabled=false;
+    document.getElementById("unselectAll").disabled=false;
+    document.getElementById("sendAll").disabled=false;
+      
+    document.getElementById("selectAll").style.display="flex";
+    document.getElementById("unselectAll").style.display="flex";
+    document.getElementById("sendAll").style.display="flex";
+  }
   
   if(currentList.length==0){ 
     accordion.innerHTML = '<div id="NoRequest"> No Requests Found!</div>';
     return;
   }
   
-  if(curr_status=='accepted'){ 
-    document.getElementById("selectAll").disabled=true;
-    document.getElementById("unselectAll").disabled=true;
-    document.getElementById("sendAll").disabled=true;
-  }
-  else{
-    document.getElementById("selectAll").disabled=false;
-    document.getElementById("unselectAll").disabled=false;
-    document.getElementById("sendAll").disabled=false;
-  }
+ 
   accordion.innerHTML = '';
 
   var curr_admin=document.getElementById('admins').value;

@@ -4,84 +4,86 @@ body {
     margin: 0;
     padding: 0;
 }
-
 #navbar {
-    height: 8vh;
-    background-color: #343a40;
-    width: 100vw;
-    display: flex;
-    padding-left: 15px;
-    padding-right: 15px;
-    justify-content: space-between;
-    align-items: center;
+  height: 8vh;
+  background-color: #343a40;
+  width: 100vw;
+  display: flex;
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #navbar img {
-    width: 6vh;
-    height: 6vh;
-    border-radius: 50%;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
 }
 
 #navbar_left {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 #navbar_right {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 #navbar_left img {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 #navbar_right img {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 #navbar_left_p {
-    display: flex;
-    align-items: center;
-    color: white;
-    font-size: min(20px, 8vw);
+  display: inline-block;
+  color: white;
+  font-size: min(20px, 8vw);
 }
 
 #navbar_right_p {
-    display: flex;
-    align-items: center;
-    color: white;
-    font-size: min(20px, 8vw);
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: min(20px, 8vw);
 }
 
 .icon-down:before {
-    content: "\25BC";
-    color: white;
-    margin-left: 10px;
+  content: "\25BC";
+  color: white;
+  margin-left: 10px;
 }
-
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
+  padding: 7px;
+  /* border: 3px solid white; */
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding: 12px 16px;
-    z-index: 1;
+  display: none;
+  position: absolute;
+  top: 7vh;
+  left: -8px;
+  background-color:  #343a40;
+  min-width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+  color: rgb(255, 255, 255);
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
 }
 
 .dropdown-content a {
-    color: black;
-    text-decoration: none;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
 }
 
 #NoRequest{
@@ -215,6 +217,13 @@ body {
 
 }
 
+.nex{
+  padding: 10px 15px 10px 15px;
+  height:auto;
+  max-height: 3rem;
+  background: #fde163;
+}
+
 
 #batch {
   width: 7rem;
@@ -259,7 +268,7 @@ body {
 .accordion .accordion-content {
   opacity: 0;
   max-height: 0;
-  overflow: hidden;
+  overflow: auto;
   transition: opacity 200ms linear, max-height 200ms linear;
   will-change: opacity, max-height;
 }
@@ -273,12 +282,13 @@ body {
 
 .accept_request {
     cursor: pointer;
-    border: 2px solid grey;
+    border: 1px solid rgb(14, 13, 13);
     background-color: rgb(103, 207, 82);
     font-size: 1rem;
+
     position: absolute;
     right: 40px;
-    border-radius: 8px;
+    
     padding: 8px;
     margin-top: -8px;
     height: 42px;
@@ -291,12 +301,12 @@ body {
 
 .reject_request {
   cursor: pointer;
-  border: 2px solid grey;
+  border: 1px solid rgb(12, 12, 12);
   background-color: rgb(247, 63, 7);
   font-size: 1rem;
   position: absolute;
   right: 60px;
-  border-radius: 8px;
+ 
   padding: 8px;
   margin-top: -8px;
   height: 42px;
@@ -304,7 +314,7 @@ body {
 }
 
 .reject_request:hover {
-  background-color: rgb(214, 240, 218);
+  background-color: rgb(252, 142, 109);
 }
 
 .input-group {
@@ -390,7 +400,7 @@ body {
   
 } */
 
-.row{  
+.brow{  
   padding-bottom: 0;
   border-bottom: 1px solid #e5e5e5;
 

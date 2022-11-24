@@ -42,7 +42,7 @@ exports.sendIpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDescr
     </div>`
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,
-        to : 'no-dues@iiitd.ac.in',
+        to : `${proffEmail}`,
         subject : 'No-Dues request for IP/IS/UR',
         html : htmlString
     }, (err, info) => {

@@ -43,7 +43,7 @@ exports.sendBtpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDesc
     </div>`
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,
-        to : 'no-dues@iiitd.ac.in',
+        to :`${proffEmail}`,
         subject : 'No-Dues request for BTP/Scholarly work/Thesis',
         html : htmlString
     }, (err, info) => {

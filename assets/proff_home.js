@@ -217,8 +217,8 @@ function addBTPAcceptCode(student,msg){
         <div>
           <h5>Description: </h5>
           <ul>
-            <li>Project Name: ${student.ipProjectName}</li>
-            <li>Project Description: ${student.ipProjectDescription}</li>
+            <li>Project Name: ${student.btpProjectName}</li>
+            <li>Project Description: ${student.btpProjectDescription}</li>
           </ul>         
           
           <span class="message">Approved : ${student['btpApprovedAt']}</span><br>
@@ -256,8 +256,8 @@ function addBTPCode(student,msg,curr_status){
               <div>
                 <h5>Description: </h5>
                 <ul>
-                  <li>Project Name: ${student.ipProjectName}</li>
-                  <li>Project Description: ${student.ipProjectDescription}</li>
+                  <li>Project Name: ${student.btpProjectName}</li>
+                  <li>Project Description: ${student.btpProjectDescription}</li>
                 </ul>
               </div>
               <span class="message">Latest Communication: </span>
@@ -334,6 +334,7 @@ function isTrue(student){
 }
 
 function clickFilter(){  
+  
 
   var currentList=[];
 
@@ -347,6 +348,27 @@ function clickFilter(){
 
   var curr_status=document.getElementById('status').value;
   var curr_type=document.getElementById('ip/btp').value;
+ 
+  if(curr_status=='accepted'){
+    console.log(document.getElementById("selectAll").style.display);
+    document.getElementById("selectAll").disabled=true;
+    document.getElementById("unselectAll").disabled=true;
+    document.getElementById("sendAll").disabled=true;
+    
+    document.getElementById("selectAll").style.display="none";
+    document.getElementById("unselectAll").style.display="none";
+    document.getElementById("sendAll").style.display="none";
+    
+  }
+  else{
+    document.getElementById("selectAll").disabled=false;
+    document.getElementById("unselectAll").disabled=false;
+    document.getElementById("sendAll").disabled=false;
+      
+    document.getElementById("selectAll").style.display="flex";
+    document.getElementById("unselectAll").style.display="flex";
+    document.getElementById("sendAll").style.display="flex";
+  }
   
   if(currentList.length==0){
  
@@ -354,22 +376,6 @@ function clickFilter(){
     return;
   }
   
-  if(curr_status=='accepted'){
-    document.getElementById("selectAll").display=true;
-    document.getElementById("unselectAll").disabled=true;
-    document.getElementById("sendAll").disabled=true;
-    // document.getElementById("selectAll").style.opacity=0.5;
-    // document.getElementById("unselectAll").style.opacity=0.5;
-    // document.getElementById("sendAll").style.opacity=0.5;
-  }
-  else{
-    document.getElementById("selectAll").disabled=false;
-    document.getElementById("unselectAll").disabled=false;
-    document.getElementById("sendAll").disabled=false;
-    // document.getElementById("selectAll").style.opacity=1;
-    // document.getElementById("unselectAll").style.opacity=1;
-    // document.getElementById("sendAll").style.opacity=1;
-  }
 
   accordion.innerHTML = '';
 
