@@ -10,7 +10,7 @@ var admins_data;
 //     });
 
 var admins_data = require('../data/admins.json');
-console.log("the admin datas are ===>>>", admins_data);
+// console.log("the admin datas are ===>>>", admins_data);
 
 function changeNameFormat(name) {
     if (name.substring(0,9) == 'Academics') {
@@ -33,7 +33,7 @@ for (var i in admins_data) {
     adminNames[admins_data[i][1]] = changeNameFormat(admins_data[i][0]);
     names.push(changeNameFormat(admins_data[i][0]));
 }
-console.log("the names are ===>>>", names);
+// console.log("the names are ===>>>", names);
 
 const mongoose = require('mongoose');
 
@@ -45,33 +45,39 @@ var schemaObject = {
     password: { type: String, required: true },
     image: { type: String, required: true, unique: true },
     degree: { type: String },
-    startYear: { type: String },
+    batch: { type: Number },
     type: { type: String },
-    branch: { type: String },
+    department: { type: String },
     roll: { type: String },
     gender: {type: String },
-    ip: { type: String },
+    ip: { type: Boolean },
     ipProf: { type: String },
-    btpProf: { type: String },
-    btp: { type: String },
-    ipApproved: {type: Boolean},
-    btpApproved: {type: Boolean},    
-    ipApplied: { type: String },    
-    btpApplied: { type: String },  
+    ipApplied:{type: Boolean},
     ipAppliedAt: { type: String },
-    btpAppliedAt: { type: String },
     ipApprovedAt: { type: String },
-    btpApprovedAt: { type: String },
+    ipProjectName: { type: String },
     ipMessage: { type: String },
-    btpMessage: { type: String },
+    ipProjectDescription: { type: String },     
+    btp: { type: Boolean },
+    btpProf: { type: String },
+    btpApplied:{type: Boolean},
+    btpAppliedAt: { type: String },
+    btpApprovedAt: { type: String },
+    btpMessage: { type: String }, 
+    btpProjectName: { type: String }, 
+    btpProjectDescription: { type: String },
     bankName: {type: String},
     bankBranch: {type: String},
     bankAccountNo: {type: String},
+    bankAccountHolder: {type:String},
     bankIfscCode: {type: String},
     mobile: {type: String},
     other_email: {type: String},
     date_of_leaving: {type: String},
     reason_of_leaving: {type: String},
+    nodues:{type: Boolean},
+    noduesMessage:{type: String},
+    noduesApprovedAt:{ type: String}
 }
 
 for (var i=0; i<names.length-2; i++) {

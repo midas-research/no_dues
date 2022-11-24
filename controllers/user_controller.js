@@ -108,6 +108,7 @@ module.exports.getUser = async (req, res) => {
 }
 
 module.exports.getStudents = (req, res) => {
+    // console.log(studentsList);
     return res.status(200).json(studentsList);
 }
 

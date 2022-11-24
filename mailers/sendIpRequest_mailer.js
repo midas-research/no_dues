@@ -15,7 +15,7 @@ function fetchProffName(email) {
     return name[0].toUpperCase() + name.substring(1,);
 }
 
-exports.sendIpRequest = async (proffEmail, studentEmail) => {
+exports.sendIpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDescription) => {
     var student = await User.findOne({email: studentEmail});
     var obj = [];
     obj.push({
@@ -31,13 +31,18 @@ exports.sendIpRequest = async (proffEmail, studentEmail) => {
         <p>You have received the following message requesting dues clearance for 
         IP/IS/UR from ${fetchStudentName(studentEmail)} 
         (email - ${studentEmail}).</p>
+        <h5>Description: </h5>
+            <ul>
+                <li>Project Name: ${ProjectName}</li>
+                <li>Project Description: ${ProjectDescription}</li>
+            </ul>
         <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to approve the dues.</p>
         <br>
         <p>Thanks No-Dues!</p>
     </div>`
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,
-        to : proffEmail,
+        to : `${proffEmail}`,
         subject : 'No-Dues request for IP/IS/UR',
         html : htmlString
     }, (err, info) => {

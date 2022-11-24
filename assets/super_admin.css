@@ -3,7 +3,9 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
+
 #navbar {
   height: 8vh;
   background-color: #343a40;
@@ -57,6 +59,7 @@ body {
   color: white;
   margin-left: 10px;
 }
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -98,6 +101,7 @@ body {
   font-size: 1.15rem;
   font-weight: 400;
 }
+
 
 
 #main {
@@ -205,6 +209,7 @@ body {
   font-size: 15px;
   font-weight: 600;
   line-height: 1;
+  
 
   margin-bottom: 10px;
   transition: all 0.3s ease-in-out;
@@ -216,13 +221,13 @@ body {
   margin-left: 5px;
 
 }
-
 .nex{
   padding: 10px 15px 10px 15px;
   height:auto;
   max-height: 3rem;
   background: #fde163;
 }
+
 
 
 #batch {
@@ -260,7 +265,8 @@ body {
 }
 .accordion button[aria-expanded=true] + .accordion-content {
   opacity: 1;
-  max-height: 15em;
+  max-height: 20em;
+  overflow-y: auto;
   transition: all 200ms linear;
   will-change: opacity, max-height;
   padding-bottom: 18px;
@@ -268,7 +274,7 @@ body {
 .accordion .accordion-content {
   opacity: 0;
   max-height: 0;
-  overflow: auto;
+  overflow: hidden;
   transition: opacity 200ms linear, max-height 200ms linear;
   will-change: opacity, max-height;
 }
@@ -277,9 +283,6 @@ body {
   font-weight: 300;
   margin: 2em 0;
 }
-
-
-
 .accept_request {
     cursor: pointer;
     border: 1px solid rgb(14, 13, 13);
@@ -403,9 +406,7 @@ body {
 .brow{  
   padding-bottom: 0;
   border-bottom: 1px solid #e5e5e5;
-
 }
-
 
 .row ul{
   margin-bottom: 0;
@@ -443,7 +444,7 @@ body {
   margin-right: 0;
 } */
 
-#past, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll, #back {
+#past, #adminRequests, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll, #back {
   cursor: pointer;
 }
 

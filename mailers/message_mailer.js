@@ -1,6 +1,7 @@
 const nodemailer = require('../config/nodemailer');
 const axios=require('axios')
 const {CURRENT_URL,NODEMAILER_EMAIL_ID}= require('../config/config');
+const User = require('../models/user');
 
 
 function changeNameFormat(name) {
@@ -41,23 +42,30 @@ exports.newMessage = async (message, email, admin) => {
                 if (user['degree'] == 'B. Tech') {admin = 'academicsBtech'}
                 if (user['degree'] == 'M. Tech') {admin = 'academicsMtech'}
                 if (user['degree'] == 'PhD') {admin = 'academicsPhd'}
+                adminDetails[admin] = {
+                    'name': adminDetails['academics']['name']
+                };
             });
         }
+        
         let htmlString = `
         <div>
             <p>Hi ${fetchName(email)}!</p>
             <br>
             <p>You have received the following message regarding your dues in the ${admin[0].toUpperCase()+admin.substring(1,)} department.</p>
             <br>
+            <p> No Dues Rejected!</p>
             <p>Message - ${message}</p>
             <br>
             <p>Thanks!</p>
             <p>${adminDetails[admin]['name']}</p>
-        </div>`
+        </div>`;
+
+        
         nodemailer.transporter.sendMail({
             from : `${NODEMAILER_EMAIL_ID}`,
             to : email,
-            subject : 'No-Dues message',
+            subject : `Message from No-Dues's Department!`,
             html : htmlString
         }, (err, info) => {
             if (err) {

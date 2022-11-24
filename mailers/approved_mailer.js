@@ -33,32 +33,45 @@ exports.approvedDues = async (admin, email) => {
     }).then(async function(data) {
         var adminDetails = {};
         var adminsList = data;
+        // console.log(admin);
+        
         for (var i in adminsList) {
             adminDetails[changeNameFormat(adminsList[i][0])] = {
                 'name': adminsList[i][2]
             };
         }
+        // console.log(adminDetails[admin]['name']);
         if (admin == 'academics') {
             await User.findOne({email: email}, (err, user) => {
                 if (err) {console.log('Error in finding user in approveDues: ', err); return;}
                 if (user['degree'] == 'B. Tech') {admin = 'academicsBtech'}
                 if (user['degree'] == 'M. Tech') {admin = 'academicsMtech'}
                 if (user['degree'] == 'PhD') {admin = 'academicsPhd'}
+                // console.log(admin);
+                adminDetails[admin] = {
+                    'name': adminDetails['academics']['name']
+                };
             });
-        }
+
+        }        
+        // console.log(adminDetails[admin]['name']);
         let htmlString = `
-        <div>
-            <p>Hi ${fetchName(email)}!</p>
-            <br>
-            <p>Congratulations! Your No-Dues has been approved for the ${admin[0].toUpperCase()+admin.substring(1,)} department.</p>
-            <br>
-            <p>Thanks!</p>
-            <p>${adminDetails[admin]['name']}</p>
-        </div>`
+            <div>
+                <p>Hi ${fetchName(email)}!</p>
+                <br>
+                <p>Congratulations! Your No-Dues has been approved for the ${admin[0].toUpperCase()+admin.substring(1,)} department.</p>
+                <br>
+                <p>Thanks!</p>
+                <p>${adminDetails[admin]['name']}</p>
+            </div>`;
+        let sub=`No Dues Approved for ${admin[0].toUpperCase()+admin.substring(1,)} Department`;  
+        
+
+        
         nodemailer.transporter.sendMail({
             from : `${NODEMAILER_EMAIL_ID}`,
             to : email,
-            subject : 'No-Dues approved',
+            subject : sub,
             html : htmlString
         }, (err, info) => {
             if (err) {

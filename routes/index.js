@@ -8,16 +8,27 @@ router.get('/', passport.checkAuthentication,passport.checkUserAuthentication, h
 router.get('/admin_home', passport.checkAdminAuthentication, homeController.adminHome);
 router.get('/proff_home', passport.checkProffAuthentication, homeController.proffHome);
 router.get('/super_admin', passport.checkSuperAdminAuthentication, homeController.superAdmin);
-router.get('/student_list', passport.checkAdminAuthentication, homeController.studentList);
+router.get('/super_admin/adminRequests', passport.checkSuperAdminAuthentication, homeController.superAdminDepartment);
+
+// router.get('/student_list', passport.checkSuperAdminAuthentication, homeController.studentList);
+
+router.get('/superSendMessage/:dues', passport.checkSuperAdminAuthentication, homeController.superSendMessage);
+router.get('/superApproveDues/:dues', passport.checkSuperAdminAuthentication, homeController.superApproveDues);
+router.get('/superApproveManyDues/:dues', passport.checkSuperAdminAuthentication, homeController.superApproveManyDues);
+router.get('/super_admin/approveAdmin/:dues', passport.checkSuperAdminAuthentication, homeController.approveAdmin);
+router.get('/super_admin/approveManyAdmins/:dues', passport.checkSuperAdminAuthentication, homeController.approveManyAdmins);
+router.get('/super_admin/sendAdminMessage/:dues', passport.checkSuperAdminAuthentication, homeController.sendAdminMessage);
 
 router.get('/sendMessage/:dues', passport.checkAdminAuthentication, homeController.sendMessage);
 router.get('/approveDues/:dues', passport.checkAdminAuthentication, homeController.approveDues);
 router.get('/approveManyDues/:dues', passport.checkAdminAuthentication, homeController.approveManyDues);
 router.get('/sendBtpRequest/:obj', passport.checkUserAuthentication, homeController.sendBtpRequest);
+// router.get('/btpResponse/:dues', homeController.approvedBtpEmail);
 router.get('/sendMessageBtp/:dues', passport.checkProffAuthentication, homeController.sendMessageBtp);
 router.get('/btpApproved/:dues', passport.checkProffAuthentication, homeController.btpApproved);
 router.get('/sendIpRequest/:obj', passport.checkUserAuthentication, homeController.sendIpRequest);
 router.get('/sendMessageIp/:dues', passport.checkProffAuthentication, homeController.sendMessageIp);
+router.get('/approveManyProffs/:dues', passport.checkProffAuthentication, homeController.approveManyProffs);
 router.get('/ipApproved/:dues', passport.checkProffAuthentication, homeController.ipApproved);
 router.get('/sendBankDetails/:bankDetails', passport.checkAuthentication, homeController.sendBankDetails);
 router.get('/sendPersonalDetails/:personalDetails', passport.checkAuthentication, homeController.sendPersonalDetails);

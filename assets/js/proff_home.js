@@ -123,7 +123,7 @@ var studentsBtech = []
 var studentsMtech = []
 var studentsPhd = []
 for (var i in studentList) {
-    if (!('ipApproved' in studentList[i]) && studentList[i]['ip']==proffEmail) {
+    if (!('ip' in studentList[i]) && studentList[i]['ipProf']==proffEmail) {
         studentsAll.push(studentList[i]);
         if (studentList[i]['degree'] == 'B. Tech') {
             studentsBtech.push(studentList[i]);
@@ -135,7 +135,7 @@ for (var i in studentList) {
             studentsBtech.push(studentList[i]);
         }
     }
-    if (studentList[i]['btp']==proffEmail && !('btpApproved' in studentList[i])) {
+    if (studentList[i]['btpProf']==proffEmail && !('btp' in studentList[i])) {
         studentsAll.push(studentList[i]);
         if (studentList[i]['degree'] == 'B. Tech') {
             studentsBtech.push(studentList[i]);
@@ -201,7 +201,7 @@ for (var i in studentsAll) {
       ipVisited[studentsAll[i].email] = true;
     }
     console.log('btp', i);
-    if (!('ip' in studentsAll[i]) || ('ipApproved' in studentsAll[i])) {
+    if (!('ipProf' in studentsAll[i]) || ('ip' in studentsAll[i])) {
         continue;
     }
     var message;
@@ -290,7 +290,7 @@ filterBtech.addEventListener('click', () => {
     } else {
       ipVisited[studentsBtech[i].email] = true;
     }
-    if (!('ip' in studentsBtech[i]) || ('ipApproved' in studentsBtech[i])) {
+    if (!('ipProf' in studentsBtech[i]) || ('ip' in studentsBtech[i])) {
         continue;
     }
     var message;
@@ -378,7 +378,7 @@ filterMtech.addEventListener('click', () => {
     } else {
       ipVisited[studentsMtech[i].email] = true;
     }
-    if (!('ip' in studentsMtech[i]) || ('ipApproved' in studentsMtech[i])) {
+    if (!('ipProf' in studentsMtech[i]) || ('ip' in studentsMtech[i])) {
         continue;
     }
     var message;
@@ -466,7 +466,7 @@ filterPhd.addEventListener('click', () => {
     } else {
       ipVisited[studentsPhd[i].email] = true;
     }
-    if (!('ip' in studentsPhd[i]) || ('ipApproved' in studentsPh[i])) {
+    if (!('ipProf' in studentsPhd[i]) || ('ip' in studentsPh[i])) {
         continue;
     }
     var message;
@@ -554,7 +554,7 @@ filterAll.addEventListener('click', () => {
     } else {
       ipVisited[studentsAll[i].email] = true;
     }
-    if (!('ip' in studentsAll[i]) || ('ipApproved' in studentsAll[i])) {
+    if (!('ipProf' in studentsAll[i]) || ('ip' in studentsAll[i])) {
         continue;
     }
     var message;

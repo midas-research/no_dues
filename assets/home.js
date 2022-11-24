@@ -1,7 +1,8 @@
+
 var user = JSON.parse(document.getElementById('user').innerHTML);
-console.log(user);
+// console.log(user);
 const admins_list = JSON.parse(document.getElementById('admins').innerHTML);
-console.log(admins_list);
+// console.log(admins_list);
 var professorsList;
 var adminsList;
 var studentsList;
@@ -29,6 +30,7 @@ if (request.status === 200) {
   studentsList = JSON.parse(request.responseText);
 }
 
+
 var request = new XMLHttpRequest();
 var getDeptShortName;
 request.open('GET', `${CURRENT_URL}/getFunction`, false);
@@ -36,6 +38,34 @@ request.send(null);
 if (request.status === 200) {
   getDeptShortName = JSON.parse(request.responseText);
 }
+
+var admins = [];
+for (var i=0; i<admins_list.length-2; i++) {
+  admins.push(getAdminName(admins_list[i][0]));
+  // console.log(getAdminName(admins_list[i][0]));
+  // console.log(getDeptShortName[admins_list[i][1]]+'Symbol');
+}
+let count=0;
+// console.log(user);
+for(var i in admins){
+  // console.log(admins[i]);
+  // console.log(user[admins[i]]);
+  if(user[0][admins[i]]==true){
+    count+=1;
+  }
+}
+if(user[0]['ip']==true){
+  count+=1;
+}
+if(user[0]['btp']==true){
+  count+=1;
+}
+
+document.getElementById('countCleared').innerHTML=`${count}`;
+document.getElementById('countAll').innerHTML=`${admins.length+2}`;
+
+
+// console.log(getDeptShortName);
 
 // function getDeptShortName(email) {
 //   if (email == 'admin-dilabs@iiitd.ac.in') {
@@ -65,10 +95,17 @@ if (request.status === 200) {
 //   }
 // }
 
+
 function requestFunction(event) {
   event.stopPropagation();
-  adminName = getAdminName(event.target.previousElementSibling.innerHTML);
-  console.log(adminName);
+  var list=event.target.classList;
+  // console.log(list);
+  // console.log(list.contains('request'));
+  if (list.contains('request')==false){
+    return;
+  }
+  var adminName = getAdminName(event.target.previousElementSibling.innerHTML);
+  // console.log(adminName);
   if (user[0][adminName+'Applied']) {
     alert('You have already requested!');
     return;
@@ -83,12 +120,14 @@ function requestFunction(event) {
 
 var container = document.getElementById('admins_list_container');
 for (var i=0; i<admins_list.length-3; i++){
+  // console.log(i);
+  // console.log(getDeptShortName[admins_list[i][1]]+'Symbol');
   container.innerHTML += `<div class="accordion-item">
     <button id="accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${admins_list[i][0]}</span>
         <!-- <span class="send_request">Send</span> -->
-        <i class="fas fa-share request" onclick="requestFunction(event)"></i>
-        <i class="fas fa-dot-circle send_request ${getDeptShortName[admins_list[i][1]]+'Symbol'} statusSymbol"></i>
+        
+        <i class="fas fa-share request ${getDeptShortName[admins_list[i][1]]+'Symbol'} " onclick="requestFunction(event)" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
         <span class="icon" aria-hidden="true"></span>
     </button>
     <div class="accordion-content">
@@ -99,13 +138,12 @@ for (var i=0; i<admins_list.length-3; i++){
 }
 
 if (user[0]['degree'] == 'B. Tech') {
-  console.log(getDeptShortName[admins_list[admins_list.length-3][1]]);
+  // console.log(getDeptShortName[admins_list[admins_list.length-3][1]]);
   container.innerHTML += `<div class="accordion-item">
     <button id="accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${admins_list[admins_list.length-3][0]}</span>
-        <!-- <span class="send_request">Send</span> -->
-        <i class="fas fa-share request" onclick="requestFunction(event)"></i>
-        <i class="fas fa-dot-circle send_request ${getDeptShortName[admins_list[admins_list.length-3][1]]+'Symbol'} statusSymbol"></i>
+        <!-- <span class="send_request">Send</span> -->        
+        <i class="fas fa-share request ${getDeptShortName[admins_list[i][1]]+'Symbol'} " onclick="requestFunction(event)" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
         <span class="icon" aria-hidden="true"></span>
     </button>
     <div class="accordion-content">
@@ -120,8 +158,7 @@ if (user[0]['degree'] == 'M. Tech') {
     <button id="accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${admins_list[admins_list.length-2][0]}</span>
         <!-- <span class="send_request">Send</span> -->
-        <i class="fas fa-share request" onclick="requestFunction(event)"></i>
-        <i class="fas fa-dot-circle send_request ${getDeptShortName[admins_list[admins_list.length-2][1]]+'Symbol'} statusSymbol"></i>
+        <i class="fas fa-share request ${getDeptShortName[admins_list[i][1]]+'Symbol'} " onclick="requestFunction(event)" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
         <span class="icon" aria-hidden="true"></span>
     </button>
     <div class="accordion-content">
@@ -136,8 +173,7 @@ if (user[0]['degree'] == 'PhD') {
     <button id="accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${admins_list[admins_list.length-1][0]}</span>
         <!-- <span class="send_request">Send</span> -->
-        <i class="fas fa-share request" onclick="requestFunction(event)"></i>
-        <i class="fas fa-dot-circle send_request ${getDeptShortName[admins_list[admins_list.length-1][1]]+'Symbol'} statusSymbol"></i>
+        <i class="fas fa-share request ${getDeptShortName[admins_list[i][1]]+'Symbol'} " onclick="requestFunction(event)" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
         <span class="icon" aria-hidden="true"></span>
     </button>
     <div class="accordion-content">
@@ -150,31 +186,56 @@ if (user[0]['degree'] == 'PhD') {
 container.innerHTML += `<div class="accordion-item">
   <button id="accordion-button-11" aria-expanded="false">
     <span class="accordion-title">BTP / Scholarly Paper / Thesis</span>
-    <i class="fas fa-share request" id="btp_sendRequest"></i>
-    <i class="fas fa-dot-circle send_request btp_signal"></i>
+    <i id="btp_sendRequest" class="fas fa-share request btp_signal" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
     <span class="icon" aria-hidden="true"></span>
   </button>
   <div class="accordion-content">
-      <label for="proffs">Choose professor:</label>
+      <label for="proffs">Choose professor:  </label>
       <select name="proffs" id="btp_proff">
         <option value="None">None</option>
       </select>
+      
+      <br>
+      
+      <label  for="projectName">Project Name: 
+        <input type="text" id="btpProjectName" class="form-control" placeholder="Enter Project Name">
+      </label>
+      <br>
+      
+      <label for="projectDescription">Project Description:
+        <textarea class="form-control" id="btpProjectDescription" rows="3" cols="30" ></textarea>
+      </label>
+      <br>
+      Comments: 
       <p id="btp_comment">There are no comments from the professor.</p>
   </div>
   </div>
   <div class="accordion-item">
   <button id="accordion-button-11" aria-expanded="false">
     <span class="accordion-title">IP / IS / UR</span>
-    <i class="fas fa-share request" id="ip_sendRequest"></i>
-    <i class="fas fa-dot-circle send_request ip_signal"></i>
+    <i id="ip_sendRequest" class="fas fa-share request ip_signal" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
     <span class="icon" aria-hidden="true"></span>
   </button>
   <div class="accordion-content">
-      <label for="proffs">Choose professor:</label>
+      <label for="proffs">Choose professor:  </label>
       <select name="proffs" id="ip_proff">
         <option value="None">None</option>
       </select>
+      
+      <br>
+      
+      <label  for="projectName">Project Name: 
+        <input type="text" id="ipProjectName" class="form-control" placeholder="Enter Project Name">
+      </label>
+      <br>
+      
+      <label for="projectDescription">Project Description:
+        <textarea class="form-control" id="ipProjectDescription" rows="3" cols="30" ></textarea>
+      </label>
+      <br>
+      Comments: 
       <p id="ip_comment">There are no comments from the professor.</p>
+      
   </div>
 </div>`
 
@@ -212,10 +273,8 @@ function getAdminName(s) {
 }
 // var admins = ['designLab', 'library', 'adminFacilities', 'systemAdmin', 'sports',
 // 'hostel', 'eceLabs', 'placement', 'incubation', 'finance', 'academics'];
-var admins = [];
-for (var i=0; i<admins_list.length-2; i++) {
-  admins.push(getAdminName(admins_list[i][0]));
-}
+
+
 
 var modal = document.getElementById("myModal");
 var modal1 = document.getElementById('myModal1');
@@ -223,7 +282,7 @@ var closeModal = document.getElementsByClassName("close")[0];
 var closeModal1 = document.getElementsByClassName("close1")[0];
 var submitModal = document.querySelector('.modal input[type="submit"]');
 var submitModal1 = document.querySelector('.modal1 input[type="submit"]');
-var bankName, bankBranch, bankAccountNo, bankIfscCode;
+var bankName, bankBranch, bankAccountNo, bankIfscCode, bankAccountHolder;
 document.getElementById('bankName').onkeypress = function() {
   document.getElementById('bankNameWarning').style.display = "none";
 }
@@ -232,6 +291,9 @@ document.getElementById('bankBranch').onkeypress = function() {
 }
 document.getElementById('bankAccountNo').onkeypress = function() {
   document.getElementById('bankAccountNoWarning').style.display = "none";
+}
+document.getElementById('bankAccountHolder').onkeypress = function() {
+  document.getElementById('bankAccountHolderWarning').style.display = "none";
 }
 document.getElementById('bankIfscCode').onkeypress = function() {
   document.getElementById('bankIfscCodeWarning').style.display = "none";
@@ -257,6 +319,7 @@ submitModal.onclick = function() {
   bankBranch = document.getElementById('bankBranch').value;
   bankAccountNo = document.getElementById('bankAccountNo').value;
   bankIfscCode = document.getElementById('bankIfscCode').value;
+  bankAccountHolder=document.getElementById('bankAccountHolder').value;
   var c=0;
   if (bankName=="") {
     document.getElementById('bankNameWarning').style.display = "block";
@@ -274,12 +337,17 @@ submitModal.onclick = function() {
     document.getElementById('bankIfscCodeWarning').style.display = "block";
     c++;
   }
+  if (bankAccountHolder=="") {
+    document.getElementById('bankAccountHolderWarning').style.display = "block";
+    c++;
+  }
   if (c>0) {return;}
   var bankDetails = {};
   bankDetails.bankName = bankName;
   bankDetails.bankBranch = bankBranch;
   bankDetails.bankAccountNo = bankAccountNo;
   bankDetails.bankIfscCode = bankIfscCode;
+  bankDetails.bankAccountHolder = bankAccountHolder;
   bankDetails.email = user[0]['email'];
   window.location.href = `${CURRENT_URL}/sendBankDetails/${JSON.stringify(bankDetails)}`;
   modal.style.display = "none";
@@ -312,14 +380,14 @@ submitModal1.onclick = function() {
   personalDetails.personalMobile = personalMobile;
   personalDetails.personalEmail = personalEmail;
   personalDetails.leavingDate = leavingDate;
-  console.log(personalDetails.leavingDate);
+  // console.log(personalDetails.leavingDate);
   if (withdrawal.checked) {
     personalDetails.leavingReason = 'withdrawal';
   }
   if (completed.checked) {
     personalDetails.leavingReason = 'completed';
   }
-  console.log(personalDetails.leavingReason);
+  // console.log(personalDetails.leavingReason);
   personalDetails.email = user[0]['email'];
   window.location.href = `${CURRENT_URL}/sendPersonalDetails/${JSON.stringify(personalDetails)}`;
   modal1.style.display = "none";
@@ -385,37 +453,59 @@ function toggleAccordion() {
   }
 }
 
-items.forEach(item => item.addEventListener('click', toggleAccordion));
+function updateSymbolMessage(user,admin){
+  // console.log(admin);
+  var symbol = document.getElementsByClassName(admin+'Symbol')[0];
 
-for (var i in admins) {
-  if (user[0][admins[i]+'Message'] && !user[0][admins[i]]) {
-    document.getElementById(admins[i]+'Message').innerHTML = user[0][admins[i]+'Message'];
-    var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
+  if (user[0][admin+'Message'] && !user[0][admin]) {
+    document.getElementById(admin+'Message').innerHTML = user[0][admin+'Message'];
+    symbol.classList.remove('fa-share');
+    symbol.classList.remove('request');
+    symbol.classList.add('send_request');
     symbol.classList.remove('fa-spinner');
     symbol.classList.add('fa-times-circle');
+    symbol.setAttribute('title','Not Cleared');
   }
-  if (user[0][admins[i]+'Applied'] && !user[0][admins[i]]) {
-    var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
-    console.log(document.getElementsByClassName(admins[i]+'Symbol')[0]);
-    symbol.classList.remove('fa-dot-circle');
+  else if (user[0][admin+'Applied'] && !user[0][admin]) {
+    var symbol = document.getElementsByClassName(admin+'Symbol')[0];
+    
+    symbol.classList.remove('fa-share');
+    symbol.classList.remove('request');
+    symbol.classList.add('send_request');
     symbol.classList.add('fa-spinner');
+    symbol.setAttribute('title','Pending');
   }
-  if (user[0][admins[i]+'Applied'] && user[0][admins[i]]) {
-    var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
+  else if (user[0][admin+'Applied'] && user[0][admin]==true) {
     if (symbol.classList.contains('fa-spinner')) {
       symbol.classList.remove('fa-spinner');
       symbol.classList.add('fa-check-circle');
+      symbol.setAttribute('title','Cleared');
     } else if (symbol.classList.contains('fa-times-circle')) {
       symbol.classList.remove('fa-times-circle');
       symbol.classList.add('fa-check-circle');
-    } else if (symbol.classList.contains('fa-dot-circle')) {
-      symbol.classList.remove('fa-dot-circle');
+      symbol.setAttribute('title','Cleared');
+    } else if (symbol.classList.contains('fa-share')) {
+     
+      symbol.classList.remove('fa-share');
+      symbol.classList.remove('request');
+      symbol.classList.add('send_request');
       symbol.classList.add('fa-check-circle');
+      symbol.setAttribute('title','Cleared');
     }
-    else {}
-    document.getElementById(admins[i]+'Message').innerHTML = 'Dues for this department has been approved';
+    document.getElementById(admin+'Message').innerHTML = 'Dues for this department has been approved';    
   }
+
+  
 }
+
+
+items.forEach(item => item.addEventListener('click', toggleAccordion));
+
+for (var i in admins) {
+
+  updateSymbolMessage(user,admins[i]);
+}
+
 setInterval(() => {
   var request = new XMLHttpRequest();
   request.open('GET', `${CURRENT_URL}/user/getUser/${user[0]._id}`, false);
@@ -426,33 +516,7 @@ setInterval(() => {
   }
 
   for (var i in admins) {
-    if (user[0][admins[i]+'Message'] && !user[0][admins[i]]) {
-      document.getElementById(admins[i]+'Message').innerHTML = user[0][admins[i]+'Message'];
-      var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
-      symbol.classList.remove('fa-spinner');
-      symbol.classList.add('fa-times-circle');
-    }
-    if (user[0][admins[i]+'Applied'] && !user[0][admins[i]]) {
-      var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
-      console.log(document.getElementsByClassName(admins[i]+'Symbol')[0]);
-      symbol.classList.remove('fa-dot-circle');
-      symbol.classList.add('fa-spinner');
-    }
-    if (user[0][admins[i]+'Applied'] && user[0][admins[i]]) {
-      var symbol = document.getElementsByClassName(admins[i]+'Symbol')[0];
-      if (symbol.classList.contains('fa-spinner')) {
-        symbol.classList.remove('fa-spinner');
-        symbol.classList.add('fa-check-circle');
-      } else if (symbol.classList.contains('fa-times-circle')) {
-        symbol.classList.remove('fa-times-circle');
-        symbol.classList.add('fa-check-circle');
-      } else if (symbol.classList.contains('fa-dot-circle')) {
-        symbol.classList.remove('fa-dot-circle');
-        symbol.classList.add('fa-check-circle');
-      }
-      else {}
-      document.getElementById(admins[i]+'Message').innerHTML = 'Dues for this department has been approved';
-    }
+    updateSymbolMessage(admins[i]);   
   }
 }, 5000);
 
@@ -467,103 +531,175 @@ var btp_sendRequest = document.getElementById('btp_sendRequest');
 var ip_sendRequest = document.getElementById('ip_sendRequest');
 
 var btp_proff = document.getElementById('btp_proff');
-if ('btp' in user[0]) {
+
+if (user[0]['btpApplied']==true) {
   btp_proff.value = reverseProfessorList[user[0]['btp']];
 }
 var btp_signal = document.getElementsByClassName('btp_signal')[0];
-if (user[0]['btp'] && !('btpApproved' in user[0])) {
-  btp_signal.classList.remove('fa-dot-circle');
+// console.log(btp_signal);
+if (user[0]['btpApplied']==true) {
+  btp_signal.removeAttribute('id');
+  btp_signal.classList.remove('fa-share');
+  btp_signal.classList.remove('request');
+  btp_signal.classList.add('send_request');
   btp_signal.classList.add('fa-spinner');
   btp_signal.style.color = 'blue';
+  btp_signal.setAttribute('title','Pending');
+  // console.log("btp else if");
 }
-if ('btpMessage' in user[0]) {
+if (user[0]['btp'==false]) {
+  btp_signal.removeAttribute('id');
+  console.log(btp_signal.id);
   btp_signal.classList.remove('fa-spinner');
   btp_signal.classList.remove('fa-check-circle');
   btp_signal.classList.remove('fa-dot-circle');
+  btp_signal.classList.remove('request');
+  btp_signal.classList.add('send_request');
   btp_signal.classList.add('fa-times-circle');
   btp_signal.style.color = 'red';
+  btp_signal.setAttribute('title','Rejected');
+  // console.log("btp reject");
 }
-if ('btpApproved' in user[0]) {
+if (user[0]['btp']==true) {
+  btp_signal.removeAttribute('id');
   btp_signal.classList.remove('fa-times-circle');
   btp_signal.classList.remove('fa-spinner');
-  btp_signal.classList.remove('fa-dot-circle');
+  btp_signal.classList.remove('fa-share');
+  btp_signal.classList.remove('request');
+  btp_signal.classList.add('send_request');
   btp_signal.classList.add('fa-check-circle');
   btp_signal.style.color = 'green';
+  btp_signal.setAttribute('title','Cleared');
+  // console.log("btp accept");
 }
 
 var btp_comment = document.getElementById('btp_comment');
-if (!('btpApproved' in user[0]) && ('btpMessage' in user[0])) {
+if (user[0]['btp']==false && 'btpMessage' in user[0]) {
   btp_comment.innerHTML = user[0]['btpMessage'];
 }
-if ('btpApproved' in user[0]) {
+if (user[0]['btp']==true) {
   btp_comment.innerHTML = 'Your dues has been approved!';
 }
 var ip_comment = document.getElementById('ip_comment');
-if (!('ipApproved' in user[0]) && ('ipMessage' in user[0])) {
+if (user[0]['ip']==false && 'ipMessage' in user[0]) {
   ip_comment.innerHTML = user[0]['ipMessage'];
 }
-if ('ipApproved' in user[0]) {
+if (user[0]['ip']==true) {
   ip_comment.innerHTML = 'Your dues has been approved!';
 }
+var btpProjectDescription = document.getElementById('btpProjectDescription');
+var btpProjectName = document.getElementById('btpProjectName');
 
 btp_sendRequest.addEventListener('click', () => {
+  if(btp_sendRequest.classList.contains('fa-share')==false){
+    return;
+  }
+
   if (btp_proff.value=='None' || btp_proff.value=='') {
     alert('Kindly choose a professor!');
     return;
   }
-  if (user[0]['btp']) {
-    alert (`You have already sent a requst to ${reverseProfessorList[user[0]['btp']]}`);
+
+  if (user[0]['btpApplied']==true) {
+    alert (`You have already sent a requst to ${reverseProfessorList[user[0]['btpProf']]}`);
+    return;
+  }
+  if (btpProjectName.value=='None' || btpProjectName.value=='') {
+    alert('Kindly Enter Project Name!');
+    return;
+  }
+  if (btpProjectDescription.value=='None' || btpProjectDescription.value=='') {
+    alert('Kindly Enter Project Description!');
     return;
   }
   var obj = [];
   obj.push({
     admin : 'btp',
     proffEmail : professorList[btp_proff.value],
-    studentEmail: user[0]['email']
+    studentEmail: user[0]['email'],
+    projectName:btpProjectName.value,
+    projectDescription: btpProjectDescription.value
   });
   console.log(obj);
   window.location.href = `${CURRENT_URL}/sendBtpRequest/${JSON.stringify(obj)}`;
 });
 
 var ip_proff = document.getElementById('ip_proff');
-if ('ip' in user[0]) {
+if (user[0]['ipApplied']==true) {
   ip_proff.value = reverseProfessorList[user[0]['ip']];
 }
 var ip_signal = document.getElementsByClassName('ip_signal')[0];
-if (user[0]['ip'] && !('ipApproved' in user[0])) {
-  ip_signal.classList.remove('fa-dot-circle');
+// console.log(ip_signal);
+// console.log(user[0]['ipApplied']);
+// console.log(user[0]['ip']);
+// console.log(user[0]['ipApplied']==true);
+
+if (user[0]['ipApplied']==true) {
+  ip_signal.removeAttribute('id');
+  ip_signal.classList.remove('fa-share');
+  ip_signal.classList.remove('request');
+  ip_signal.classList.add('send_request'); 
   ip_signal.classList.add('fa-spinner');
   ip_signal.style.color = 'blue';
+  ip_signal.setAttribute('title','Pending');
+  // console.log("else if");
 }
-if ('ipMessage' in user[0]) {
+if (user[0]['ip']==false) {
+  ip_signal.removeAttribute('id');
   ip_signal.classList.remove('fa-spinner');
   ip_signal.classList.remove('fa-check-circle');
-  ip_signal.classList.remove('fa-dot-circle');
+  ip_signal.classList.remove('fa-share');
+  ip_signal.classList.remove('request');
+  ip_signal.classList.add('send_request');
   ip_signal.classList.add('fa-times-circle');
   ip_signal.style.color = 'red';
+  ip_signal.setAttribute('title','Rejected');
+  // console.log("red");
 }
-if ('ipApproved' in user[0]) {
-  ip_signal.classList.remove('fa-spinnere');
+if (user[0]['ip']==true) {
+  ip_signal.removeAttribute('id');
   ip_signal.classList.remove('fa-times-circle');
-  ip_signal.classList.remove('fa-dot-circle');
+  ip_signal.classList.remove('fa-spinner');
+  ip_signal.classList.remove('fa-share');
+  ip_signal.classList.remove('request');
+  ip_signal.classList.add('send_request');
   ip_signal.classList.add('fa-check-circle');
   ip_signal.style.color = 'green';
+  ip_signal.setAttribute('title','Cleared');
+  // console.log("green");
 }
+var ipProjectDescription = document.getElementById('ipProjectDescription');
+var ipProjectName = document.getElementById('ipProjectName');
 
 ip_sendRequest.addEventListener('click', () => {
+  if(ip_sendRequest.classList.contains('fa-share')==false){
+    return;
+  }
   if (ip_proff.value=='None' || ip_proff.value=='') {
     alert('Kindly choose a professor!');
     return;
   }
-  if (user[0]['ip']) {
-    alert (`You have already sent a requst to ${reverseProfessorList[user[0]['ip']]}`);
+  if (user[0]['ipApplied']==true) {
+    alert (`You have already sent a requst to ${reverseProfessorList[user[0]['ipProf']]}`);
     return;
   }
+  if (ipProjectName.value=='None' || ipProjectName.value=='') {
+    alert('Kindly Enter Project Name!');
+    return;
+  }
+  if (ipProjectDescription.value=='None' || ipProjectDescription.value=='') {
+    alert('Kindly Enter Project Description!');
+    return;
+  }
+  // console.log(ipProjectName.value);
+  // console.log(ipProjectDescription.value);
   var obj = [];
   obj.push({
     admin: 'ip',
     proffEmail: professorList[ip_proff.value],
-    studentEmail: user[0]['email']
+    studentEmail: user[0]['email'],
+    projectName:ipProjectName.value,
+    projectDescription: ipProjectDescription.value
   });
   console.log(obj);
   window.location.href = `${CURRENT_URL}/sendIpRequest/${JSON.stringify(obj)}`;

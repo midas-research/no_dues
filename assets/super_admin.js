@@ -1,19 +1,23 @@
-
+// console.log("Inside super admin Js")
 const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 
-var adminName = document.getElementById('adminName').innerHTML;
+var adminList = JSON.parse(document.getElementById('adminList').innerHTML);
+// console.log(adminList);
 var id = document.getElementById('id').innerHTML;
+var adminName= document.getElementById('adminName').innerHTML;
+
+
 
 var accordion = document.getElementsByClassName('accordion')[0];
 var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
 
-function check(student,curr_status){  
+function check(student,curr_status){
   
   if(curr_status=='pending'){    
-    return student[adminName+'Applied'] && student[adminName]==null;
+    return student[adminName]==null;
   }
 
-  else if(curr_status=='accepted'){    
+  else if(curr_status=='accepted'){
     return student[adminName]==true;
   }
 
@@ -21,6 +25,26 @@ function check(student,curr_status){
     return student[adminName]==false;
   }
 }
+function adminsLeft(student){
+
+  var check=true;
+
+  for(var i in adminList){
+    if(!student[adminList[i]]){
+      check&=false;
+    }
+    else{
+      check&=student[adminList[i]];
+    }    
+
+  }
+
+  return check;
+
+  
+
+}
+
 
 function addAcceptCode(student,msg){
   
@@ -35,17 +59,23 @@ function addAcceptCode(student,msg){
              
             <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
             <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
-            <!--<div class="input-group-append">
-                <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-            </div>-->
           </div>
+
+
           
           <span class="message">Approved : ${student[adminName+'ApprovedAt']}</span><br>
           <span class="message">Latest Communication before Accepting: </span><br>
           <span class="message">${msg}</span><br>
           <span class="message">Requested : ${student[adminName+'AppliedAt']}</span>
+          <hr>
+          <div class="admins-status">
+              ${addcontent(student)} 
+          </div>
+
         </div>
-      </div>`  
+        
+      </div>`
+  
 }
 
 function isTrue(student){
@@ -61,6 +91,7 @@ function isTrue(student){
   if(!curr_batch){
     curr_batch=-1;
   } 
+
   
   if(curr_degree=='All'){
     checkDegree=true;
@@ -75,9 +106,35 @@ function isTrue(student){
   }
 
   return checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+
+
+}
+
+function addcontent(student){
+    uncleared=`<hr><h5>UnCleared Status: </h5>
+              <ul>`;
+    cleared=`<h5>Cleared Status: </h5> 
+            <ul>`;
+    for (var i in adminList){
+      var j=student[adminList[i]];
+      if(j==null){
+        j=false;        
+      }
+      if(j==true){
+        cleared+=`<li> ${adminList[i]} : ${j} </li>`;
+      }
+      else{
+        uncleared+=`<li> ${adminList[i]} : ${j} </li>`;
+      }
+      
+    }
+    uncleared+=`</ul>`;
+    cleared+=`</ul>`;
+    return cleared+uncleared;
 }
 
 function clickFilter(){
+
   var curr_status=document.getElementById('status').value;
   var curr_degree=document.getElementById('degree').value;
   var curr_department=document.getElementById('department').value;
@@ -89,12 +146,10 @@ function clickFilter(){
 
   var currentList=[];
 
-  for(var i in studentList){
-      
+  for(var i in studentList){      
     if(isTrue(studentList[i])){
       currentList.push(studentList[i]);
-    }      
-    
+    } 
   }
 
   if(curr_status=='accepted'){
@@ -118,16 +173,15 @@ function clickFilter(){
     document.getElementById("sendAll").style.display="flex";
   }
   
-  if(currentList.length==0){
- 
+  if(currentList.length==0){ 
     accordion.innerHTML = '<div id="NoRequest"> No Requests Found!</div>';
     return;
   }
   
- 
+  
   accordion.innerHTML = '';
-  for (var i in currentList) {
 
+  for (var i in currentList) {
    var message;
    if (currentList[i][adminName+'Message']) {
      message = currentList[i][adminName+'Message'];
@@ -135,20 +189,29 @@ function clickFilter(){
      message = 'You have not sent any message currently.';
    }
 
-   if(curr_status=='accepted'){
+   if(check(currentList[i],curr_status) && curr_status=='accepted'){
+     accordion.innerHTML = "";
      accordion.innerHTML += addAcceptCode(currentList[i],message);
    }
-   else {
+   else if (check(currentList[i],curr_status)) {
+
+     k="Not Cleared"
+     if(adminsLeft(currentList[i])){
+        k="All Cleared"
+     }
+     accordion.innerHTML = '';
      accordion.innerHTML += `
        <div class="accordion-item filter-btech">
          <button id="accordion-button-1" aria-expanded="false">
-             <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name}</span>
+             <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name} - ${k}</span>
              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
              <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>
              <!--<i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>-->
              <span class="icon" aria-hidden="true"></span>
          </button>
          <div class="accordion-content">
+            
+           
            <div class="input-group mb-3">
              
              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
@@ -159,6 +222,10 @@ function clickFilter(){
            </div>
            <span class="message">Latest Communication: </span><br>
            <span class="message">   ${message}</span>
+           <hr>
+           <div class="admins-status">
+              ${addcontent(currentList[i])} 
+            </div>
          </div>
        </div>`
    }
@@ -178,28 +245,35 @@ function clickFilter(){
   items.forEach(item => item.addEventListener('click', toggleAccordion));
 }
 
+
 clickFilter();
 
 function approved(e) {
+
   var r = e.parentElement.parentElement;
   var emailroll = e.parentElement.childNodes[1].innerHTML;
   var email = emailroll.substring(0, emailroll.indexOf(' -'));
+
+  
   var studentId;
   for (var i in studentList) {
     if (studentList[i]['email'] == email) {
       studentId = studentList[i]['_id'];
     }
   }
-  console.log(studentId);
+
+  console.log(adminName);
+ 
   var obj = [];
   obj.push({
     admin : adminName,
     email : email,
-    id: studentId,
+    id: studentId
   });
   console.log(JSON.stringify(obj));
   
-  window.location.href = `${CURRENT_URL}/approveDues/${JSON.stringify(obj)}`;
+  
+  window.location.href = `${CURRENT_URL}/superApproveDues/${JSON.stringify(obj)}`;
   r.remove();
 }
 
@@ -207,7 +281,7 @@ var search=document.getElementById('search');
 search.addEventListener('click', clickFilter);
 
 
-function sendMessage(e) {
+function sendMessage(e, res) {
   var dues = e.target.previousElementSibling.value;
   if (dues == '') {
     alert("You need to give a message before rejecting!");
@@ -224,18 +298,18 @@ function sendMessage(e) {
     email : email.substring(0, index)
   });
   console.log(JSON.stringify(obj));
-  window.location.href = `${CURRENT_URL}/sendMessage/${JSON.stringify(obj)}`;
+  window.location.href = `${CURRENT_URL}/superSendMessage/${JSON.stringify(obj)}`;
 }
 
 var sheet = document.getElementById('sheet');
 sheet.addEventListener('click', () => {
-  window.location.href = "/showSheet";
+  window.location.href = `${CURRENT_URL}/showSheet`;
 });
 
-// var bankAccountDetails = document.getElementById('bankAccountDetails');
-// bankAccountDetails.addEventListener('click', () => {
-//   window.location.href = `${CURRENT_URL}/bankAccountDetails`;
-// });
+var adminRequests  = document.getElementById('adminRequests');
+adminRequests.addEventListener('click', () => {
+  window.location.href = `${CURRENT_URL}/super_admin/adminRequests`;
+});
 
 //code for selecting multiple students at a time
 var selectAll = document.getElementById('selectAll');
@@ -276,7 +350,7 @@ sendAll.addEventListener('click', () => {
   if (obj.length != 0) {
     var obj2 = []; obj2.push(obj);
     console.log(obj);
-    window.location.href = `${CURRENT_URL}/approveManyDues/${JSON.stringify(obj2)}`;
+    window.location.href = `${CURRENT_URL}/superApproveManyDues/${JSON.stringify(obj2)}`;
   }
 });
 
