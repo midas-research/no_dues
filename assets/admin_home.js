@@ -74,13 +74,47 @@ function isTrue(student){
     checkBatch=true;
   }
 
-  return checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+  let res= checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+
+  if(adminName="hostel"){
+    var currHostelTaken=document.getElementById('hostelTaken').value;
+    if(currHostelTaken=='true'){
+      currHostelTaken=true;
+    }
+    else if(currHostelTaken=='false'){
+      currHostelTaken=false;
+    }
+
+    console.log(currHostelTaken);
+    console.log(student['hostelTaken']);
+
+    var checkHostelTaken=currHostelTaken==student['hostelTaken'];
+    console.log(checkHostelTaken);
+    
+    if(currHostelTaken=='all'){
+      checkHostelTaken=true;
+    }
+
+    res=res & checkHostelTaken;
+  }
+
+  return res;
+}
+
+function displayText(student){
+
+  if(adminName=='hostel'){
+    var hostelTaken='Hostel Taken';
+    if(student.hostelTaken==false){
+      hostelTaken='Hostel Not Taken'
+    }
+    return`<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name} - ${hostelTaken}</span>`
+  }
+  return`<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name}</span>`
 }
 
 function clickFilter(){
   var curr_status=document.getElementById('status').value;
-  var curr_degree=document.getElementById('degree').value;
-  var curr_department=document.getElementById('department').value;
   var curr_batch=document.getElementById('batch').value;
   
   if(!curr_batch){
@@ -142,20 +176,15 @@ function clickFilter(){
      accordion.innerHTML += `
        <div class="accordion-item filter-btech">
          <button id="accordion-button-1" aria-expanded="false">
-             <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name}</span>
+             ${displayText(currentList[i])}
              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
              <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>
-             <!--<i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>-->
              <span class="icon" aria-hidden="true"></span>
          </button>
          <div class="accordion-content">
-           <div class="input-group mb-3">
-             
+           <div class="input-group mb-3">             
              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
              <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
-             <!--<div class="input-group-append">
-                 <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-             </div>-->
            </div>
            <span class="message">Latest Communication: </span><br>
            <span class="message">   ${message}</span>
@@ -205,6 +234,9 @@ function approved(e) {
 
 var search=document.getElementById('search');
 search.addEventListener('click', clickFilter);
+
+var status_button=document.getElementById('status');
+status_button.addEventListener('click',clickFilter);
 
 
 function sendMessage(e) {

@@ -1,8 +1,5 @@
-// console.log("Inside super admin Js")
 const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
-
 var adminList = JSON.parse(document.getElementById('adminList').innerHTML);
-// console.log(adminList);
 var id = document.getElementById('id').innerHTML;
 var adminName= document.getElementById('adminName').innerHTML;
 
@@ -83,15 +80,26 @@ function isTrue(student){
   var curr_degree=document.getElementById('degree').value;
   var curr_department=document.getElementById('department').value;
   var curr_batch=document.getElementById('batch').value;
+  var clearance=document.getElementById('clearance').value;
+
+  var k="not cleared"
+  if(adminsLeft(student)){
+    k="cleared"
+  }
 
   var checkDegree= curr_degree==student['degree'];
   var checkDepartment= curr_department==student['department'];
   var checkBatch= curr_batch==student['batch'];
 
+  var checkClearance= clearance==k;
+
   if(!curr_batch){
     curr_batch=-1;
   } 
-
+  
+  if(clearance=='all'){
+    checkClearance=true;
+  }
   
   if(curr_degree=='All'){
     checkDegree=true;
@@ -105,7 +113,7 @@ function isTrue(student){
     checkBatch=true;
   }
 
-  return checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+  return checkClearance && checkDegree && checkDepartment && checkBatch && check(student,curr_status);
 
 
 }
@@ -262,7 +270,7 @@ function approved(e) {
     }
   }
 
-  console.log(adminName);
+  // console.log(adminName);
  
   var obj = [];
   obj.push({
@@ -270,7 +278,7 @@ function approved(e) {
     email : email,
     id: studentId
   });
-  console.log(JSON.stringify(obj));
+  // console.log(JSON.stringify(obj));
   
   
   window.location.href = `${CURRENT_URL}/superApproveDues/${JSON.stringify(obj)}`;
@@ -280,6 +288,8 @@ function approved(e) {
 var search=document.getElementById('search');
 search.addEventListener('click', clickFilter);
 
+var status_button=document.getElementById('status');
+status_button.addEventListener('click',clickFilter);
 
 function sendMessage(e, res) {
   var dues = e.target.previousElementSibling.value;
@@ -297,7 +307,7 @@ function sendMessage(e, res) {
     message : dues,
     email : email.substring(0, index)
   });
-  console.log(JSON.stringify(obj));
+  // console.log(JSON.stringify(obj));
   window.location.href = `${CURRENT_URL}/superSendMessage/${JSON.stringify(obj)}`;
 }
 

@@ -30,10 +30,7 @@
                         <a id="selectAll">Select All</a> <br><hr>
                         <a id="unselectAll">Unselect All</a> <br><hr>
                         <a id="sendAll">Send Selected</a> <br><hr> -->
-                        <!-- <% if (adminName == "hostel") { %>
-                          <a id="listBoys">Send Boys List</a> <br><hr>
-                          <a id="listGirls">Send Girls List</a>
-                        <% } %> -->
+                        
                     </div>
                 </div>
             </div>
@@ -47,13 +44,17 @@
             <div class="container">
                 <h2 style="margin-bottom: 40px;">List of students</h2>
 
+                <div class="d-flex align-items-center justify-content-center" style="margin-bottom: 10px; " data-aos="fade-up" data-aos-delay="100">
+                  
+                  <select class="filter" name="status" id="status">                      
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="accepted">Accepted</option>          
+                  </select>
+
+                </div>
+
                 <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                 
-                    <select class="filter" name="status" id="status">                      
-                      <option value="pending">Pending</option>
-                      <option value="rejected">Rejected</option>
-                      <option value="accepted">Accepted</option>          
-                    </select>
 
                     <select class="filter" name="degree" id="degree">
                       <option value="All"> Degree (All)</option>
@@ -74,6 +75,14 @@
 
                
                     <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH" >
+
+                    <% if (adminName == "hostel") { %>
+                        <select class="filter" name="hostelTaken" id="hostelTaken">
+                          <option value="all">Taken/Not Taken</option>
+                          <option value=true>Taken Hostel</option>
+                          <option value=false>Not Taken</option>         
+                        </select>    
+                    <% } %>
             
                 
                     <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> </button>                  

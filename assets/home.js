@@ -1,11 +1,8 @@
 
 var user = JSON.parse(document.getElementById('user').innerHTML);
-// console.log(user);
-const admins_list = JSON.parse(document.getElementById('admins').innerHTML);
-// console.log(admins_list);
-var professorsList;
-var adminsList;
-var studentsList;
+let professorsList;
+let admins_list;
+let studentsList;
 
 const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
 
@@ -20,8 +17,9 @@ var request = new XMLHttpRequest();
 request.open('GET', `${CURRENT_URL}/user/getAdmins`, false);
 request.send(null);
 if (request.status === 200) {
-  adminsList = JSON.parse(request.responseText);
+  admins_list = JSON.parse(request.responseText);
 }
+
 
 var request = new XMLHttpRequest();
 request.open('GET', `${CURRENT_URL}/user/getStudents`, false);
@@ -42,14 +40,10 @@ if (request.status === 200) {
 var admins = [];
 for (var i=0; i<admins_list.length-2; i++) {
   admins.push(getAdminName(admins_list[i][0]));
-  // console.log(getAdminName(admins_list[i][0]));
-  // console.log(getDeptShortName[admins_list[i][1]]+'Symbol');
 }
 let count=0;
-// console.log(user);
+
 for(var i in admins){
-  // console.log(admins[i]);
-  // console.log(user[admins[i]]);
   if(user[0][admins[i]]==true){
     count+=1;
   }
@@ -65,63 +59,68 @@ document.getElementById('countCleared').innerHTML=`${count}`;
 document.getElementById('countAll').innerHTML=`${admins.length+2}`;
 
 
-// console.log(getDeptShortName);
+function additionalInfo(admin){
+  if(admin=='hostel'){
+    return `<br>
+            Did you ever take hostel?
+            <br>
+            <input type="radio" id="taken" name="hostelTaken" value=true>
+            <label for="taken">Yes</label><br>
+            <input type="radio" id="notTaken" name="hostelTaken" value=false>
+            <label for="notTaken">No </label><hr>`  
 
-// function getDeptShortName(email) {
-//   if (email == 'admin-dilabs@iiitd.ac.in') {
-//     return 'designLab';
-//   } else if (email == 'rajendra@iiitd.ac.in') {
-//       return 'library';
-//   } else if (email == 'admin-facilities@iiitd.ac.in') {
-//       return 'adminFacilities';
-//   }  else if (email == 'ravi@iiitd.ac.in') {
-//     return 'hostel';
-//   } else if (email == 'abhinay@iiitd.ac.in') {
-//       return 'systemAdmin';
-//   } else if (email == 'ravi@iiitd.ac.in') {
-//       return 'sports';
-//   } else if (email == 'rahul@iiitd.ac.in') {
-//       return 'eceLabs';
-//   } else if (email == 'rashmil@iiitd.ac.in') {
-//       return 'placement';
-//   } else if (email == 'geetagupta@iiitdic.in') {
-//       return 'incubation';
-//   } else if (email == 'varsha@iiitd.ac.in') {
-//       return 'finance';
-//   } else if (email=='no-dues@iiitd.ac.in' || email=='admin-mtech@iiitd.ac.in' || email=='admin-phd@iiitd.ac.in') {
-//       return 'academics';
-//   } else {
-//       return 'student';
-//   }
-// }
-
+  }
+  else{
+    return'';
+  }
+}
 
 function requestFunction(event) {
   event.stopPropagation();
   var list=event.target.classList;
-  // console.log(list);
-  // console.log(list.contains('request'));
   if (list.contains('request')==false){
     return;
   }
   var adminName = getAdminName(event.target.previousElementSibling.innerHTML);
-  // console.log(adminName);
+  
   if (user[0][adminName+'Applied']) {
     alert('You have already requested!');
     return;
   }
+
+  var hostelTaken=undefined;
+
+  if(adminName=='hostel'){
+    var ele = document.getElementsByName('hostelTaken');
+      
+    for(i = 0; i < ele.length; i++) {
+          
+        if(ele[i].type="radio") {          
+          if(ele[i].checked){
+            hostelTaken=ele[i].value;
+            break;
+          }                
+        }
+    }
+
+    if(hostelTaken==undefined){
+      alert('Please tell your hostel status! ');
+      return;
+    }
+  }
+
   var obj = [];
   obj.push({
     studentEmail: user[0].email,
-    adminName: adminName
+    adminName: adminName,
+    hostelTaken: hostelTaken
   });
   window.location.href = `${CURRENT_URL}/request/${JSON.stringify(obj)}`;
 }
 
 var container = document.getElementById('admins_list_container');
 for (var i=0; i<admins_list.length-3; i++){
-  // console.log(i);
-  // console.log(getDeptShortName[admins_list[i][1]]+'Symbol');
+  
   container.innerHTML += `<div class="accordion-item">
     <button id="accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${admins_list[i][0]}</span>
@@ -131,6 +130,7 @@ for (var i=0; i<admins_list.length-3; i++){
         <span class="icon" aria-hidden="true"></span>
     </button>
     <div class="accordion-content">
+        ${additionalInfo(getDeptShortName[admins_list[i][1]])}        
         <p>Admin - ${admins_list[i][2]}</p>
         <p id="${getDeptShortName[admins_list[i][1]]+'Message'}" class="message">There are no comments from the admin of this department.</p>
     </div>
@@ -138,7 +138,7 @@ for (var i=0; i<admins_list.length-3; i++){
 }
 
 if (user[0]['degree'] == 'B. Tech') {
-  // console.log(getDeptShortName[admins_list[admins_list.length-3][1]]);
+
   container.innerHTML += `<div class="accordion-item">
     <button id="accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${admins_list[admins_list.length-3][0]}</span>
@@ -271,10 +271,6 @@ function getAdminName(s) {
   }
   return newName;
 }
-// var admins = ['designLab', 'library', 'adminFacilities', 'systemAdmin', 'sports',
-// 'hostel', 'eceLabs', 'placement', 'incubation', 'finance', 'academics'];
-
-
 
 var modal = document.getElementById("myModal");
 var modal1 = document.getElementById('myModal1');
@@ -380,14 +376,14 @@ submitModal1.onclick = function() {
   personalDetails.personalMobile = personalMobile;
   personalDetails.personalEmail = personalEmail;
   personalDetails.leavingDate = leavingDate;
-  // console.log(personalDetails.leavingDate);
+ 
   if (withdrawal.checked) {
     personalDetails.leavingReason = 'withdrawal';
   }
   if (completed.checked) {
     personalDetails.leavingReason = 'completed';
   }
-  // console.log(personalDetails.leavingReason);
+
   personalDetails.email = user[0]['email'];
   window.location.href = `${CURRENT_URL}/sendPersonalDetails/${JSON.stringify(personalDetails)}`;
   modal1.style.display = "none";

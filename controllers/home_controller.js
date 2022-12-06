@@ -124,7 +124,6 @@ module.exports.home = (req, res) => {
         user : JSON.stringify(obj),
         name : req.user.name,
         image : req.user.image,
-        admins: JSON.stringify(admins),
         url:JSON.stringify(CURRENT_URL)
     });
 }
@@ -153,6 +152,7 @@ module.exports.request = (req, res) => {
   console.log(obj);
   var studentEmail = obj.studentEmail;
   var adminName = obj.adminName;
+  var hostelTaken=obj.hostelTaken;
   console.log(studentEmail, adminName);
   var updateObject = {};
   updateObject[adminName+'Applied'] = true;
@@ -161,6 +161,7 @@ module.exports.request = (req, res) => {
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date+' '+time;
   updateObject[adminName+'AppliedAt'] = dateTime;
+  updateObject['hostelTaken']=hostelTaken;
   User.findOneAndUpdate({email : obj['studentEmail']}, updateObject, (err, user) => {
     if (err) {console.log('Error in updating request status: ', err); return;}
     user.save();

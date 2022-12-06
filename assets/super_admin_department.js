@@ -220,6 +220,12 @@ function approved(e,curr_admin) {
 var search=document.getElementById('search');
 search.addEventListener('click', clickFilter);
 
+var status_button=document.getElementById('status');
+status_button.addEventListener('click',clickFilter);
+
+var admins_button=document.getElementById('admins');
+admins_button.addEventListener('click',clickFilter);
+
 
 function sendMessage(e, curr_admin) {
   var dues = e.target.previousElementSibling.value;

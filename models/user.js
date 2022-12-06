@@ -77,7 +77,8 @@ var schemaObject = {
     reason_of_leaving: {type: String},
     nodues:{type: Boolean},
     noduesMessage:{type: String},
-    noduesApprovedAt:{ type: String}
+    noduesApprovedAt:{ type: String},
+    hostelTaken:{type: Boolean,default:undefined}
 }
 
 for (var i=0; i<names.length-2; i++) {
