@@ -73,7 +73,7 @@ passport.use(new googleStrategy({
     
 
     if(profile.emails[0].value==SUPER_ADMIN_EMAIL){
-        console.log("super-admin");
+        // console.log("super-admin");
 
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
@@ -100,7 +100,7 @@ passport.use(new googleStrategy({
     }
 
     else if (isAdmin.isAdmin(profile.emails[0].value) ) {
-        console.log("Admin found");
+        // console.log("Admin found");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -124,7 +124,7 @@ passport.use(new googleStrategy({
             }
         })
     } else if (getProffName.isProff(profile.emails[0].value)) {
-        console.log("prog hee hai");
+        // console.log("prog hee hai");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -164,7 +164,7 @@ passport.use(new googleStrategy({
         //     range: "ALL"
         // });
         // students_data = data.data.values;
-        console.log("user");
+        // console.log("user");
         User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
             if (err) {
                 console.log('Error in google strategy passport', err); return;
@@ -176,7 +176,7 @@ passport.use(new googleStrategy({
                 if(!details){
                     return done(null,false);
                 }
-                console.log("User created!");
+                // console.log("User created!");
                 User.create({
                     name: details[4],
                     email: profile.emails[0].value,

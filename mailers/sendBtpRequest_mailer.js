@@ -16,31 +16,28 @@ function fetchProffName(email) {
 }
 
 exports.sendBtpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDescription) => {
-    var student = await User.findOne({email: studentEmail});    
-    var obj = [];
-    obj.push({
-      proffEmail: proffEmail,
-      email : studentEmail,
-      id: student._id
-    });
-    var url = `${CURRENT_URL}/proff_home`;
+    var student = await User.findOne({email: studentEmail});
+   
+    let url=`${CURRENT_URL}/btpApprovedMail/${proffEmail}/${student._id}`;
+   
     let htmlString = `
     <div>
         <p>Hi ${fetchProffName(proffEmail)}!</p>
         <br>
         <p>You have received the following message requesting dues clearance for 
-        BTP/Schlar Paper/Thesis from ${fetchStudentName(studentEmail)} 
+        BTP from ${fetchStudentName(studentEmail)} 
         (email - ${studentEmail}).</p>
         <h5>Description: </h5>
             <ul>
                 <li>Project Name: ${ProjectName}</li>
                 <li>Project Description: ${ProjectDescription}</li>
             </ul>
-        <p>Click <a href=\`${CURRENT_URL}/btpResponse/ ${JSON.stringify(obj)} \`>here</a> to approve the dues.</p>
-        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to message and reject the dues.</p>        
+        <p>Click <a href=\`${url}\`>here</a> to approve the dues.</p>
+        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to go to the portal and reject the dues.</p>
         <br>
         <p>Thanks No-Dues!</p>
     </div>`
+
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,
         to :`${proffEmail}`,

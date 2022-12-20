@@ -74,13 +74,47 @@ function isTrue(student){
     checkBatch=true;
   }
 
-  return checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+  let res= checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+
+  if(adminName="hostel"){
+    var currHostelTaken=document.getElementById('hostelTaken').value;
+    if(currHostelTaken=='true'){
+      currHostelTaken=true;
+    }
+    else if(currHostelTaken=='false'){
+      currHostelTaken=false;
+    }
+
+    console.log(currHostelTaken);
+    console.log(student['hostelTaken']);
+
+    var checkHostelTaken=currHostelTaken==student['hostelTaken'];
+    console.log(checkHostelTaken);
+    
+    if(currHostelTaken=='all'){
+      checkHostelTaken=true;
+    }
+
+    res=res & checkHostelTaken;
+  }
+
+  return res;
+}
+
+function displayHostelText(student){
+
+  if(adminName=='hostel'){
+    var hostelTaken='Hostel Taken';
+    if(student.hostelTaken==false){
+      hostelTaken='Hostel Not Taken'
+    }
+    return`<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name} - ${hostelTaken}</span>`
+  }
+  return`<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name}</span>`
 }
 
 function clickFilter(){
   var curr_status=document.getElementById('status').value;
-  var curr_degree=document.getElementById('degree').value;
-  var curr_department=document.getElementById('department').value;
   var curr_batch=document.getElementById('batch').value;
   
   if(!curr_batch){
@@ -142,20 +176,15 @@ function clickFilter(){
      accordion.innerHTML += `
        <div class="accordion-item filter-btech">
          <button id="accordion-button-1" aria-expanded="false">
-             <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name}</span>
+             ${displayHostelText(currentList[i])}
              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
              <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>
-             <!--<i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>-->
              <span class="icon" aria-hidden="true"></span>
          </button>
          <div class="accordion-content">
-           <div class="input-group mb-3">
-             
+           <div class="input-group mb-3">             
              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
              <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
-             <!--<div class="input-group-append">
-                 <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-             </div>-->
            </div>
            <span class="message">Latest Communication: </span><br>
            <span class="message">   ${message}</span>
@@ -180,22 +209,22 @@ function clickFilter(){
 
 clickFilter();
 
-function approved(e) {
+function approved(e) { 
   var r = e.parentElement.parentElement;
   var emailroll = e.parentElement.childNodes[1].innerHTML;
-  var email = emailroll.substring(0, emailroll.indexOf(' -'));
+
+  var email = emailroll.substring(1, emailroll.indexOf(' -')); 
   var studentId;
   for (var i in studentList) {
     if (studentList[i]['email'] == email) {
       studentId = studentList[i]['_id'];
     }
   }
-  console.log(studentId);
   var obj = [];
   obj.push({
     admin : adminName,
     email : email,
-    id: studentId,
+    id: studentId, 
   });
   console.log(JSON.stringify(obj));
   
@@ -205,6 +234,9 @@ function approved(e) {
 
 var search=document.getElementById('search');
 search.addEventListener('click', clickFilter);
+
+var status_button=document.getElementById('status');
+status_button.addEventListener('click',clickFilter);
 
 
 function sendMessage(e) {
@@ -221,7 +253,7 @@ function sendMessage(e) {
   obj.push({
     admin : adminName,
     message : dues,
-    email : email.substring(0, index)
+    email : email.substring(0, index),
   });
   console.log(JSON.stringify(obj));
   window.location.href = `${CURRENT_URL}/sendMessage/${JSON.stringify(obj)}`;
@@ -264,8 +296,10 @@ sendAll.addEventListener('click', () => {
     if (checkboxes[i].checked == true) {
       if (checkboxes[i].previousElementSibling) {
         var text = checkboxes[i].previousElementSibling.innerHTML;
-        var index = text.indexOf(' ');
-        var studentEmail = text.substring(0,index);
+        var index = text.indexOf(' -');
+        var studentEmail = text.substring(1,index);
+        // console.log(studentEmail);
+        
         obj.push({
           studentEmail: studentEmail,
           adminName: adminName

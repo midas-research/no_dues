@@ -453,6 +453,8 @@ clickFilter();
 var search=document.getElementById('search');
 search.addEventListener('click', clickFilter);
 
+var status_button=document.getElementById('status');
+status_button.addEventListener('click',clickFilter);
 
 var selectAll = document.getElementById('selectAll');
 var checkboxes = document.getElementsByClassName('tickbox');
