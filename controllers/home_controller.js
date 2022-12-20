@@ -309,6 +309,7 @@ module.exports.approveManyDues = (req, res) => {
 
   for (var i in obj) {
     var studentEmail = obj[i].studentEmail;
+    console.log('Hello'+studentEmail);
     var adminName = obj[i].adminName;
     var updateObject = {};
     updateObject[adminName] = true;

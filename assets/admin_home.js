@@ -220,13 +220,11 @@ function approved(e) {
       studentId = studentList[i]['_id'];
     }
   }
-
-
   var obj = [];
   obj.push({
     admin : adminName,
     email : email,
-    id: studentId,
+    id: studentId, 
   });
   console.log(JSON.stringify(obj));
   
@@ -298,8 +296,10 @@ sendAll.addEventListener('click', () => {
     if (checkboxes[i].checked == true) {
       if (checkboxes[i].previousElementSibling) {
         var text = checkboxes[i].previousElementSibling.innerHTML;
-        var index = text.indexOf(' ');
+        var index = text.indexOf(' -');
         var studentEmail = text.substring(1,index);
+        // console.log(studentEmail);
+        
         obj.push({
           studentEmail: studentEmail,
           adminName: adminName

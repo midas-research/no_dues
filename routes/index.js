@@ -17,7 +17,13 @@ router.get('/super_admin/sendAdminMessage/:dues', passport.checkSuperAdminAuthen
 
 router.get('/admin_home', passport.checkAdminAuthentication, homeController.adminHome);
 router.get('/sendMessage/:dues', passport.checkAdminAuthentication, homeController.sendMessage);
+
+
+
 router.get('/approveDues/:dues', passport.checkAdminAuthentication, homeController.approveDues);
+
+
+
 router.get('/approveManyDues/:dues', passport.checkAdminAuthentication, homeController.approveManyDues);
 router.get('/sheet', passport.checkAdminAuthentication,passport.checkSheetAuthentication, homeController.sheet);
 router.get('/past/:admin', passport.checkAdminAuthentication, homeController.past);
