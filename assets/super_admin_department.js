@@ -202,8 +202,6 @@ function approved(e,curr_admin) {
       studentId = studentList[i]['_id'];
     }
   }
-
-  // console.log(curr_admin);
  
   var obj = [];
   obj.push({
@@ -211,7 +209,6 @@ function approved(e,curr_admin) {
     email : email,
     id: studentId
   });
-  console.log(JSON.stringify(obj));  
   
   window.location.href = `${CURRENT_URL}/super_admin/approveAdmin/${JSON.stringify(obj)}`;
   r.remove();
@@ -243,7 +240,7 @@ function sendMessage(e, curr_admin) {
     message : dues,
     email : email.substring(0, index)
   });
-  // console.log(JSON.stringify(obj));
+
   window.location.href = `${CURRENT_URL}/super_admin/sendAdminMessage/${JSON.stringify(obj)}`;
 }
 
@@ -276,12 +273,12 @@ unselectAll.addEventListener('click', () => {
 //code for sending multiple students at a time
 var sendAll = document.getElementById('sendAll');
 var checkboxes = document.getElementsByClassName('tickbox');
-// console.log(checkboxes.length);
+
 sendAll.addEventListener('click', () => {
   var obj = [];
   var curr_admin=document.getElementById('admins').value;
   for (var i in checkboxes) {
-    //sendRequestButtons[i].click();
+ 
     if (checkboxes[i].checked == true) {
       if (checkboxes[i].previousElementSibling) {
         var text = checkboxes[i].previousElementSibling.innerHTML;

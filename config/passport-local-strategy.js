@@ -89,9 +89,9 @@ passport.checkAdminAuthentication = (req, res, next) => {
 //check if it's a normal User
 passport.checkUserAuthentication = (req, res, next) => {
     
-    console.log(req.user.email);
+    // console.log(req.user.email);
     if (req.isAuthenticated()){
-        console.log(req.user.email);
+        // console.log(req.user.email);
         if(req.user.email==`${SUPER_ADMIN_EMAIL}`){
             return res.redirect('/super_admin');
 

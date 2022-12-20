@@ -16,14 +16,11 @@ function fetchProffName(email) {
 }
 
 exports.sendIpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDescription) => {
+
     var student = await User.findOne({email: studentEmail});
-    var obj = [];
-    obj.push({
-      proffEmail: proffEmail,
-      email : studentEmail,
-      id: student._id
-    });
-    var url = `${CURRENT_URL}/proff_home`;
+   
+    let url=`${CURRENT_URL}/ipApprovedMail/${proffEmail}/${student._id}`;
+  
     let htmlString = `
     <div>
         <p>Hi ${fetchProffName(proffEmail)}!</p>
@@ -36,10 +33,14 @@ exports.sendIpRequest = async (proffEmail, studentEmail,ProjectName,ProjectDescr
                 <li>Project Name: ${ProjectName}</li>
                 <li>Project Description: ${ProjectDescription}</li>
             </ul>
-        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to approve the dues.</p>
+        <p>Click <a href=\`${url}\`>here</a> to approve the dues.</p>      
+        <p>Click <a href=\`${CURRENT_URL}/proff_home\`>here</a> to go to the portal and reject the dues.</p>
+
         <br>
         <p>Thanks No-Dues!</p>
     </div>`
+
+
     nodemailer.transporter.sendMail({
         from : `${NODEMAILER_EMAIL_ID}`,
         to : `${proffEmail}`,

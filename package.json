@@ -7,7 +7,7 @@
     "start": "nodemon index.js --ignore data/getAdminName.js --ignore data/getProffName.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Soumyadeep Paul",
+  "contributors": ["Soumyadeep Paul","Bhavya Jain"],
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.4",

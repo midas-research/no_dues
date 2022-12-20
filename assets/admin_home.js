@@ -101,7 +101,7 @@ function isTrue(student){
   return res;
 }
 
-function displayText(student){
+function displayHostelText(student){
 
   if(adminName=='hostel'){
     var hostelTaken='Hostel Taken';
@@ -176,7 +176,7 @@ function clickFilter(){
      accordion.innerHTML += `
        <div class="accordion-item filter-btech">
          <button id="accordion-button-1" aria-expanded="false">
-             ${displayText(currentList[i])}
+             ${displayHostelText(currentList[i])}
              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
              <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>
              <span class="icon" aria-hidden="true"></span>
@@ -209,17 +209,19 @@ function clickFilter(){
 
 clickFilter();
 
-function approved(e) {
+function approved(e) { 
   var r = e.parentElement.parentElement;
   var emailroll = e.parentElement.childNodes[1].innerHTML;
-  var email = emailroll.substring(0, emailroll.indexOf(' -'));
+
+  var email = emailroll.substring(1, emailroll.indexOf(' -')); 
   var studentId;
   for (var i in studentList) {
     if (studentList[i]['email'] == email) {
       studentId = studentList[i]['_id'];
     }
   }
-  console.log(studentId);
+
+
   var obj = [];
   obj.push({
     admin : adminName,
@@ -253,7 +255,7 @@ function sendMessage(e) {
   obj.push({
     admin : adminName,
     message : dues,
-    email : email.substring(0, index)
+    email : email.substring(0, index),
   });
   console.log(JSON.stringify(obj));
   window.location.href = `${CURRENT_URL}/sendMessage/${JSON.stringify(obj)}`;
@@ -297,7 +299,7 @@ sendAll.addEventListener('click', () => {
       if (checkboxes[i].previousElementSibling) {
         var text = checkboxes[i].previousElementSibling.innerHTML;
         var index = text.indexOf(' ');
-        var studentEmail = text.substring(0,index);
+        var studentEmail = text.substring(1,index);
         obj.push({
           studentEmail: studentEmail,
           adminName: adminName
