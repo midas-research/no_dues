@@ -17,13 +17,7 @@ router.get('/super_admin/sendAdminMessage/:dues', passport.checkSuperAdminAuthen
 
 router.get('/admin_home', passport.checkAdminAuthentication, homeController.adminHome);
 router.get('/sendMessage/:dues', passport.checkAdminAuthentication, homeController.sendMessage);
-
-
-
 router.get('/approveDues/:dues', passport.checkAdminAuthentication, homeController.approveDues);
-
-
-
 router.get('/approveManyDues/:dues', passport.checkAdminAuthentication, homeController.approveManyDues);
 router.get('/sheet', passport.checkAdminAuthentication,passport.checkSheetAuthentication, homeController.sheet);
 router.get('/past/:admin', passport.checkAdminAuthentication, homeController.past);
@@ -45,7 +39,7 @@ router.get('/sendBtpRequest/:obj', passport.checkUserAuthentication, homeControl
 router.get('/sendIpRequest/:obj', passport.checkUserAuthentication, homeController.sendIpRequest);
 router.get('/sendBankDetails/:bankDetails', passport.checkAuthentication, homeController.sendBankDetails);
 router.get('/sendPersonalDetails/:personalDetails', passport.checkAuthentication, homeController.sendPersonalDetails);
-router.get('/download/:obj', passport.checkAuthentication, homeController.download);
+router.get('/download/:id',homeController.download);
 
 
 router.get('/bankAccountDetails', passport.checkBankAuthentication, homeController.bankAccountDetails);

@@ -721,7 +721,7 @@ downloadbtn.addEventListener('click', () => {
   // if (c > 0) {
   //   alert('Kindly get the approvals from all departments!');
   // }
-  window.location.href = `${CURRENT_URL}/download/${user[0].email}`;
+  window.location.href = `${CURRENT_URL}/download/${user[0]._id}`;
 });
 
 // document.onkeydown = function(e) {
