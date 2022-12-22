@@ -663,7 +663,8 @@ module.exports.download = async (req, res) => {
    
     return res.render('pdf', {
       user: JSON.stringify(user),
-      admins: JSON.stringify(admins)
+      id: JSON.stringify(user._id),
+      url:JSON.stringify(CURRENT_URL)
     });
   })
 };
