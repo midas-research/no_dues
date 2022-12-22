@@ -8,7 +8,7 @@ body {
 
 }
 
-h3 {
+h2 {
     text-align: center;
 }
 
@@ -41,6 +41,7 @@ h3 {
     margin: 2px auto;
 }
 
+
 #details {
     display: flex;
     flex-direction: column;
@@ -55,6 +56,7 @@ h3 {
     display: flex;
     justify-content: space-evenly;
 }
+
 
 #table {
     display: flex;
@@ -83,9 +85,6 @@ td, th {
 
 #form{
     padding: 15px;
-      
-    /* outline: 1px solid black;  
-    outline-offset: 2px;     */
     background-color: white; 
     width: 650px;
   

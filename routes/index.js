@@ -39,7 +39,7 @@ router.get('/sendBtpRequest/:obj', passport.checkUserAuthentication, homeControl
 router.get('/sendIpRequest/:obj', passport.checkUserAuthentication, homeController.sendIpRequest);
 router.get('/sendBankDetails/:bankDetails', passport.checkAuthentication, homeController.sendBankDetails);
 router.get('/sendPersonalDetails/:personalDetails', passport.checkAuthentication, homeController.sendPersonalDetails);
-router.get('/download/:obj',homeController.download);
+router.get('/download/:id',homeController.download);
 
 
 router.get('/bankAccountDetails', passport.checkBankAuthentication, homeController.bankAccountDetails);

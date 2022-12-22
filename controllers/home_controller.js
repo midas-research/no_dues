@@ -657,13 +657,12 @@ module.exports.download = async (req, res) => {
   for (var i=0; i<admins_list.length-2; i++) {
     admins.push(modifyAdminName(admins_list[i][0]));
   }
-  var email = req.params.obj;
-  User.findOne({email: email}, (err, user) => {
+  var id = req.params.id;
+  User.findOne({_id: id}, (err, user) => {
     if (err) {console.log('Error in finding user in download: ', err);return;}
-   
+
     return res.render('pdf', {
       user: JSON.stringify(user),
-      id: JSON.stringify(user._id),
       url:JSON.stringify(CURRENT_URL)
     });
   })

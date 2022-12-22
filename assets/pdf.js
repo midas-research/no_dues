@@ -1,7 +1,6 @@
-var id = document.getElementById('id').innerHTML;
-var CURRENT_URL = document.getElementById('url').innerHTML;
+const CURRENT_URL = JSON.parse(document.getElementById('url').innerHTML);
 var admins;
-var users= document.getElementById('id').innerHTML;
+var user = JSON.parse(document.getElementById('user').innerHTML);
 
 
 
@@ -9,15 +8,39 @@ fetch(`${CURRENT_URL}/user/getAdmins`)
   .then((response) => response.json())
   .then((data) => admins=data);
 
-fetch(`${CURRENT_URL}/user/getUser/${id}`)
-    .then((response) => response.json())
-    .then((data) => users=data);
-console.log(admins);
-console.log(users);
+// fetch(`${CURRENT_URL}/user/getUser/${id}`)
+//     .then((response) => response.json())
+//     .then((data) => user=data);
+// console.log(admins);
+// console.log(user);
 
 var date = document.getElementById('date');
 var today = new Date();
 date.innerHTML = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+
+
+//QR CODE
+
+let link=`${CURRENT_URL}/download/${user._id}`;
+// console.log(link);
+
+var qrcode = new QRCode(document.querySelector(".qrCode"), {
+    text: link,
+    width: 100, //128
+    height: 100,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+});
+
+let a=document.getElementById('atag');
+a.setAttribute('href',link);
+
+//PDF Download
+
+var downloadbtn=document.getElementById('download');
+downloadbtn.addEventListener('click',download5);
 
 function download(){
     console.log("Hello");
@@ -30,17 +53,6 @@ function download(){
     });
     // how to convert an html to pdf using javascript?
 }
-
-function download5(){
-    downloadbtn.style.display='none';
-    window.print();
-    downloadbtn.style.display='block';
-}
-
-var downloadbtn=document.getElementById('download');
-downloadbtn.addEventListener('click',download5);
-
-
 function download1(){
     const doc = new jsPDF({
         orientation: 'p',
@@ -67,7 +79,6 @@ function download1(){
         // 3508 x 2480 px
     })
 }
-
 function download3(){
     var doc = new jsPDF();          
     var elementHandler = {
@@ -93,7 +104,6 @@ function download3(){
 
     doc.output("dataurlnewwindow");
 }
-
 function download4() {
     let pdf = new jsPDF('p','pt','a4');
  
@@ -134,4 +144,9 @@ function download4() {
             pdf.save('Test.pdf');
         }, margins
     );
+}
+function download5(){
+    downloadbtn.style.display='none';
+    window.print();
+    downloadbtn.style.display='block';
 }
