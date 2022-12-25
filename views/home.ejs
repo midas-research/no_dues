@@ -88,178 +88,19 @@
                 <h3> Total Dues Cleared: <span id="countCleared"></span> / <span id="countAll"></span></h3>
                 
                 <div class="accordion" id="admins_list_container">
-                  <!-- <div class="accordion-item">
-                    <button id="accordion-button-1" aria-expanded="false">
-                        <span class="accordion-title">Design Lab</span>
-                        <i class="fas fa-share request" onclick="request(event)"></i>
-                        <i class="fas fa-dot-circle send_request designLabSymbol statusSymbol"></i>
-                        <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Abhijeet Mishra [B-003 (R&D Block)]</p>
-                        <p id="designLabMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-2" aria-expanded="false">
-                        <span class="accordion-title">Library</span>
-                        <i class="fas fa-share request" onclick="request(event)"></i>
-                        <i class="fas fa-dot-circle send_request librarySymbol statusSymbol"></i>
-                        <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Rajendra Singh [Library office]</p>
-                        <p id="libraryMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-3" aria-expanded="false">
-                        <span class="accordion-title">Admin Facilities</span>
-                        <i class="fas fa-share request" onclick="request(event)"></i>
-                        <i class="fas fa-dot-circle send_request adminFacilitiesSymbol statusSymbol"></i>
-                        <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Sanjay Ray [BMS 2<sup>nd</sup> floor]</p>
-                        <p id="adminFacilitiesMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-4" aria-expanded="false">
-                        <span class="accordion-title">System Admin & Networking</span>
-                        <i class="fas fa-share request" onclick="request(event)"></i>
-                        <i class="fas fa-dot-circle send_request systemAdminSymbol statusSymbol"></i>
-                        <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Abhinav Saxena [B-105 (Old Acad)]</p>
-                        <p id="systemAdminMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-5" aria-expanded="false">
-                      <span class="accordion-title">Officer Sports & Student Facilities</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request sportsSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Ravi Bhasin [A-207-1 (Old Acad)]</p>
-                        <p id="sportsMessage" class="message">You once have been found guilty of breaking a cricket bat and you have to pay Rs 600.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-6" aria-expanded="false">
-                      <span class="accordion-title">Hostel</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request hostelSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Ravi Bhasin [A-207-1 (Old Acad)]</p>
-                        <p id="hostelMessage" class="message">There are no comments from the admin of this department..</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-7" aria-expanded="false">
-                      <span class="accordion-title">Junior Research Engineer(ECE Labs)</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request eceLabsSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Rahul Gupta [B-304/5/2 (LHC)]</p>
-                        <p id="eceLabsMessage" class="message">You have issued an arduino and haven't returned it.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-8" aria-expanded="false">
-                      <span class="accordion-title">Placement in-charge</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request placementSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Rashmil Mishra [B-311 (LHC)]</p>
-                        <p id="placementMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-9" aria-expanded="false">
-                      <span class="accordion-title">Incubation center</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request incubationSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Geeta Gupta [Student center]</p>
-                        <p id="incubationMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-10" aria-expanded="false">
-                      <span class="accordion-title">Finance & Accounts</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request financeSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Admin - Varsha Aggarwal</p>
-                        <p id="financeMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-11" aria-expanded="false">
-                      <span class="accordion-title">Academics</span>
-                      <i class="fas fa-share request" onclick="request(event)"></i>
-                      <i class="fas fa-dot-circle send_request academicsSymbol statusSymbol"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Academics - Nisha Aggarwal(B.Tech), Ashutosh Brahma(M.Tech), Priti Patwal(Ph.D.)</p>
-                        <p id="academicsMessage" class="message">There are no comments from the admin of this department.</p>
-                    </div>
-                  </div> -->
-                  <!-- <div class="accordion-item">
-                    <button id="accordion-button-11" aria-expanded="false">
-                      <span class="accordion-title">BTP / Scholarly Paper / Thesis</span>
-                      <i class="fas fa-share request" id="btp_sendRequest"></i>
-                      <i class="fas fa-dot-circle send_request btp_signal"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <label for="proffs">Choose professor:</label>
-                        <select name="proffs" id="btp_proff">
-                          <option value="None">None</option>
-                          <option value="Raghava Mutharaju">Raghava Mutharaju</option>
-                        </select>
-                        <p id="btp_comment">There are no comments from the professor.</p>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <button id="accordion-button-11" aria-expanded="false">
-                      <span class="accordion-title">IP / IS / UR</span>
-                      <i class="fas fa-share request" id="ip_sendRequest"></i>
-                      <i class="fas fa-dot-circle send_request ip_signal"></i>
-                      <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                        <label for="proffs">Choose professor:</label>
-                        <select name="proffs" id="ip_proff">
-                          <option value="None">None</option>
-                          <option value="Raghava Mutharaju">Raghava Mutharaju</option>
-                        </select>
-                        <p id="ip_comment">There are no comments from the professor.</p>
-                    </div>
-                  </div> -->
                 </div>
-              </div>
+                <button class="addButton" onclick="createIpRequest()">Add IP Request</button>
+                <button class="addButton" onclick="createBtpRequest()">Add BTP Request</button>
+                
+
+                
+            </div>
+            
         </div>
       
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>       
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
         <script src="../assets/home.js"></script>
         <script>
           $(function () {

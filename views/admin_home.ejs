@@ -10,8 +10,6 @@
     </head>
     <body>
         <p id="adminName" style="display:none"><%= adminName %></p>
-        <p id="id" style="display:none"><%= id %></p>
-        <p id="studentList" style="display:none"><%= studentList %></p>
         <p id="CURRENT_URL" style="display:none"><%= url %></p>
         
         <div id="navbar">
@@ -35,7 +33,7 @@
                 </div>
             </div>
             <div id="navbar_right">
-                <div id="navbar_right_p">Hello Admin</div>
+                <div id="navbar_right_p">Hello <%= originalName%></div>
                 <div id="navbar_right_i"><img src=<%= locals.user.image %> /></div>
             </div>
         </div>
@@ -102,22 +100,7 @@
 
                 <div class="accordion">
                   
-                  <!-- <div class="accordion-item">
-                    <button id="accordion-button-1" aria-expanded="false">
-                        <span class="accordion-title">yashdeep18121@iiitd.ac.in - 2018121</span>
-                        <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
-                        <span class="icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="accordion-content">
-                      <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-                        </div>
-                      </div>
-                      <span class="message">You have not sent any message currently.</span>
-                    </div>
-                  </div> -->
+                 
                 </div>
 
             </div>

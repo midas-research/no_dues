@@ -12,7 +12,6 @@
         <p id="adminName" style="display:none"><%= adminName %></p>
         <p id="adminList" style="display:none"><%= adminList %></p>
         <p id="id" style="display:none"><%= id %></p>
-        <p id="studentList" style="display:none"><%= studentList %></p>
         <p id="CURRENT_URL" style="display:none"><%= url %></p>
         
         <div id="navbar">
@@ -51,11 +50,12 @@
                 </div>
 
                 <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                
+                  
+
                   <select class="filter" name="clearance" id="clearance">
-                    <option value="all">All (Cleared/Not Cleared)</option>
-                    <option value="cleared">Cleared</option>
-                    <option value="not cleared">Not Cleared</option>          
+                    <option value="all">(All Clear/Not Clear)</option>
+                    <option value="cleared">All Clear</option>
+                    <option value="not cleared">Not Clear</option>          
                   </select>
 
                   <select class="filter" name="degree" id="degree">
@@ -77,10 +77,11 @@
 
               
                   <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH" >
+                  <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> SEARCH
+                  </button>
               
               
-                  <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> </button>                  
-
+                  
                 </div>
 
                 <div class="brow row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
