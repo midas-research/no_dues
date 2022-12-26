@@ -30,6 +30,15 @@
     background-color: rgb(6, 96, 169);
 }
 
+.accordion button .accordion-title {
+    /* padding: 1em 1.5em 1em 0; */
+    max-width: 70%;
+    height: auto;    
+    padding: 0px;
+    display: inline-block;
+
+}
+
 
 @media only screen and (max-width: 768px) {
     #header {
@@ -37,13 +46,7 @@
     }
 }
 
-.accordion button .accordion-title {
-    /* padding: 1em 1.5em 1em 0; */
-    max-width: 70%;
-    height: auto;
-    display: inline-block;
 
-}
 
 #header div{
     height: 100%;
