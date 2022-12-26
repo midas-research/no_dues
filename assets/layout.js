@@ -2,7 +2,7 @@ const navbar = document.getElementById("navbar");
 console.log(navbar);
 var topIdx = navbar.offsetTop;
 function stickynavbar() {
-  if (window.scrollY > topIdx+50) {
+  if (window.scrollY > topIdx+(window.innerHeight/10)) {
     navbar.classList.add("sticky");
   } else {
     navbar.classList.remove("sticky");
