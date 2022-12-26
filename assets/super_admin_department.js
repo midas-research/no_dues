@@ -36,7 +36,7 @@ var option = document.createElement("option");
 option.value = "professor";
 option.text = "Professor";
 addAdmins.add(option);
-console.log(adminList);
+
 
 //html Code For Accepted Requests
 function addAcceptCode(student, msg, curr_admin) {
@@ -400,9 +400,9 @@ selectAll.addEventListener("click", () => {
 //code for unselecting students at a time
 var unselectAll = document.getElementById("unselectAll");
 unselectAll.addEventListener("click", () => {
-  console.log("select");
+ 
   var checkboxes = document.getElementsByClassName("tickbox");
-  console.log(checkboxes);
+ 
   for (var i in checkboxes) {
     checkboxes[i].checked = false;
   }
