@@ -227,7 +227,6 @@ function clickFilter() {
     }
 
     if (check(currentList[i], curr_status) && curr_status == "accepted") {
-      accordion.innerHTML = "";
       accordion.innerHTML += addAcceptCode(currentList[i], message);
     } else if (check(currentList[i], curr_status)) {
       k = "Not Clear";
@@ -265,6 +264,7 @@ function clickFilter() {
             </div>
          </div>
        </div>`;
+
     }
   }
 
