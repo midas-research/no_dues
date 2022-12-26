@@ -471,48 +471,45 @@ unselectAll.addEventListener("click", () => {
 var sendSelected = document.getElementById("sendAll");
 sendSelected.addEventListener("click", () => {
   var checkboxes = document.getElementsByClassName("tickbox");
-  var obj = [];
+
   for (var i in checkboxes) {
-    if (checkboxes[i].checked == true) {
-      if (checkboxes[i].previousElementSibling) {
-        var text = checkboxes[i].previousElementSibling.innerHTML;
-        var list = text.split(" ");
+    if (checkboxes[i].previousElementSibling) {
+      var obj = [];
+      var text = checkboxes[i].previousElementSibling.innerHTML;
+      var list = text.split(" - ");
 
-        var studentEmail = list[0];
-        var projectName = list[list.length - 3];
+      var studentEmail = list[0];
+      var projectName = list[list.length - 2];
 
-        var admin = list[list.length - 1];
-        if (admin == "BTP") {
-          admin = "btp";
-        } else {
-          admin = "ip";
-        }
-        obj.push({
-          profEmail: profEmail,
-          studentEmail: studentEmail,
-          admin: admin,
-          projectName: projectName,
-        });
+      var admin = list[list.length - 1];
+      if (admin == "BTP") {
+        admin = "btp";
+      } else {
+        admin = "ip";
       }
+
+      obj.push({
+        profEmail: profEmail,
+        studentEmail: studentEmail,
+        admin: admin,
+        projectName: projectName,
+      });
+
+      var request = new XMLHttpRequest();
+      request.open(
+        "GET",
+        `${CURRENT_URL}/approveEmailProf/${JSON.stringify(obj)}`,
+        false
+      );
+      request.send(null);
     }
   }
-  if (obj.length != 0) {
-    var obj2 = [];
-    obj2.push(obj);
-    var request = new XMLHttpRequest();
-    request.open(
-      "GET",
-      `${CURRENT_URL}/approveManyProffs/${JSON.stringify(obj2)}`,
-      false
-    );
-    request.send(null);
 
-    request = new XMLHttpRequest();
-    request.open("GET", url, false);
-    request.send(null);
-    if (request.status === 200) {
-      student_list = JSON.parse(request.responseText);
-      clickFilter();
-    }
+  var request = new XMLHttpRequest();
+  request.open("GET", url, false);
+  request.send(null);
+  if (request.status === 200) {
+    student_list = JSON.parse(request.responseText);
+    clickFilter();
   }
 });

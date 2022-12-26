@@ -1,93 +1,140 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title><%= title %></title>
-        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/admin_home.css"/>
-    </head>
-    <body>
-        <p id="profEmail" style="display:none"><%= profEmail %></p>
-        <p id="CURRENT_URL" style="display:none"><%= url %></p>
-        <div id="navbar">
-            <div id="navbar_left">
-                <div id="navbar_left_i"><img src="/assets/nd.png"/></div>
-                
-                <div class="dropdown">
-                    <div id="navbar_left_p">No Dues</div>
-                    <span class='icon-down'></span>
-                    <div class="dropdown-content">
-                        <a href="/user/signout">Logout</a>
-                    </div>
-                </div>
-            </div>
-            <div id="navbar_right">
-                <div id="navbar_right_p">Hello Professor <%= locals.name %></div>
-                <div id="navbar_right_i"><img src=<%= locals.image%> /></div>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="icon" href="../assets/images/icon.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/assets/admin_home.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+  </head>
+
+  <body>
+    <p id="profEmail" style="display: none"><%= profEmail %></p>
+    <p id="CURRENT_URL" style="display: none"><%= url %></p>
+
+    <%- include('partials/header.ejs') %>
+
+    <div id="navbar">
+      <div id="navbar_left">
+        <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
+
+        <div class="dropdown">
+          <div id="navbar_left_p">No Dues</div>
+          <span class="icon-down"></span>
+          <div class="dropdown-content">
+            <a href="/user/signout">Logout</a>
+          </div>
+        </div>
+      </div>
+      <div id="navbar_right">
+        <div id="navbar_right_p">Hello Professor <%= locals.name %></div>
+        <div id="navbar_right_i"><img src="<%=locals.image%>"> </div>
+      </div>
+    </div>
+
+    <div id="main">
+      <div class="container">
+        <h2>List of Students</h2>
+        <div
+          class="d-flex align-items-center justify-content-center"
+          style="margin-bottom: 10px"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <select class="filter" name="status" id="status">
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+            <option value="accepted">Accepted</option>
+          </select>
         </div>
 
-        <div id="main">
-            <div class="container">
-                <h2>List of Students</h2>
-                <div class="d-flex align-items-center justify-content-center" style="margin-bottom: 10px; " data-aos="fade-up" data-aos-delay="100">
-                  
-                  <select class="filter" name="status" id="status">                      
-                    <option value="pending">Pending</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="accepted">Accepted</option>          
-                  </select>
+        <div
+          class="row d-flex align-items-center justify-content-center"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <select class="filter" name="degree" id="degree">
+            <option value="All">Degree (All)</option>
+            <option value="B. Tech">B.Tech</option>
+            <option value="M. Tech">M.Tech</option>
+            <option value="Phd">Phd</option>
+          </select>
 
-                </div>
-                
-                <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
+          <select class="filter" name="department" id="department">
+            <option value="All">Branch(All)</option>
+            <option value="CSE">CSE</option>
+            <option value="Mathematics">MATHS</option>
+            <option value="CB">CSB</option>
+            <option value="SSH">SSH</option>
+            <option value="ECE">ECE</option>
+            <option value="HCD">HCD</option>
+          </select>
 
-                  <select class="filter" name="degree" id="degree">
-                    <option value="All"> Degree (All)</option>
-                    <option value="B. Tech">B.Tech</option>
-                    <option value="M. Tech">M.Tech</option>
-                    <option value="Phd">Phd</option>          
-                  </select>
+          <select class="filter" name="ip/btp" id="ip/btp">
+            <option value="all">IP/BTP</option>
+            <option value="btp">BTP</option>
+            <option value="ip">IP</option>
+          </select>
 
-                  <select class="filter" name="department" id="department">
-                    <option value="All">Branch(All)</option>
-                    <option value="CSE">CSE</option>
-                    <option value="Mathematics">MATHS</option>
-                    <option value="CB">CSB</option>
-                    <option value="SSH">SSH</option> 
-                    <option value="ECE">ECE</option>
-                    <option value="HCD">HCD</option>         
-                  </select>
-                  
-                  <select class="filter" name="ip/btp" id="ip/btp">
-                    <option value="all">IP/BTP</option>
-                    <option value="btp">BTP</option>
-                    <option value="ip">IP</option> 
-                  </select>
-             
-                  <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH"> 
+          <input
+            class="filter"
+            type="number"
+            id="batch"
+            name="batch"
+            placeholder="BATCH"
+          />
 
-                  
-                  
-                  <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> SEARCH</button>                  
-
-                </div>
-
-                <div class="brow row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                  <button class="filter nex" id="selectAll">Select All</button>
-                 
-                  <button class="filter nex" id="unselectAll">Unselect All </button>
-                
-                  <button class="filter nex" id="sendAll">Accept Selected</button>
-
-                </div>
-              <div class="accordion">
-              </div>
-            </div>
+          <button class="filter" id="search">
+            <i class="fa fa-search" aria-hidden="true"></i> SEARCH
+          </button>
         </div>
-        <script src="../assets/proff_home.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    </body>
+
+        <div
+          class="brow row d-flex align-items-center justify-content-center"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <button class="filter nex" id="selectAll">Select All</button>
+
+          <button class="filter nex" id="unselectAll">Unselect All</button>
+
+          <button class="filter nex" id="sendAll">Accept Selected</button>
+        </div>
+        <div class="accordion"></div>
+      </div>
+    </div>
+    <%- include('partials/footer.ejs') %>
+    
+    <script src="../assets/proff_home.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script>
+        <% if (flash.success && flash.success.length > 0) { %>
+      new Noty({
+        theme: 'metroui',
+        text: "<%= flash.success %>",
+        type: 'success',
+        layout: 'topRight',
+        timeout: 1500
+      }).show();
+        <% } %>
+    </script>
+  </body>
 </html>

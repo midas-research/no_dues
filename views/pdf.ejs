@@ -1,85 +1,122 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Final receipt</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>         -->
-        
-        <link rel="stylesheet" type="text/css" href="/assets/pdf.css"/>
-    </head>
-    <body>
-        <p id="user" style="display:none"><%= user %></p>
-        <p id="url" style="display:none"><%= url %></p>
-        <div id="download"> Save/Print <i class="fa fa-download"></i></div>
-        <div id="form" style="border: 1px solid black;">
-            <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
-                <div><h1>No-Dues Form For Students</h1></div>
-                <a id="atag"><div class="qrCode block"></div></a>
-            </div>        
-            <hr>
-            <div id="details">
-                                
-                <div class="block">
-                    <div><strong>Name of the student:</strong> <%= JSON.parse(user).name %></div>
-                    <div><strong>Roll no:</strong> <%= JSON.parse(user).roll %> </div>
-                    <div><strong>Programme:</strong> <%= JSON.parse(user).degree %> </div>
-                </div>
-                <div class="block">
-                    
-                    <div><strong>Phone No.:</strong> <%= JSON.parse(user).mobile %>  </div>
-                    <div><strong>E-mail(other than IIITD):</strong> <%= JSON.parse(user).other_email %> </div>
-                </div>
-                <div class="block">
-                    <div><strong>Date of leaving IIITD:</strong> <%= JSON.parse(user).date_of_leaving %></div>
-                    <div><strong>Reason of leaving program:</strong> <%= JSON.parse(user).reason_of_leaving %></div>
-                </div>                
-            </div>
-            
-            <hr>
-            <div id="table">
-                <table id="contentTable">
 
-                </table>
-                
-                
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final receipt</title>
+    <link rel="icon" href="../assets/images/icon.png" type="image/png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>         -->
+
+    <link rel="stylesheet" type="text/css" href="/assets/pdf.css" />
+</head>
+
+<body>
+    <p id="user" style="display:none">
+        <%= user %>
+    </p>
+    <p id="url" style="display:none">
+        <%= url %>
+    </p>
+    <div id="download"> Save/Print <i class="fa fa-download"></i></div>
+    <div id="form" style="border: 1px solid black;">
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+            <div>
+                <h1>No-Dues Form For Students</h1>
             </div>
-            <hr>
-            <br>
-            <div id="refund">
-                <h3>Request for refund of caution money(mention the amount you have paid):</h3>
-                <p>Caution money: ___________ &emsp;&emsp;&emsp;&emsp; Hostel Security(if any): ___________</p>
-                <p>I request that the aount of caution money (Including Hostel Security(if any))
-                    may be refunded to me by bank transfer to my below mentioned A/C. [Alumni fee of &#x20B9; 2000/- 
-                    (if not paid earlier), Convocation Fee of &#x20B9; 1500/- and donation amount mentioned in the
-                    Google form will be deducted and remaining amount will be transferred]
-                </p>
-                <p>Bank Name and branch: <span class="underline"><%= JSON.parse(user).bankName %>, <%= JSON.parse(user).bankBranch %></span> </p>
-                <p>Account No.: <span class="underline"><%= JSON.parse(user).bankAccountNo %></span> </p>
-                <p>IFSC Code: <span class="underline"><%= JSON.parse(user).bankIfscCode %></span> </p>
-                <p><strong>(Please attach a cancelled cheque for your bank account)</strong></p>
-                <br>
-                <p>Date: <span id="date" class="underline"></span> </p>
-                <p>Signature of the student: <span class="underline"><%= JSON.parse(user).name %></span> </p>
+            <a id="atag">
+                <div class="qrCode block"></div>
+            </a>
+        </div>
+        <hr>
+        <div id="details">
+
+            <div class="block">
+                <div><strong>Name of the student:</strong>
+                    <%= JSON.parse(user).name %>
+                </div>
+                <div><strong>Roll no:</strong>
+                    <%= JSON.parse(user).roll %>
+                </div>
+                <div><strong>Programme:</strong>
+                    <%= JSON.parse(user).degree %>
+                </div>
             </div>
-            <hr>
-            <div id="officeUse">
-                <p><strong>DM (F&A): </strong>As per the authentication obtained from different departments/sections
-                , nothing is DUE with the student. His/Her/Their caution deposit(s) and other reimbursements
-                (if any) may be released and the account shall be settled in full & final.</p>
-                <br>
-                <br>
-                <strong>Registrar</strong>
+            <div class="block">
+
+                <div><strong>Phone No.:</strong>
+                    <%= JSON.parse(user).mobile %>
+                </div>
+                <div><strong>E-mail(other than IIITD):</strong>
+                    <%= JSON.parse(user).other_email %>
+                </div>
             </div>
+            <div class="block">
+                <div><strong>Date of leaving IIITD:</strong>
+                    <%= JSON.parse(user).date_of_leaving %>
+                </div>
+                <div><strong>Reason of leaving program:</strong>
+                    <%= JSON.parse(user).reason_of_leaving %>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div id="table">
+            <table id="contentTable">
+
+            </table>
+
 
         </div>
-        
-      
-        <script src="../assets/pdf.js" type="text/javascript"></script>
-        
-    </body>
+        <hr>
+        <br>
+        <div id="refund">
+            <h3>Request for refund of caution money(mention the amount you have paid):</h3>
+            <p>Caution money: ___________ &emsp;&emsp;&emsp;&emsp; Hostel Security(if any): ___________</p>
+            <p>I request that the aount of caution money (Including Hostel Security(if any))
+                may be refunded to me by bank transfer to my below mentioned A/C. [Alumni fee of &#x20B9; 2000/-
+                (if not paid earlier), Convocation Fee of &#x20B9; 1500/- and donation amount mentioned in the
+                Google form will be deducted and remaining amount will be transferred]
+            </p>
+            <p>Bank Name and branch: <span class="underline">
+                    <%= JSON.parse(user).bankName %>, <%= JSON.parse(user).bankBranch %>
+                </span> </p>
+            <p>Account No.: <span class="underline">
+                    <%= JSON.parse(user).bankAccountNo %>
+                </span> </p>
+            <p>IFSC Code: <span class="underline">
+                    <%= JSON.parse(user).bankIfscCode %>
+                </span> </p>
+            <p><strong>(Please attach a cancelled cheque for your bank account)</strong></p>
+            <br>
+            <p>Date: <span id="date" class="underline"></span> </p>
+            <p>Signature of the student: <span class="underline">
+                    <%= JSON.parse(user).name %>
+                </span> </p>
+        </div>
+        <hr>
+        <div id="officeUse">
+            <p><strong>DM (F&A): </strong>As per the authentication obtained from different departments/sections
+                , nothing is DUE with the student. His/Her/Their caution deposit(s) and other reimbursements
+                (if any) may be released and the account shall be settled in full & final.</p>
+            <br>
+            <br>
+            <strong>Registrar</strong>
+        </div>
+
+    </div>
+
+
+    <script src="../assets/pdf.js" type="text/javascript"></script>
+
+</body>
+
 </html>

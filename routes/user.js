@@ -20,7 +20,7 @@ router.get(
 );
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/user/signin" }),
+  passport.authenticate("google", { failureRedirect: "/user/failedSignIn" }),
   userController.createSession
 );
 router.get(
@@ -28,6 +28,7 @@ router.get(
   passport.checkAuthentication,
   userController.getProfessors
 );
+router.get("/failedSignIn", userController.failedSignIn);
 router.get("/getProfessorName/:profEmail", userController.getProfessorName);
 router.get(
   "/getStudents",

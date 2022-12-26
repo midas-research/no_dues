@@ -33,6 +33,7 @@ module.exports.superAdmin = (req, res) => {
     adminName: "nodues",
     id: req.user._id,
     url: JSON.stringify(CURRENT_URL),
+    layout: "super_admin",
   });
 };
 
@@ -133,7 +134,6 @@ module.exports.superAdminDepartment = (req, res) => {
   let originalName = Admin.original;
 
   originalName["academics"] = "Academics";
-  console.log(admins_list);
 
   return res.render("super_admin_department", {
     title: "Requests To Admins",
@@ -142,6 +142,7 @@ module.exports.superAdminDepartment = (req, res) => {
     originalName: JSON.stringify(originalName),
     id: req.user._id,
     url: JSON.stringify(CURRENT_URL),
+    layout: "super_admin_department",
   });
 };
 
@@ -257,6 +258,7 @@ module.exports.adminHome = (req, res) => {
       originalName: originalName,
       adminName: admin,
       url: JSON.stringify(CURRENT_URL),
+      layout: "admin_home",
     });
   });
 };
@@ -384,6 +386,7 @@ module.exports.past = (req, res) => {
       studentList: JSON.stringify(studentList),
       admin: admin,
       url: JSON.stringify(CURRENT_URL),
+      layout: "admin_past",
     });
   });
 };
@@ -396,61 +399,58 @@ module.exports.showSheet = (req, res) => {
 
 //Professor Operations
 
-module.exports.approveManyProffs = (req, res) => {
+module.exports.approveEmailProf = (req, res) => {
   var obj = JSON.parse(req.params.dues)[0];
-  for (var i in obj) {
-    var studentEmail = obj[i].studentEmail;
-    var adminName = obj[i].admin;
-    var projectName = obj[i].projectName;
 
-    var today = new Date();
-    var date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + " " + time;
+  var studentEmail = obj.studentEmail;
+  var adminName = obj.admin;
+  var projectName = obj.projectName;
+  var profEmail = obj.profEmail;
 
-    User.findOne({ email: studentEmail }, (err, user) => {
-      if (err) {
-        console.log("Error in saving profEmail in sendBtpRequest: ", err);
-        return;
-      }
-      for (var idx in user[`${adminName}List`]) {
-        var ipObj = user[`${adminName}List`][idx];
+  var today = new Date();
+  var date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  var time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date + " " + time;
 
-        if (
-          ipObj[`projectName`] == projectName &&
-          ipObj[`profEmail`] == obj[i]["profEmail"]
-        ) {
-          user[`${adminName}List`][idx][adminName] = true;
-          user[`${adminName}List`][idx][adminName + "ApprovedAt"] = dateTime;
-          user.save();
+  User.findOne({ email: studentEmail }, (err, user) => {
+    if (err) {
+      console.log("Error in saving profEmail in approveManyProff: ", err);
+      return;
+    }
 
-          if (adminName == "btp") {
-            btpApproved_mailer.btpApproved_mailer(
-              obj[i]["profEmail"],
-              obj[i]["studentEmail"],
-              idx
-            );
-          }
-          if (adminName == "ip") {
-            ipApproved_mailer.ipApproved_mailer(
-              obj[i]["profEmail"],
-              obj[i]["studentEmail"],
-              idx
-            );
-          }
-          break;
+    for (var idx in user[`${adminName}List`]) {
+      var ipObj = user[`${adminName}List`][idx];
+
+      if (
+        ipObj[`projectName`] == projectName &&
+        ipObj[`profEmail`] == profEmail
+      ) {
+        user[`${adminName}List`][idx][adminName] = true;
+        user[`${adminName}List`][idx][adminName + "ApprovedAt"] = dateTime;
+        user.save();
+
+        if (adminName == "btp") {
+          btpApproved_mailer.btpApproved_mailer(
+            obj["profEmail"],
+            obj["studentEmail"],
+            idx
+          );
         }
+        if (adminName == "ip") {
+          ipApproved_mailer.ipApproved_mailer(
+            obj["profEmail"],
+            obj["studentEmail"],
+            idx
+          );
+        }
+
+        res.status = 200;
+        res.end();
       }
-    });
-  }
-  res.status = 200;
-  return res.end();
+    }
+  });
 };
 
 module.exports.proffHome = (req, res) => {
@@ -467,6 +467,7 @@ module.exports.proffHome = (req, res) => {
       profEmail: req.user.email,
       image: req.user.image,
       url: JSON.stringify(CURRENT_URL),
+      layout: "proff_home",
     });
   });
 };
@@ -586,7 +587,7 @@ module.exports.ipApproved = (req, res) => {
 module.exports.afterMailPage = (req, res) => {
   var status = req.params.status;
 
-  res.render("afterMailPage", { status: status });
+  res.render("afterMailPage", { status: status, layout: "afterMailPage" });
 };
 
 module.exports.ipApprovedThroughMail = (req, res) => {
@@ -664,6 +665,7 @@ module.exports.home = (req, res) => {
     name: req.user.name,
     image: req.user.image,
     url: JSON.stringify(CURRENT_URL),
+    layout: "home",
   });
 };
 
@@ -813,6 +815,7 @@ module.exports.download = async (req, res) => {
     return res.render("pdf", {
       user: JSON.stringify(user),
       url: JSON.stringify(CURRENT_URL),
+      layout: "pdf",
     });
   });
 };
@@ -873,5 +876,6 @@ module.exports.bankAccountDetails = (req, res) => {
 module.exports.studentList = (req, res) => {
   return res.render("student_list", {
     title: "No-Dues List",
+    layout: "student_list",
   });
 };

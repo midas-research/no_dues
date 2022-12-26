@@ -12,6 +12,7 @@ module.exports.signup = (req, res) => {
   }
   return res.render("signup", {
     title: "Sign Up",
+    layout: "signup",
   });
 };
 
@@ -19,8 +20,10 @@ module.exports.signin = (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   }
+
   return res.render("signin", {
     title: "Sign In",
+    layout: "signin",
   });
 };
 
@@ -77,14 +80,17 @@ module.exports.createSession = (req, res) => {
   req.flash("success", "Logged in successfully");
   if (Admin.checkAdmin(req.user.email)) {
     return res.redirect("/admin_home");
-  }
-  if (req.user.email == `${NODEMAILER_EMAIL_ID}`) {
+  } else if (req.user.email == `${NODEMAILER_EMAIL_ID}`) {
     return res.redirect("/super_admin");
-  }
-  if (getProffName.isProff(req.user.email)) {
+  } else if (getProffName.isProff(req.user.email)) {
     return res.redirect("/proff_home");
   }
   return res.redirect("/");
+};
+
+module.exports.failedSignIn = (req, res) => {
+  req.flash("error", "Invalid Credentials");
+  return res.redirect("/user/signin");
 };
 
 module.exports.destroySession = (req, res) => {
@@ -192,6 +198,14 @@ module.exports.getStudentsProfessor = (req, res) => {
 };
 
 module.exports.getAdmins = (req, res) => {
+
+  let data=Admin.admins;
+  if(data[data.length-1]=='academics'){
+    data.pop();
+    data.push('academicsB');
+    data.push("academicsM");
+    data.push("academicsP");
+  }
   return res.status(200).json(Admin.admins);
 };
 

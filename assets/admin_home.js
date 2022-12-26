@@ -301,6 +301,13 @@ function sendMessage(e) {
 //Show sheet functionality
 var sheet = document.getElementById("sheet");
 sheet.addEventListener("click", () => {
+  new Noty({
+    theme: "metroui",
+    text: "Updating Sheet!",
+    type: "success",
+    layout: "topRight",
+    timeout: 1500,
+  }).show();
   window.location.href = "/showSheet";
 });
 

@@ -19,6 +19,8 @@ if (request.status === 200) {
   admins_list = JSON.parse(request.responseText);
 }
 
+
+
 //Displaying Count
 {
   let count = 0;
@@ -55,10 +57,12 @@ var container = document.getElementById("admins_list_container");
 //Creating request div
 function createRequest(admin) {
   if (admin.substring(0, 9) == "academics") {
+    
     if (user[0]["degree"][0] != admin[9]) {
       return;
     }
   }
+
 
   let details = {};
   var request = new XMLHttpRequest();
@@ -429,9 +433,11 @@ function createIpSentRequest(obj) {
   container.innerHTML += `
     <div class="accordion-item">
       <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title"> IP / IS / UR - ${obj["projectName"]} - ${
+        <span class="accordion-title"> IP / IS / UR - <span class="tag-primary">${
+          obj["projectName"]
+        }</span> - <span class="tag-secondary">${
     professorsName[obj["profEmail"]]
-  }</span>
+  }</span></span>
         <i style="color: ${color};" class="send_request fas ${signal} " data-toggle="tooltip" data-placement="bottom" title="${title}"></i>
         <span class="icon" aria-hidden="true"></span>
       </button>
@@ -473,9 +479,9 @@ function createBtpSentRequest(obj) {
   container.innerHTML += `
     <div class="accordion-item">
       <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title"> BTP / Scholarly Paper / Thesis - ${
+        <span class="accordion-title"> BTP / Scholarly Paper / Thesis - <span class="tag-primary">${
           obj["projectName"]
-        } - ${professorsName[obj["profEmail"]]}</span>
+        }</span> - <span class="tag-secondary">${professorsName[obj["profEmail"]]}</span></span>
         <i style="color: ${color};" class="send_request fas ${signal}" data-toggle="tooltip" data-placement="bottom" title="${title}"></i>
         <span class="icon" aria-hidden="true"></span>
       </button>
@@ -687,16 +693,16 @@ downloadbtn.addEventListener("click", () => {
   };
 
   // When the user clicks on the button, open the modal
-  window.onload = function () {
-    if (
-      !user[0]["bankName"] ||
-      !user[0]["bankBranch"] ||
-      !user[0]["bankAccountNo"] ||
-      !user[0]["bankIfscCode"]
-    ) {
-      modal.style.display = "block";
-    }
-  };
+  // window.onload = function () {
+  //   if (
+  //     !user[0]["bankName"] ||
+  //     !user[0]["bankBranch"] ||
+  //     !user[0]["bankAccountNo"] ||
+  //     !user[0]["bankIfscCode"]
+  //   ) {
+  //     modal.style.display = "block";
+  //   }
+  // };
   var uploadBankDetails = document.getElementById("uploadBankDetails");
   uploadBankDetails.onclick = function () {
     modal.style.display = "block";

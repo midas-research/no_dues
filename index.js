@@ -17,6 +17,7 @@ const https = require("https");
 //const professorsList = require('./config/professors');
 const fs = require("fs");
 const Admin = require("./models/admin");
+const expressLayouts = require("express-ejs-layouts");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 
 app.use("/assets", express.static("./assets"));
+app.use(expressLayouts);
 app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(

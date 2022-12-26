@@ -113,9 +113,9 @@ router.get(
   homeController.btpApproved
 );
 router.get(
-  "/approveManyProffs/:dues",
+  "/approveEmailProf/:dues",
   passport.checkProffAuthentication,
-  homeController.approveManyProffs
+  homeController.approveEmailProf
 );
 
 router.get(

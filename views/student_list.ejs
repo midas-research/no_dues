@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title><%= title %></title>
-        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/home.css"/>
-    </head>
-    <body>
-        <!-- <ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="icon" href="../assets/images/icon.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/assets/home.css" />
+  </head>
+
+  <body>
+    <!-- <ul>
             <% if (locals.user) { %>
                 <li><h1><%= locals.user.name %></h1></li>
                 <li><h1><a href='/user/signout'>Sign Out</a></h1></li>
@@ -15,68 +27,69 @@
                 <li><h1><a href='/user/signin'>Sign In</a></h1></li>
             <% } %>
         </ul> -->
-        <div id="navbar">
-            <div id="navbar_left">
-                <div id="navbar_left_i"><img src="/assets/nd.png"/></div>
-                <div id="navbar_left_p">No Dues</div>
-                <div class="dropdown">
-                    <span class='icon-down'></span>
-                    <div class="dropdown-content">
-                        <a href="/user/signout">Logout</a>
-                    </div>
-                </div>
-            </div>
-            <div id="navbar_right">
-                <div id="navbar_right_p">Hello Admin</div>
-                <div id="navbar_right_i"><img src=<%= locals.user.image%> /></div>
-            </div>
+    <div id="navbar">
+      <div id="navbar_left">
+        <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
+        <div id="navbar_left_p">No Dues</div>
+        <div class="dropdown">
+          <span class="icon-down"></span>
+          <div class="dropdown-content">
+            <a href="/user/signout">Logout</a>
+          </div>
         </div>
-        <div id="main">
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Roll</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Timestamp</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Soumyadeep Paul</td>
-                    <td>2018104</td>
-                    <td>soumyadeep18104@iiitd.ac.in</td>
-                    <td>03-03-2021 14:50</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Himanshu Aggarwal</td>
-                    <td>2018146</td>
-                    <td>himanshu18146@iiitd.ac.in</td>
-                    <td>11-03-2021 22:25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Yashdeep Prasad</td>
-                    <td>2018121</td>
-                    <td>yashdeep18121@iiitd.ac.in</td>
-                    <td>01-03-2021 14:50</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Vishwesh kumar</td>
-                    <td>2018084</td>
-                    <td>vishwesh18084@iiitd.ac.in</td>
-                    <td>01-01-2021 16:57</td>
-                  </tr>
-                </tbody>
-              </table>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="/assets/home.js"></script>
-    </body>
+      </div>
+      <div id="navbar_right">
+        <div id="navbar_right_p">Hello Admin</div>
+        <div id="navbar_right_i"><img src="<%" ="locals.user.image%" /> /></div>
+      </div>
+    </div>
+    <div id="main">
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Roll</th>
+            <th scope="col">Email</th>
+            <th scope="col">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Soumyadeep Paul</td>
+            <td>2018104</td>
+            <td>soumyadeep18104@iiitd.ac.in</td>
+            <td>03-03-2021 14:50</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Himanshu Aggarwal</td>
+            <td>2018146</td>
+            <td>himanshu18146@iiitd.ac.in</td>
+            <td>11-03-2021 22:25</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Yashdeep Prasad</td>
+            <td>2018121</td>
+            <td>yashdeep18121@iiitd.ac.in</td>
+            <td>01-03-2021 14:50</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Vishwesh kumar</td>
+            <td>2018084</td>
+            <td>vishwesh18084@iiitd.ac.in</td>
+            <td>01-01-2021 16:57</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="/assets/home.js"></script>
+  </body>
 </html>

@@ -2,15 +2,21 @@ const passport = require("passport");
 const { google } = require("googleapis");
 const LocalStrategy = require("passport-local").Strategy;
 const Admin = require("../models/admin");
-const admins = require("../data/admins");
 const getProffName = require("../data/getProffName");
 
 const User = require("../models/user");
 const { EMAIL_ID, SUPER_ADMIN_EMAIL } = require("../config/config");
 
 function add(temp, x) {
+  if (x != true) {
+    temp.array.push("No");
+  } else {
+    temp.array.push("Yes");
+  }
+}
+function add2(temp, x) {
   if (x == null) {
-    temp.array.push(false);
+    temp.array.push("null");
   } else {
     temp.array.push(x);
   }
@@ -58,6 +64,7 @@ passport.checkAuthentication = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
+
   return res.redirect("/user/signin");
 };
 
@@ -76,6 +83,7 @@ passport.checkAdminAuthentication = (req, res, next) => {
     }
   }
 
+  req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
 };
 
@@ -93,6 +101,7 @@ passport.checkUserAuthentication = (req, res, next) => {
     }
   }
 
+  req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
 };
 
@@ -110,6 +119,7 @@ passport.checkProffAuthentication = (req, res, next) => {
       return res.redirect("/");
     }
   }
+  req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
 };
 
@@ -118,6 +128,7 @@ passport.checkSuperAdminAuthentication = async (req, res, next) => {
   if (req.isAuthenticated() && req.user.email == `${SUPER_ADMIN_EMAIL}`) {
     return next();
   }
+  req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
 };
 
@@ -128,28 +139,13 @@ passport.setAuthenticatedUser = (req, res, next) => {
   next();
 };
 
-function modifyAdminName(s) {
-  if (s.substring(0, 9) == "Academics") {
-    return "academics";
-  }
-  var arr = s.split(" ");
-  var newName = arr[0].toLowerCase();
-  for (var i = 1; i < arr.length; i++) {
-    if (arr[i] == "&" || arr[i] == "&amp;") {
-      arr[i] = "and";
-    }
-    newName = newName + arr[i][0].toUpperCase() + arr[i].substring(1);
-  }
-  return newName;
-}
-
 function adminsLeft(student) {
-  var admins_list = [];
-  for (var i = 0; i < admins.length - 2; i++) {
-    admins_list.push(modifyAdminName(admins[i][0]));
-  }
-  admins_list.push("ip");
-  admins_list.push("btp");
+  var admins_list = Admin.admins;
+
+  admins_list.pop();
+  admins_list.pop();
+  admins_list.pop();
+  admins_list.push("academics");
 
   var check = true;
 
@@ -161,11 +157,24 @@ function adminsLeft(student) {
     }
   }
 
+  for (var j in student["ipList"]) {
+    if (!(student["ipList"][j] == true)) {
+      check = false;
+      break;
+    }
+  }
+
+  for (var j in student["btpList"]) {
+    if (!(student["btpList"][j] == true)) {
+      check = false;
+      break;
+    }
+  }
+
   return Boolean(check);
 }
 
 passport.checkSheetAuthentication = async (req, res, next) => {
-  //No Dues Details
   const spreadsheetId = "1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk";
   const auth = new google.auth.GoogleAuth({
     keyFile: "credentials.json",
@@ -204,7 +213,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Academics",
     "IP",
     "BTP",
-    "Overall",
+    "Total",
     "NoDues",
     "Bank Name",
     "Branch Name",
@@ -216,12 +225,12 @@ passport.checkSheetAuthentication = async (req, res, next) => {
   for (var i in docs) {
     if (!docs[i]["type"]) {
       var temp = { array: [] };
-      add(temp, docs[i]["name"]);
-      add(temp, docs[i]["roll"]);
-      add(temp, docs[i]["email"]);
-      add(temp, docs[i]["degree"]);
-      add(temp, docs[i]["department"]);
-      add(temp, docs[i]["startYear"]);
+      add2(temp, docs[i]["name"]);
+      add2(temp, docs[i]["roll"]);
+      add2(temp, docs[i]["email"]);
+      add2(temp, docs[i]["degree"]);
+      add2(temp, docs[i]["department"]);
+      add2(temp, docs[i]["batch"]);
       add(temp, docs[i]["designLab"]);
       add(temp, docs[i]["library"]);
       add(temp, docs[i]["adminFacilities"]);
@@ -251,11 +260,11 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add(temp, checkBtp);
       add(temp, adminsLeft(docs[i]));
       add(temp, docs[i]["nodues"]);
-      add(temp, docs[i]["bankName"]);
-      add(temp, docs[i]["bankBranch"]);
-      add(temp, docs[i]["bankAccountHolder"]);
-      add(temp, docs[i]["bankAccountNo"]);
-      add(temp, docs[i]["bankIfscCode"]);
+      add2(temp, docs[i]["bankName"]);
+      add2(temp, docs[i]["bankBranch"]);
+      add2(temp, docs[i]["bankAccountHolder"]);
+      add2(temp, docs[i]["bankAccountNo"]);
+      add2(temp, docs[i]["bankIfscCode"]);
 
       values.push(temp.array);
     }
