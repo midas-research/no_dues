@@ -6,26 +6,9 @@ body {
     overflow-x: hidden;
 }
 
-.tag-primary{
-  padding:7px;
-  background-color:rgb(250, 180, 50);
-  color:white;
-  border-radius: 5px;
-}
 
-.tag-secondary {
-  padding: 7px;
-  background-color: rgb(5, 190, 119);
-  color: white;
-  border-radius: 5px;
-}
-.tag-tertiary {
-  padding: 7px;
-  background-color: rgb(6, 96, 169);
-  color: white;
-  border-radius: 5px;
-}
-#navbar {
+
+/* #navbar {
     height: 10vh;
     background-color: #343a40;
     width: 100vw;
@@ -33,9 +16,6 @@ body {
     padding-left: 15px;
     padding-right: 15px;
     justify-content: space-between;
-      
-    
-    /* align-items: center; */
 }
 
 #navbar img {
@@ -73,7 +53,7 @@ body {
     align-items: center;
     color: white;
     font-size: min(20px, 8vw);
-}
+} */
 
 .icon-down:before {
     content: "\25BC";
@@ -136,6 +116,12 @@ body {
     text-align: center;
 } */
 
+.buttons{
+  display:flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
 .addButton{
   padding: 15px;
   background-color:rgb(216, 32, 32);
@@ -144,17 +130,23 @@ body {
   text-align: center;
   border: 0px;
   border-radius: 10px;
-  margin: 20px;
+  margin: 10px;
   cursor: pointer;
   color:white;
   display: inline-block;
-  justify-self: center;
+  max-width: 50vw;
 }
 
 .addButton:hover{
   background-color: rgb(245, 92, 92);
   
   color:rgb(8, 8, 8);
+}
+
+@media only screen and (max-width: 768px) {
+  .buttons{
+    flex-direction: row;
+  }
 }
 .accordion .accordion-item {
   border-bottom: 1px solid #e5e5e5;
@@ -185,7 +177,11 @@ body {
   border: 1px solid #03b5d2;
 }
 .accordion button .accordion-title {
-  padding: 1em 1.5em 1em 0;
+  /* padding: 1em 1.5em 1em 0; */
+  max-width: 70%;
+  height:auto;
+  display: inline-block;
+ 
 }
 .accordion button .icon {
   display: inline-block;

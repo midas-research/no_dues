@@ -34,20 +34,17 @@ for (var i in admins_list) {
   let adminObj;
   var request = new XMLHttpRequest();
 
-  request.open("GET", `${CURRENT_URL}/user/getAdmin/${admins_list[i]}`, false);
+  let adminName=admins_list[i];
+  if(adminName=='academics'){
+    adminName+=user['degree'][0];
+  }
+  request.open("GET", `${CURRENT_URL}/user/getAdmin/${adminName}`, false);
   request.send(null);
   if (request.status === 200) {
     adminObj = JSON.parse(request.responseText)[0];
   }
 
-  if (admins_list[i].substring(0, 9) == "academics") {
-    if (user["degree"][0] != admins_list[i][9]) {
-      continue;
-    } else {
-      admins_list[i] = "academics";
-    }
-  }
-
+  
   let originalName = adminObj["originalAdminName"];
   let displayAddress = adminObj["displayAddress"];
   let displayName = adminObj["displayName"];

@@ -142,11 +142,6 @@ passport.setAuthenticatedUser = (req, res, next) => {
 function adminsLeft(student) {
   var admins_list = Admin.admins;
 
-  admins_list.pop();
-  admins_list.pop();
-  admins_list.pop();
-  admins_list.push("academics");
-
   var check = true;
 
   for (var i in admins_list) {

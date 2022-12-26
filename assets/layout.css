@@ -4,11 +4,31 @@
     height: 12vh;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
-  
+    align-items: center; 
     
 }
 
+.tag{
+    color: white;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px;
+
+}
+
+
+.tag-primary {   
+    background-color: rgb(250, 180, 50);    
+}
+
+.tag-secondary {
+    background-color: rgb(5, 190, 119);
+}
+
+.tag-tertiary {
+    background-color: rgb(6, 96, 169);
+}
 
 
 @media only screen and (max-width: 768px) {
@@ -17,6 +37,13 @@
     }
 }
 
+.accordion button .accordion-title {
+    /* padding: 1em 1.5em 1em 0; */
+    max-width: 70%;
+    height: auto;
+    display: inline-block;
+
+}
 
 #header div{
     height: 100%;
@@ -35,9 +62,10 @@ footer{
     background-color:#343a40 !important;
     height:7vh;
     padding: 1rem;
-    
-
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   
+    width:100%;
+   
 }
 footer a:hover{
     text-decoration: none;
@@ -45,6 +73,7 @@ footer a:hover{
 }
 body{
     overflow-x:hidden;
+    position: relative;
 }
 
 
@@ -72,6 +101,37 @@ body{
     overflow-y: auto;
 }
 
+@media only screen and (max-width: 768px) {
+    .container{
+        width: 95vw;
+        box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2);
+        /* border-radius: 0px; */
+        padding:1rem;
+        
+    }
+    #navbar_right_i{
+        display: none;
+
+    }
+    #navbar_left_i {
+        display: none;
+
+    }
+    #main{
+        padding: 0px;
+      
+        background-color: white !important;
+    }
+    footer{
+        display: none;
+    }
+}
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
 .container h2,
 .container h3 {
     text-align: center;
@@ -84,6 +144,53 @@ body{
     background-color: rgb(248, 248, 248);
     padding: 10px;
     box-sizing: border-box;
+}
+
+#navbar {
+    height: 10vh;
+    background-color: #343a40;
+    width: 100vw;
+    display: flex;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: space-between;
+}
+
+#navbar img {
+    width: 6vh;
+    height: 6vh;
+    border-radius: 50%;
+}
+
+#navbar_left {
+    display: flex;
+    align-items: center;
+}
+
+#navbar_right {
+    display: flex;
+    align-items: center;
+}
+
+#navbar_left img {
+    margin-right: 20px;
+}
+
+#navbar_right img {
+    margin-left: 20px;
+}
+
+#navbar_left_p {
+    display: inline-block;
+    color: white;
+    font-size: min(20px, 8vw);
+}
+
+#navbar_right_p {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: min(20px, 8vw);
 }
 
 

@@ -36,21 +36,7 @@ router.get(
   passport.checkSuperAdminAuthentication,
   homeController.superApproveManyDues
 );
-router.get(
-  "/super_admin/approveAdmin/:dues",
-  passport.checkSuperAdminAuthentication,
-  homeController.approveAdmin
-);
-router.get(
-  "/super_admin/approveManyAdmins/:dues",
-  passport.checkSuperAdminAuthentication,
-  homeController.approveManyAdmins
-);
-router.get(
-  "/super_admin/sendAdminMessage/:dues",
-  passport.checkSuperAdminAuthentication,
-  homeController.sendAdminMessage
-);
+
 
 router.get(
   "/admin_home",

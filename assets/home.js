@@ -20,7 +20,6 @@ if (request.status === 200) {
 }
 
 
-
 //Displaying Count
 {
   let count = 0;
@@ -43,8 +42,7 @@ if (request.status === 200) {
   var total = 0;
 
   total +=
-    admins_list.length -
-    2 +
+    admins_list.length+
     user[0]["ipList"].length +
     user[0]["btpList"].length;
 
@@ -56,17 +54,16 @@ var container = document.getElementById("admins_list_container");
 
 //Creating request div
 function createRequest(admin) {
-  if (admin.substring(0, 9) == "academics") {
-    
-    if (user[0]["degree"][0] != admin[9]) {
-      return;
-    }
-  }
+  
 
+  let adminName=admin;
+  if(adminName=='academics'){
+    adminName+=user[0]['degree'][0];
+  }
 
   let details = {};
   var request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/user/getAdmin/${admin}`, false);
+  request.open("GET", `${CURRENT_URL}/user/getAdmin/${adminName}`, false);
   request.send(null);
   if (request.status === 200) {
     details = JSON.parse(request.responseText)[0];
@@ -77,20 +74,20 @@ function createRequest(admin) {
   if (displayAddress == "") {
     displayAddress = "NA";
   }
-  if (admin.substring(0, 9) == "academics") {
-    admin = "academics";
-  }
+  
 
   container.innerHTML += `<div class="accordion-item">
-    <button id="accordion-button-1" aria-expanded="false">
+    <button id="row accordion-button-1" aria-expanded="false">
         <span class="accordion-title">${originalName}</span>
-        <!-- <span class="send_request">Send</span> -->
-        
+               
         <i class="fas fa-share request ${
           admin + "Symbol"
         } " onclick="requestFunction(event)" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
+        
         <span class="icon" aria-hidden="true"></span>
+
     </button>
+
     <div class="accordion-content">
         ${customInfo(admin)}        
         <p>Admin - ${displayName} [${displayAddress}]</p>
@@ -124,9 +121,7 @@ admins_list.map(createRequest);
 
 //Symbol Update for Admins
 function updateSymbolMessage(user, admin) {
-  if (admin.substring(0, 9) == "academics") {
-    admin = "academics";
-  }
+  
   var symbol = document.getElementsByClassName(admin + "Symbol")[0];
 
   if (user[0][admin + "Message"] && !user[0][admin]) {
@@ -173,7 +168,7 @@ for (var i in admins_list) {
 //To get admin name
 function getAdminName(s) {
   if (s.substring(0, 9) == "Academics") {
-    return "academics" + s[11];
+    return "academics";
   }
   var arr = s.split(" ");
   var newName = arr[0].toLowerCase();
@@ -433,9 +428,9 @@ function createIpSentRequest(obj) {
   container.innerHTML += `
     <div class="accordion-item">
       <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title"> IP / IS / UR - <span class="tag-primary">${
+        <span class="accordion-title"> IP / IS / UR - <span class="tag tag-primary">${
           obj["projectName"]
-        }</span> - <span class="tag-secondary">${
+        }</span> - <span class="tag tag-secondary">${
     professorsName[obj["profEmail"]]
   }</span></span>
         <i style="color: ${color};" class="send_request fas ${signal} " data-toggle="tooltip" data-placement="bottom" title="${title}"></i>
@@ -479,9 +474,9 @@ function createBtpSentRequest(obj) {
   container.innerHTML += `
     <div class="accordion-item">
       <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title"> BTP / Scholarly Paper / Thesis - <span class="tag-primary">${
+        <span class="accordion-title"> BTP / Scholarly Paper / Thesis - <span class="tag tag-primary">${
           obj["projectName"]
-        }</span> - <span class="tag-secondary">${professorsName[obj["profEmail"]]}</span></span>
+        }</span> - <span class="tag tag-secondary">${professorsName[obj["profEmail"]]}</span></span>
         <i style="color: ${color};" class="send_request fas ${signal}" data-toggle="tooltip" data-placement="bottom" title="${title}"></i>
         <span class="icon" aria-hidden="true"></span>
       </button>
@@ -743,3 +738,6 @@ downloadbtn.addEventListener("click", () => {
     }
   };
 }
+
+
+  
