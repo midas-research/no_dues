@@ -6,14 +6,35 @@ body {
     overflow-x: hidden;
 }
 
+.tag-primary{
+  padding:7px;
+  background-color:rgb(250, 180, 50);
+  color:white;
+  border-radius: 5px;
+}
+
+.tag-secondary {
+  padding: 7px;
+  background-color: rgb(5, 190, 119);
+  color: white;
+  border-radius: 5px;
+}
+.tag-tertiary {
+  padding: 7px;
+  background-color: rgb(6, 96, 169);
+  color: white;
+  border-radius: 5px;
+}
 #navbar {
-    height: 8vh;
+    height: 10vh;
     background-color: #343a40;
     width: 100vw;
     display: flex;
     padding-left: 15px;
     padding-right: 15px;
     justify-content: space-between;
+      
+    
     /* align-items: center; */
 }
 
@@ -85,11 +106,14 @@ body {
     text-decoration: none;
 }
 
-#main {
-    height: 92vh;
+/* #main {    
     width: 100vw;
-    background-color: #fff;
-}
+    min-height:80vh;
+    background-color: rgb(248, 248, 248);
+    padding: 10px;
+    box-sizing: border-box;
+} */
+
 
 @import url("https://fonts.googleapis.com/css?family=Hind:300,400&display=swap");
 
@@ -97,16 +121,41 @@ body {
   box-sizing: border-box;
 }
 
-.container {
+/* .container {
   margin: 0 auto;
-  padding: 4rem;
-  width: 60rem;
+  padding: 2rem;
+  width: 60vw;
+  height:100%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 }
 
 .container h2, .container h3 {
     text-align: center;
+} */
+
+.addButton{
+  padding: 15px;
+  background-color:rgb(216, 32, 32);
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  border: 0px;
+  border-radius: 10px;
+  margin: 20px;
+  cursor: pointer;
+  color:white;
+  display: inline-block;
+  justify-self: center;
 }
 
+.addButton:hover{
+  background-color: rgb(245, 92, 92);
+  
+  color:rgb(8, 8, 8);
+}
 .accordion .accordion-item {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -195,11 +244,10 @@ body {
 }
 
 .send_request {
-    /* border: 2px solid grey;
-    background-color: lightgray; */
+    
     font-size: 1.5rem;
     position: absolute;
-    right: 40px;
+    right: 40px !important;
     border-radius: 8px;
     padding: 8px;
     margin-top: -8px;
@@ -273,6 +321,7 @@ body {
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   /* border: 10px solid black; */
+  border-radius: 20px;
 }
 
 .modal-content {
@@ -294,6 +343,7 @@ body {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  border-radius: 20px;
 }
 
 .modal-content1 {
@@ -302,6 +352,7 @@ body {
   padding: 20px;
   border: 1px solid #888;
   width: 50%; /* Could be more or less, depending on screen size */
+
 }
 
 .modal1 input {
@@ -317,7 +368,7 @@ body {
 
 /* The Close Button */
 .close {
-  color: #aaa;
+  color: black;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -325,13 +376,13 @@ body {
 
 .close:hover,
 .close:focus {
-  color: black;
+  color:#aaa;
   text-decoration: none;
   cursor: pointer;
 }
 
 .close1 {
-  color: #aaa;
+  color: black;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -339,7 +390,7 @@ body {
 
 .close1:hover,
 .close1:focus {
-  color: black;
+  color:#aaa;
   text-decoration: none;
   cursor: pointer;
 }
@@ -410,3 +461,6 @@ body {
 input[type=radio] {
   width: fit-content;
 }
+
+
+

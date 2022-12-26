@@ -1,102 +1,131 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title><%= title %></title>
-        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/super_admin.css"/>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
-    </head>
-    <body>
-        <p id="adminName" style="display:none"><%= adminName %></p>
-        <p id="adminList" style="display:none"><%= adminList %></p>
-        <p id="id" style="display:none"><%= id %></p>
-        <p id="studentList" style="display:none"><%= studentList %></p>
-        <p id="CURRENT_URL" style="display:none"><%= url %></p>
-        
-        <div id="navbar">
-            <div id="navbar_left">
-                <div id="navbar_left_i"><img src="/assets/nd.png"/></div>
-                
-                <div class="dropdown">
-                    <div id="navbar_left_p">No Dues</div>
-                    <span class='icon-down'></span>
-                    <div class="dropdown-content">                        
-                        <a id="adminRequests">Requests to Admins</a><br><hr>
-                        <a id="sheet">Show Sheet</a><br><hr>
-                        <a href="/user/signout">Logout</a><br>                
-                    </div>
-                </div>
-            </div>
-            <div id="navbar_right">
-                <div id="navbar_right_p">Hello Super Admin</div>
-                <div id="navbar_right_i"><img src=<%= locals.user.image %> /></div>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="icon" href="../assets/images/icon.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/assets/super_admin.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+  </head>
+
+  <body>
+    <p id="adminName" style="display: none"><%= adminName %></p>
+    <p id="adminList" style="display: none"><%= adminList %></p>
+    <p id="id" style="display: none"><%= id %></p>
+    <p id="CURRENT_URL" style="display: none"><%= url %></p>
+    <%- include('partials/header.ejs') %>
+
+    <div id="navbar">
+      <div id="navbar_left">
+        <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
+
+        <div class="dropdown">
+          <div id="navbar_left_p">No Dues</div>
+          <span class="icon-down"></span>
+          <div class="dropdown-content">
+            <a id="adminRequests">Requests to Admins</a><br />
+            <hr />
+            <a id="sheet">Show Sheet</a><br />
+            <hr />
+            <a href="/user/signout">Logout</a><br />
+          </div>
+        </div>
+      </div>
+      <div id="navbar_right">
+        <div id="navbar_right_p">Hello Super Admin</div>
+        <div id="navbar_right_i">
+          <img src="<%=locals.user.image%>">
+        </div>
+      </div>
+    </div>
+
+    <div id="main">
+      <div class="container">
+        <h2 style="margin-bottom: 40px">List Of Students</h2>
+
+        <div
+          class="d-flex align-items-center justify-content-center"
+          style="margin-bottom: 10px"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <select class="filter" name="status" id="status">
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+            <option value="accepted">Accepted</option>
+          </select>
         </div>
 
-        <div id="main">
-            <div class="container">
-              
-                <h2 style="margin-bottom: 40px;">List Of Students</h2>     
-                
-                <div class="d-flex align-items-center justify-content-center" style="margin-bottom: 10px; " data-aos="fade-up" data-aos-delay="100">
-                  
-                  <select class="filter" name="status" id="status">                      
-                    <option value="pending">Pending</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="accepted">Accepted</option>          
-                  </select>
+        <div
+          class="row d-flex align-items-center justify-content-center"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <select class="filter" name="clearance" id="clearance">
+            <option value="all">(All Clear/Not Clear)</option>
+            <option value="cleared">All Clear</option>
+            <option value="not cleared">Not Clear</option>
+          </select>
 
-                </div>
+          <select class="filter" name="degree" id="degree">
+            <option value="All">Degree (All)</option>
+            <option value="B. Tech">B.Tech</option>
+            <option value="M. Tech">M.Tech</option>
+            <option value="Phd">Phd</option>
+          </select>
 
-                <div class="row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                
-                  <select class="filter" name="clearance" id="clearance">
-                    <option value="all">All (Cleared/Not Cleared)</option>
-                    <option value="cleared">Cleared</option>
-                    <option value="not cleared">Not Cleared</option>          
-                  </select>
+          <select class="filter" name="department" id="department">
+            <option value="All">Branch(All)</option>
+            <option value="CSE">CSE</option>
+            <option value="Mathematics">MATHS</option>
+            <option value="CB">CSB</option>
+            <option value="SSH">SSH</option>
+            <option value="ECE">ECE</option>
+            <option value="HCD">HCD</option>
+          </select>
 
-                  <select class="filter" name="degree" id="degree">
-                    <option value="All"> Degree (All)</option>
-                    <option value="B. Tech">B.Tech</option>
-                    <option value="M. Tech">M.Tech</option>
-                    <option value="Phd">Phd</option>          
-                  </select>
+          <input
+            class="filter"
+            type="number"
+            id="batch"
+            name="batch"
+            placeholder="BATCH"
+          />
+          <button class="filter" id="search">
+            <i class="fa fa-search" aria-hidden="true"></i> SEARCH
+          </button>
+        </div>
 
-                  <select class="filter" name="department" id="department">
-                    <option value="All">Branch(All)</option>
-                    <option value="CSE">CSE</option>
-                    <option value="Mathematics">MATHS</option>
-                    <option value="CB">CSB</option>
-                    <option value="SSH">SSH</option> 
-                    <option value="ECE">ECE</option>
-                    <option value="HCD">HCD</option>         
-                  </select>              
+        <div
+          class="brow row d-flex align-items-center justify-content-center"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <button class="filter nex" id="selectAll">Select All</button>
 
-              
-                  <input class="filter" type="number" id="batch" name="batch" placeholder="BATCH" >
-              
-              
-                  <button class="filter" id="search"> <i class="fa fa-search" aria-hidden="true"></i> </button>                  
+          <button class="filter nex" id="unselectAll">Unselect All</button>
 
-                </div>
+          <button class="filter nex" id="sendAll">Accept Selected</button>
+        </div>
 
-                <div class="brow row d-flex align-items-center justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                  <button class="filter nex" id="selectAll">Select All</button>
-                 
-                  <button class="filter nex" id="unselectAll">Unselect All </button>
-                
-                  <button class="filter nex" id="sendAll">Accept Selected</button>
-
-                </div>
-            
-               
-
-                <div class="accordion">
-                  
-                  <!-- <div class="accordion-item">
+        <div class="accordion">
+          <!-- <div class="accordion-item">
                     <button id="accordion-button-1" aria-expanded="false">
                         <span class="accordion-title">yashdeep18121@iiitd.ac.in - 2018121</span>
                         <i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>
@@ -112,13 +141,24 @@
                       <span class="message">You have not sent any message currently.</span>
                     </div>
                   </div> -->
-                </div>
-
-            </div>
         </div>
-        <script src="../assets/super_admin.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    </body>
+      </div>
+    </div>
+    <%- include('partials/footer.ejs') %>
+    <script src="../assets/super_admin.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script>
+        <% if (flash.success && flash.success.length > 0) { %>
+      new Noty({
+        theme: 'metroui',
+        text: "<%= flash.success %>",
+        type: 'success',
+        layout: 'topRight',
+        timeout: 1500
+      }).show();
+        <% } %>
+    </script>
+  </body>
 </html>

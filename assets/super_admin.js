@@ -1,53 +1,57 @@
-const CURRENT_URL= JSON.parse(document.getElementById('CURRENT_URL').innerHTML);
-var adminList = JSON.parse(document.getElementById('adminList').innerHTML);
-var id = document.getElementById('id').innerHTML;
-var adminName= document.getElementById('adminName').innerHTML;
+const CURRENT_URL = JSON.parse(
+  document.getElementById("CURRENT_URL").innerHTML
+);
+var adminList = JSON.parse(document.getElementById("adminList").innerHTML);
+var id = document.getElementById("id").innerHTML;
+var adminName = document.getElementById("adminName").innerHTML;
 
+var accordion = document.getElementsByClassName("accordion")[0];
 
+var request = new XMLHttpRequest();
+request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
+request.send();
+if (request.status === 200) {
+  studentList = JSON.parse(request.responseText);
+}
 
-var accordion = document.getElementsByClassName('accordion')[0];
-var studentList = JSON.parse(document.getElementById('studentList').innerHTML);
-
-function check(student,curr_status){
-  
-  if(curr_status=='pending'){    
-    return student[adminName]==null;
-  }
-
-  else if(curr_status=='accepted'){
-    return student[adminName]==true;
-  }
-
-  else{
-    return student[adminName]==false;
+function check(student, curr_status) {
+  if (curr_status == "pending") {
+    return student[adminName] == null;
+  } else if (curr_status == "accepted") {
+    return student[adminName] == true;
+  } else {
+    return student[adminName] == false;
   }
 }
-function adminsLeft(student){
 
-  var check=true;
-
-  for(var i in adminList){
-    if(!student[adminList[i]]){
-      check&=false;
+function adminsLeft(student) {
+  for (var i in adminList) {
+    if (!(student[adminList[i]] == true)) {
+      return false;
     }
-    else{
-      check&=student[adminList[i]];
-    }    
-
   }
 
-  return check;
+  for (var i in student["ipList"]) {
+    if (!(student["ipList"][i] == true)) {
+      return false;
+    }
+  }
 
-  
+  for (var i in student["btpList"]) {
+    if (!(student["btpList"][i] == true)) {
+      return false;
+    }
+  }
 
+  return true;
 }
 
-
-function addAcceptCode(student,msg){
-  
-    return `<div class="accordion-item filter-btech">
+function addAcceptCode(student, msg) {
+  return `<div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name}</span>
+            <span class="accordion-title">${student.email} - ${
+    student.roll
+  } - ${student.name}</span>
             <span class="icon" aria-hidden="true"></span>
             
         </button>
@@ -58,12 +62,12 @@ function addAcceptCode(student,msg){
             <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
           </div>
 
-
           
-          <span class="message">Approved : ${student[adminName+'ApprovedAt']}</span><br>
+          <span class="message">Approved : ${
+            student[adminName + "ApprovedAt"]
+          }</span><br>
           <span class="message">Latest Communication before Accepting: </span><br>
           <span class="message">${msg}</span><br>
-          <span class="message">Requested : ${student[adminName+'AppliedAt']}</span>
           <hr>
           <div class="admins-status">
               ${addcontent(student)} 
@@ -71,147 +75,172 @@ function addAcceptCode(student,msg){
 
         </div>
         
-      </div>`
-  
+      </div>`;
 }
 
-function isTrue(student){
-  var curr_status=document.getElementById('status').value;
-  var curr_degree=document.getElementById('degree').value;
-  var curr_department=document.getElementById('department').value;
-  var curr_batch=document.getElementById('batch').value;
-  var clearance=document.getElementById('clearance').value;
+function isTrue(student) {
+  var curr_status = document.getElementById("status").value;
+  var curr_degree = document.getElementById("degree").value;
+  var curr_department = document.getElementById("department").value;
+  var curr_batch = document.getElementById("batch").value;
+  var clearance = document.getElementById("clearance").value;
 
-  var k="not cleared"
-  if(adminsLeft(student)){
-    k="cleared"
+  var k = "not cleared";
+  if (adminsLeft(student)) {
+    k = "cleared";
   }
 
-  var checkDegree= curr_degree==student['degree'];
-  var checkDepartment= curr_department==student['department'];
-  var checkBatch= curr_batch==student['batch'];
+  var checkDegree = curr_degree == student["degree"];
+  var checkDepartment = curr_department == student["department"];
+  var checkBatch = curr_batch == student["batch"];
 
-  var checkClearance= clearance==k;
+  var checkClearance = clearance == k;
 
-  if(!curr_batch){
-    curr_batch=-1;
-  } 
-  
-  if(clearance=='all'){
-    checkClearance=true;
-  }
-  
-  if(curr_degree=='All'){
-    checkDegree=true;
+  if (!curr_batch) {
+    curr_batch = -1;
   }
 
-  if(curr_department=='All'){
-    checkDepartment=true;
+  if (clearance == "all") {
+    checkClearance = true;
   }
 
-  if(curr_batch==-1){
-    checkBatch=true;
+  if (curr_degree == "All") {
+    checkDegree = true;
   }
 
-  return checkClearance && checkDegree && checkDepartment && checkBatch && check(student,curr_status);
+  if (curr_department == "All") {
+    checkDepartment = true;
+  }
 
+  if (curr_batch == -1) {
+    checkBatch = true;
+  }
 
+  return (
+    checkClearance &&
+    checkDegree &&
+    checkDepartment &&
+    checkBatch &&
+    check(student, curr_status)
+  );
 }
 
-function addcontent(student){
-    uncleared=`<hr><h5>UnCleared Status: </h5>
+function addcontent(student) {
+  uncleared = `<hr><h5>UnCleared Status: </h5>
               <ul>`;
-    cleared=`<h5>Cleared Status: </h5> 
+  cleared = `<h5>Cleared Status: </h5> 
             <ul>`;
-    for (var i in adminList){
-      var j=student[adminList[i]];
-      if(j==null){
-        j=false;        
-      }
-      if(j==true){
-        cleared+=`<li> ${adminList[i]} : ${j} </li>`;
-      }
-      else{
-        uncleared+=`<li> ${adminList[i]} : ${j} </li>`;
-      }
-      
+  for (var i in adminList) {
+    var j = student[adminList[i]];
+    if (j == null) {
+      j = false;
     }
-    uncleared+=`</ul>`;
-    cleared+=`</ul>`;
-    return cleared+uncleared;
+    if (j == true) {
+      cleared += `<li> ${adminList[i]} : Yes </li>`;
+    } else {
+      uncleared += `<li> ${adminList[i]} : No </li>`;
+    }
+  }
+
+  let ipCheck = "Yes";
+
+  for (var i in student["ipList"]) {
+    if (!(student["ipList"][i]["ip"] == true)) {
+      ipCheck = "No";
+      break;
+    }
+  }
+  if (ipCheck == "Yes") {
+    cleared += `<li> IP : Yes </li>`;
+  } else {
+    uncleared += `<li> IP : No </li>`;
+  }
+
+  let btpCheck = "Yes";
+
+  for (var i in student["btpList"]) {
+    if (!(student["btpList"][i]["btp"] == true)) {
+      btpCheck = "No";
+      break;
+    }
+  }
+  if (btpCheck == "Yes") {
+    cleared += `<li> Btp : Yes </li>`;
+  } else {
+    uncleared += `<li> Btp : No </li>`;
+  }
+
+  uncleared += `</ul>`;
+  cleared += `</ul>`;
+  return cleared + uncleared;
 }
 
-function clickFilter(){
+function clickFilter() {
+  var curr_status = document.getElementById("status").value;
+  var curr_degree = document.getElementById("degree").value;
+  var curr_department = document.getElementById("department").value;
+  var curr_batch = document.getElementById("batch").value;
 
-  var curr_status=document.getElementById('status').value;
-  var curr_degree=document.getElementById('degree').value;
-  var curr_department=document.getElementById('department').value;
-  var curr_batch=document.getElementById('batch').value;
-  
-  if(!curr_batch){
-    curr_batch=-1;
-  } 
+  if (!curr_batch) {
+    curr_batch = -1;
+  }
 
-  var currentList=[];
+  var currentList = [];
 
-  for(var i in studentList){      
-    if(isTrue(studentList[i])){
+  for (var i in studentList) {
+    if (isTrue(studentList[i])) {
       currentList.push(studentList[i]);
-    } 
+    }
   }
 
-  if(curr_status=='accepted'){
-    console.log(document.getElementById("selectAll").style.display);
-    document.getElementById("selectAll").disabled=true;
-    document.getElementById("unselectAll").disabled=true;
-    document.getElementById("sendAll").disabled=true;
-    
-    document.getElementById("selectAll").style.display="none";
-    document.getElementById("unselectAll").style.display="none";
-    document.getElementById("sendAll").style.display="none";
-    
+  if (curr_status == "accepted") {
+    document.getElementById("selectAll").disabled = true;
+    document.getElementById("unselectAll").disabled = true;
+    document.getElementById("sendAll").disabled = true;
+
+    document.getElementById("selectAll").style.display = "none";
+    document.getElementById("unselectAll").style.display = "none";
+    document.getElementById("sendAll").style.display = "none";
+  } else {
+    document.getElementById("selectAll").disabled = false;
+    document.getElementById("unselectAll").disabled = false;
+    document.getElementById("sendAll").disabled = false;
+
+    document.getElementById("selectAll").style.display = "flex";
+    document.getElementById("unselectAll").style.display = "flex";
+    document.getElementById("sendAll").style.display = "flex";
   }
-  else{
-    document.getElementById("selectAll").disabled=false;
-    document.getElementById("unselectAll").disabled=false;
-    document.getElementById("sendAll").disabled=false;
-      
-    document.getElementById("selectAll").style.display="flex";
-    document.getElementById("unselectAll").style.display="flex";
-    document.getElementById("sendAll").style.display="flex";
-  }
-  
-  if(currentList.length==0){ 
+
+  if (currentList.length == 0) {
     accordion.innerHTML = '<div id="NoRequest"> No Requests Found!</div>';
     return;
   }
-  
-  
-  accordion.innerHTML = '';
+
+  accordion.innerHTML = "";
 
   for (var i in currentList) {
-   var message;
-   if (currentList[i][adminName+'Message']) {
-     message = currentList[i][adminName+'Message'];
-   } else {
-     message = 'You have not sent any message currently.';
-   }
+    var message;
+    if (currentList[i][adminName + "Message"]) {
+      message = currentList[i][adminName + "Message"];
+    } else {
+      message = "You have not sent any message currently.";
+    }
 
-   if(check(currentList[i],curr_status) && curr_status=='accepted'){
-     accordion.innerHTML = "";
-     accordion.innerHTML += addAcceptCode(currentList[i],message);
-   }
-   else if (check(currentList[i],curr_status)) {
-
-     k="Not Cleared"
-     if(adminsLeft(currentList[i])){
-        k="All Cleared"
-     }
-     accordion.innerHTML = '';
-     accordion.innerHTML += `
+    if (check(currentList[i], curr_status) && curr_status == "accepted") {
+      accordion.innerHTML = "";
+      accordion.innerHTML += addAcceptCode(currentList[i], message);
+    } else if (check(currentList[i], curr_status)) {
+      k = "Not Clear";
+      if (adminsLeft(currentList[i])) {
+        k = "All Clear";
+      }
+      accordion.innerHTML = "";
+      accordion.innerHTML += `
        <div class="accordion-item filter-btech">
          <button id="accordion-button-1" aria-expanded="false">
-             <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name} - ${k}</span>
+             <span class="accordion-title">${currentList[i].email} - ${
+        currentList[i].roll
+      } - ${currentList[i].name} - ${k}</span>
              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
              <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>
              <!--<i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>-->
@@ -235,145 +264,179 @@ function clickFilter(){
               ${addcontent(currentList[i])} 
             </div>
          </div>
-       </div>`
-   }
+       </div>`;
+    }
   }
 
   const items = document.querySelectorAll(".accordion button");
 
   function toggleAccordion() {
-    const itemToggle = this.getAttribute('aria-expanded');
+    const itemToggle = this.getAttribute("aria-expanded");
     for (i = 0; i < items.length; i++) {
-      items[i].setAttribute('aria-expanded', 'false');
+      items[i].setAttribute("aria-expanded", "false");
     }
-    if (itemToggle == 'false') {
-      this.setAttribute('aria-expanded', 'true');
+    if (itemToggle == "false") {
+      this.setAttribute("aria-expanded", "true");
     }
   }
-  items.forEach(item => item.addEventListener('click', toggleAccordion));
+  items.forEach((item) => item.addEventListener("click", toggleAccordion));
 }
-
 
 clickFilter();
 
-function approved(e) {
-
-  var r = e.parentElement.parentElement;
-  var emailroll = e.parentElement.childNodes[1].innerHTML;
-  var email = emailroll.substring(0, emailroll.indexOf(' -'));
-
-  
-  var studentId;
-  for (var i in studentList) {
-    if (studentList[i]['email'] == email) {
-      studentId = studentList[i]['_id'];
-    }
-  }
-
-  // console.log(adminName);
- 
-  var obj = [];
-  obj.push({
-    admin : adminName,
-    email : email,
-    id: studentId
-  });
-  // console.log(JSON.stringify(obj));
-  
-  
-  window.location.href = `${CURRENT_URL}/superApproveDues/${JSON.stringify(obj)}`;
-  r.remove();
-}
-
-var search=document.getElementById('search');
-search.addEventListener('click', clickFilter);
-
-var status_button=document.getElementById('status');
-status_button.addEventListener('click',clickFilter);
-
-function sendMessage(e, res) {
+function sendMessage(e) {
   var dues = e.target.previousElementSibling.value;
-  if (dues == '') {
+  if (dues == "") {
     alert("You need to give a message before rejecting!");
     return;
   }
   var message = e.target.parentElement.nextElementSibling;
   message.innerHTML = dues;
-  var email = e.target.parentElement.parentElement.previousElementSibling.childNodes[1].textContent;
+  var email =
+    e.target.parentElement.parentElement.previousElementSibling.childNodes[1]
+      .textContent;
   var index = email.indexOf(" ");
   var obj = [];
   obj.push({
-    admin : adminName,
-    message : dues,
-    email : email.substring(0, index)
+    admin: adminName,
+    message: dues,
+    email: email.substring(0, index),
   });
-  // console.log(JSON.stringify(obj));
-  window.location.href = `${CURRENT_URL}/superSendMessage/${JSON.stringify(obj)}`;
+
+  var request = new XMLHttpRequest();
+  request.open(
+    "GET",
+    `${CURRENT_URL}/superSendMessage/${JSON.stringify(obj)}`,
+    false
+  );
+  request.send();
+
+  request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
+  request.send();
+  if (request.status === 200) {
+    studentList = JSON.parse(request.responseText);
+    clickFilter();
+  }
 }
 
-var sheet = document.getElementById('sheet');
-sheet.addEventListener('click', () => {
+function approved(e) {
+  var r = e.parentElement.parentElement;
+  var emailroll = e.parentElement.childNodes[1].innerHTML;
+  var email = emailroll.substring(0, emailroll.indexOf(" -"));
+
+  var studentId;
+  for (var i in studentList) {
+    if (studentList[i]["email"] == email) {
+      studentId = studentList[i]["_id"];
+    }
+  }
+
+  var obj = [];
+  obj.push({
+    admin: adminName,
+    email: email,
+    id: studentId,
+  });
+
+  var request = new XMLHttpRequest();
+  request.open(
+    "GET",
+    `${CURRENT_URL}/superApproveDues/${JSON.stringify(obj)}`,
+    false
+  );
+  request.send();
+
+  request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
+  request.send();
+  if (request.status === 200) {
+    studentList = JSON.parse(request.responseText);
+    clickFilter();
+  }
+}
+
+//Adding ClickFilter Option to search and status_button
+var search = document.getElementById("search");
+search.addEventListener("click", clickFilter);
+
+var status_button = document.getElementById("status");
+status_button.addEventListener("click", clickFilter);
+
+//Sheet Functionality
+var sheet = document.getElementById("sheet");
+sheet.addEventListener("click", () => {
+  new Noty({
+    theme: "metroui",
+    text: "Updating Sheet!",
+    type: "success",
+    layout: "topRight",
+    timeout: 1500,
+  }).show();
   window.location.href = `${CURRENT_URL}/showSheet`;
 });
 
-var adminRequests  = document.getElementById('adminRequests');
-adminRequests.addEventListener('click', () => {
+//Admin Requests Functionality
+var adminRequests = document.getElementById("adminRequests");
+adminRequests.addEventListener("click", () => {
   window.location.href = `${CURRENT_URL}/super_admin/adminRequests`;
 });
 
 //code for selecting multiple students at a time
-var selectAll = document.getElementById('selectAll');
-var checkboxes = document.getElementsByClassName('tickbox');
-selectAll.addEventListener('click', () => {
+var selectAll = document.getElementById("selectAll");
+selectAll.addEventListener("click", () => {
+  var checkboxes = document.getElementsByClassName("tickbox");
   for (var i in checkboxes) {
     checkboxes[i].checked = true;
   }
 });
-var unselectAll = document.getElementById('unselectAll');
-var checkboxes = document.getElementsByClassName('tickbox');
-unselectAll.addEventListener('click', () => {
+
+//code for unselecting students at a time
+var unselectAll = document.getElementById("unselectAll");
+unselectAll.addEventListener("click", () => {
+  var checkboxes = document.getElementsByClassName("tickbox");
   for (var i in checkboxes) {
     checkboxes[i].checked = false;
   }
 });
 
 //code for sending multiple students at a time
-var sendAll = document.getElementById('sendAll');
-var checkboxes = document.getElementsByClassName('tickbox');
-// console.log(checkboxes.length);
-sendAll.addEventListener('click', () => {
+var sendAll = document.getElementById("sendAll");
+sendAll.addEventListener("click", () => {
+  var checkboxes = document.getElementsByClassName("tickbox");
   var obj = [];
   for (var i in checkboxes) {
     //sendRequestButtons[i].click();
     if (checkboxes[i].checked == true) {
       if (checkboxes[i].previousElementSibling) {
         var text = checkboxes[i].previousElementSibling.innerHTML;
-        var index = text.indexOf(' ');
-        var studentEmail = text.substring(0,index);
+        var index = text.indexOf(" ");
+        var studentEmail = text.substring(0, index);
         obj.push({
           studentEmail: studentEmail,
-          adminName: adminName
+          adminName: adminName,
         });
       }
     }
   }
   if (obj.length != 0) {
-    var obj2 = []; obj2.push(obj);
-    console.log(obj);
-    window.location.href = `${CURRENT_URL}/superApproveManyDues/${JSON.stringify(obj2)}`;
+    var obj2 = [];
+    obj2.push(obj);
+
+    var request = new XMLHttpRequest();
+    request.open(
+      "GET",
+      `${CURRENT_URL}/superApproveManyDues/${JSON.stringify(obj2)}`,
+      false
+    );
+    request.send();
+
+    request = new XMLHttpRequest();
+    request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
+    request.send();
+    if (request.status === 200) {
+      studentList = JSON.parse(request.responseText);
+      clickFilter();
+    }
   }
 });
-
-var listBoys = document.getElementById('listBoys');
-if (listBoys) {
-  listBoys.addEventListener('click', () => {
-    window.location.href = `${CURRENT_URL}/sendMailToBoysHostelAdmin`;
-  });
-}
-
-var listGirls = document.getElementById('listGirls');
-if (listGirls) {
-  listGirls.addEventListener('click', () => {
-    window.location.href = `${CURRENT_URL}/sendMailToGirlsHostelAdmin`;
-  });
-}

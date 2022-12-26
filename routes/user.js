@@ -1,31 +1,68 @@
-const express = require('express');
-const userController = require('../controllers/user_controller');
-const passport = require('passport');
+const express = require("express");
+const userController = require("../controllers/user_controller");
+const passport = require("passport");
 
 const router = express.Router();
 
 // router.get('/profile', passport.checkAuthentication, userController.profile);
-router.get('/signup', userController.signup);
-router.get('/signin', userController.signin);
-router.post('/create', userController.create);
-router.post('/createSession', passport.authenticate(
-    'local',
-    {failureRedirect: '/user/signin'}
-), userController.createSession);
-router.get('/signout', userController.destroySession);
-router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
-router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect:'/user/signin'}), userController.createSession);
-router.get('/getProfessors', userController.getProfessors);
-router.get('/getStudents', userController.getStudents);
-router.get('/getAdmins', userController.getAdmins);
-router.get('/getUser/:id', userController.getUser);
-router.get('/getStudentsLoggedIn', userController.getStudentsLoggedIn);
+router.get("/signup", userController.signup);
+router.get("/signin", userController.signin);
+router.post("/create", userController.create);
+router.post(
+  "/createSession",
+  passport.authenticate("local", { failureRedirect: "/user/signin" }),
+  userController.createSession
+);
+router.get("/signout", userController.destroySession);
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/user/failedSignIn" }),
+  userController.createSession
+);
+router.get(
+  "/getProfessors",
+  passport.checkAuthentication,
+  userController.getProfessors
+);
+router.get("/failedSignIn", userController.failedSignIn);
+router.get("/getProfessorName/:profEmail", userController.getProfessorName);
+router.get(
+  "/getStudents",
+  passport.checkAuthentication,
+  userController.getStudents
+);
 
-router.all('*', function(req, res) {
-    res.status(404).send("Sorry! Couldn't find this URL");
+router.get(
+  "/getStudents/:adminName",
+  passport.checkAuthentication,
+  userController.getStudentsAdmin
+);
+
+router.get(
+  "/getStudents/professor/:profEmail",
+  passport.checkAuthentication,
+  userController.getStudentsProfessor
+);
+
+router.get("/getAdmins", userController.getAdmins);
+router.get("/getAdmin/:admin", userController.getAdminDetails);
+router.get(
+  "/getUser/:id",
+  passport.checkAuthentication,
+  userController.getUser
+);
+router.get(
+  "/getStudentsLoggedIn",
+  passport.checkAuthentication,
+  userController.getStudentsLoggedIn
+);
+
+router.all("*", function (req, res) {
+  res.status(404).send("Sorry! Couldn't find this URL");
 });
 
-
-
-
-module.exports = router;    
+module.exports = router;
