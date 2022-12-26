@@ -43,7 +43,9 @@ module.exports.addAdmins = (data) => {
 
     let originalName = details[0];
     let adminName = format(originalName);
-    admins.push(adminName);
+    if(adminName.substring(0,9)!='academics'){
+      admins.push(adminName);
+    }    
     original[adminName] = originalName;
 
     let displayName = details[1];
@@ -72,6 +74,7 @@ module.exports.addAdmins = (data) => {
       originalAdminName: originalName,
     });
   }
+  admins.push('academics');
   console.log("Admin Data Added");
 };
 

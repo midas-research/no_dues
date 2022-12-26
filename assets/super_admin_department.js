@@ -10,10 +10,6 @@ var originalName = JSON.parse(
 );
 var studentList;
 var addAdmins = document.getElementById("admins");
-adminList.pop();
-adminList.pop();
-adminList.pop();
-adminList.push("academics");
 
 function format(text) {
   let arr = text.split(" ");
@@ -35,10 +31,12 @@ for (var i in adminList) {
   addAdmins.add(option);
 }
 
+
 var option = document.createElement("option");
 option.value = "professor";
 option.text = "Professor";
 addAdmins.add(option);
+console.log(adminList);
 
 //html Code For Accepted Requests
 function addAcceptCode(student, msg, curr_admin) {

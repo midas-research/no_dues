@@ -198,14 +198,7 @@ module.exports.getStudentsProfessor = (req, res) => {
 };
 
 module.exports.getAdmins = (req, res) => {
-
-  let data=Admin.admins;
-  if(data[data.length-1]=='academics'){
-    data.pop();
-    data.push('academicsB');
-    data.push("academicsM");
-    data.push("academicsP");
-  }
+ 
   return res.status(200).json(Admin.admins);
 };
 

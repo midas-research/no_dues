@@ -3,7 +3,7 @@ const CURRENT_URL = JSON.parse(
 );
 var adminList = JSON.parse(document.getElementById("adminList").innerHTML);
 var id = document.getElementById("id").innerHTML;
-var adminName = document.getElementById("adminName").innerHTML;
+var superAdminName = document.getElementById("adminName").innerHTML;
 
 var accordion = document.getElementsByClassName("accordion")[0];
 
@@ -16,11 +16,11 @@ if (request.status === 200) {
 
 function check(student, curr_status) {
   if (curr_status == "pending") {
-    return student[adminName] == null;
+    return student[superAdminName] == null;
   } else if (curr_status == "accepted") {
-    return student[adminName] == true;
+    return student[superAdminName] == true;
   } else {
-    return student[adminName] == false;
+    return student[superAdminName] == false;
   }
 }
 
@@ -64,7 +64,7 @@ function addAcceptCode(student, msg) {
 
           
           <span class="message">Approved : ${
-            student[adminName + "ApprovedAt"]
+            student[superAdminName + "ApprovedAt"]
           }</span><br>
           <span class="message">Latest Communication before Accepting: </span><br>
           <span class="message">${msg}</span><br>
@@ -220,8 +220,8 @@ function clickFilter() {
 
   for (var i in currentList) {
     var message;
-    if (currentList[i][adminName + "Message"]) {
-      message = currentList[i][adminName + "Message"];
+    if (currentList[i][superAdminName + "Message"]) {
+      message = currentList[i][superAdminName + "Message"];
     } else {
       message = "You have not sent any message currently.";
     }
@@ -234,7 +234,7 @@ function clickFilter() {
       if (adminsLeft(currentList[i])) {
         k = "All Clear";
       }
-      accordion.innerHTML = "";
+     
       accordion.innerHTML += `
        <div class="accordion-item filter-btech">
          <button id="accordion-button-1" aria-expanded="false">
@@ -298,7 +298,7 @@ function sendMessage(e) {
   var index = email.indexOf(" ");
   var obj = [];
   obj.push({
-    admin: adminName,
+    admin: superAdminName,
     message: dues,
     email: email.substring(0, index),
   });
@@ -334,7 +334,7 @@ function approved(e) {
 
   var obj = [];
   obj.push({
-    admin: adminName,
+    admin: superAdminName,
     email: email,
     id: studentId,
   });
@@ -414,7 +414,7 @@ sendAll.addEventListener("click", () => {
         var studentEmail = text.substring(0, index);
         obj.push({
           studentEmail: studentEmail,
-          adminName: adminName,
+          adminName: superAdminName,
         });
       }
     }

@@ -22,11 +22,7 @@ const { CURRENT_URL, NODEMAILER_EMAIL_ID } = require("../config/config");
 //Super Admin Operations
 module.exports.superAdmin = (req, res) => {
   var admins_list = Admin.admins;
-  admins_list.pop();
-  admins_list.pop();
-  admins_list.pop();
-  admins_list.push("academics");
-
+  
   return res.render("super_admin", {
     title: "Super-Admin",
     adminList: JSON.stringify(admins_list),
@@ -146,93 +142,97 @@ module.exports.superAdminDepartment = (req, res) => {
   });
 };
 
-module.exports.sendAdminMessage = (req, res) => {
-  var obj = JSON.parse(req.params.dues);
+// module.exports.sendAdminMessage = (req, res) => {
+//   var obj = JSON.parse(req.params.dues);
 
-  User.findOne({ email: obj[0].email }, (err, user) => {
-    if (err) {
-      console.log("Error in finding student from email id");
-      return;
-    }
-    var id = user._id;
-    var attribute = obj[0].admin + "Message";
-    var updatedObject = {};
-    updatedObject[obj[0].admin] = false;
-    updatedObject[attribute] = obj[0].message;
-    updatedObject[obj[0].admin + "ApprovedAt"] = null;
+//   User.findOne({ email: obj[0].email }, (err, user) => {
+//     if (err) {
+//       console.log("Error in finding student from email id");
+//       return;
+//     }
+//     var id = user._id;
+//     var attribute = obj[0].admin + "Message";
+//     var updatedObject = {};
+//     updatedObject[obj[0].admin] = false;
+//     updatedObject[attribute] = obj[0].message;
+//     updatedObject[obj[0].admin + "ApprovedAt"] = null;
 
-    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
-      user.save();
-      return res.redirect("/super_admin/adminRequests");
-    });
-    message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
-  });
-  return;
-};
+//     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
+//       user.save();
+//       return res.redirect("/super_admin/adminRequests");
+//     });
+//     message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
+//   });
+//   return;
+// };
 
-module.exports.approveAdmin = (req, res) => {
-  var obj = JSON.parse(req.params.dues);
-  User.findOne({ email: obj[0].email }, (err, user) => {
-    if (err) {
-      console.log("Error in finding student from email id");
-      return;
-    }
-    var id = user._id;
-    var updateObject = {};
-    var today = new Date();
-    var date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + " " + time;
-    updateObject[obj[0].admin] = true;
-    updateObject[obj[0].admin + "ApprovedAt"] = dateTime;
 
-    User.findByIdAndUpdate(id, updateObject, (err, user) => {
-      user.save();
-      return res.redirect("/super_admin/adminRequests");
-    });
-    approved_mailer.approvedDues(obj[0].admin, obj[0].email);
-  });
-  return;
-};
+// module.exports.approveAdmin = (req, res) => {
+//   var obj = JSON.parse(req.params.dues);
+//   User.findOne({ email: obj[0].email }, (err, user) => {
+//     if (err) {
+//       console.log("Error in finding student from email id");
+//       return;
+//     }
+//     var id = user._id;
+//     var updateObject = {};
+//     var today = new Date();
+//     var date =
+//       today.getFullYear() +
+//       "-" +
+//       (today.getMonth() + 1) +
+//       "-" +
+//       today.getDate();
+//     var time =
+//       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+//     var dateTime = date + " " + time;
+//     updateObject[obj[0].admin] = true;
+//     updateObject[obj[0].admin + "ApprovedAt"] = dateTime;
 
-module.exports.approveManyAdmins = (req, res) => {
-  var obj = JSON.parse(req.params.dues)[0];
-  for (var i in obj) {
-    var studentEmail = obj[i].studentEmail;
-    var adminName = obj[i].adminName;
-    var updateObject = {};
-    updateObject[adminName] = true;
-    var today = new Date();
-    var date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + " " + time;
-    updateObject[adminName + "ApprovedAt"] = dateTime;
+//     User.findByIdAndUpdate(id, updateObject, (err, user) => {
+//       user.save();
+//       return res.redirect("/super_admin/adminRequests");
+//     });
+//     approved_mailer.approvedDues(obj[0].admin, obj[0].email);
+//   });
+//   return;
+// };
 
-    User.findOneAndUpdate(
-      { email: studentEmail },
-      updateObject,
-      (err, user) => {
-        user.save();
-        approved_mailer.approvedDues(adminName, studentEmail);
-      }
-    );
-  }
-  return res.redirect("/super_admin/adminRequests");
-};
+// module.exports.approveManyAdmins = (req, res) => {
+//   var obj = JSON.parse(req.params.dues)[0];
+//   for (var i in obj) {
+//     var studentEmail = obj[i].studentEmail;
+//     var adminName = obj[i].adminName;
+//     var updateObject = {};
+//     updateObject[adminName] = true;
+//     var today = new Date();
+//     var date =
+//       today.getFullYear() +
+//       "-" +
+//       (today.getMonth() + 1) +
+//       "-" +
+//       today.getDate();
+//     var time =
+//       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+//     var dateTime = date + " " + time;
+//     updateObject[adminName + "ApprovedAt"] = dateTime;
+
+//     User.findOneAndUpdate(
+//       { email: studentEmail },
+//       updateObject,
+//       (err, user) => {
+//         user.save();
+//         approved_mailer.approvedDues(adminName, studentEmail);
+//       }
+//     );
+//   }
+//   return res.redirect("/super_admin/adminRequests");
+// };
+
+
 
 //Admin Operations
+
 
 module.exports.adminHome = (req, res) => {
   var studentList = [];
@@ -674,9 +674,7 @@ module.exports.request = (req, res) => {
 
   var studentEmail = obj.studentEmail;
   var adminName = obj.adminName;
-  if (adminName.substring(0, 9) == "academics") {
-    adminName = "academics";
-  }
+  
   var hostelTaken = obj.hostelTaken;
 
   var updateObject = {};
@@ -791,20 +789,9 @@ function modifyAdminName(s) {
   }
   return newName;
 }
+
 module.exports.download = async (req, res) => {
-  var admins_list;
-  await axios
-    .get(`${CURRENT_URL}/user/getAdmins`)
-    .then((response) => {
-      admins_list = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  var admins = [];
-  for (var i = 0; i < admins_list.length - 2; i++) {
-    admins.push(modifyAdminName(admins_list[i][0]));
-  }
+  
   var id = req.params.id;
   User.findOne({ _id: id }, (err, user) => {
     if (err) {
