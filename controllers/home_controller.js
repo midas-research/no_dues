@@ -587,7 +587,7 @@ module.exports.ipApproved = (req, res) => {
 module.exports.afterMailPage = (req, res) => {
   var status = req.params.status;
 
-  res.render("afterMailPage", { status: status, layout: "afterMailPage" });
+  res.render("afterMailPage", { title: "No Dues",status: status, layout: "afterMailPage" });
 };
 
 module.exports.ipApprovedThroughMail = (req, res) => {
