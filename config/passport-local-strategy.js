@@ -192,9 +192,11 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Name",
     "Roll no.",
     "Email",
+    "Mobile No.",
     "Degree",
     "Department",
     "Batch",
+    "Leaving Reason",
     "Design Lab",
     "Library",
     "Admin Facilities",
@@ -214,7 +216,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Branch Name",
     "Account Holder Name",
     "Account No",
-    "IFSC Code",
+    "IFSC Code"
   ]);
   var docs = await User.find({});
   for (var i in docs) {
@@ -223,9 +225,11 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add2(temp, docs[i]["name"]);
       add2(temp, docs[i]["roll"]);
       add2(temp, docs[i]["email"]);
+      add2(temp, docs[i]["mobile"]);
       add2(temp, docs[i]["degree"]);
       add2(temp, docs[i]["department"]);
       add2(temp, docs[i]["batch"]);
+      add2(temp, docs[i]["personalDetails"]);
       add(temp, docs[i]["designLab"]);
       add(temp, docs[i]["library"]);
       add(temp, docs[i]["adminFacilities"]);

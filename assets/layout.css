@@ -104,11 +104,15 @@ body{
     overflow-y: auto;
 }
 
+.container select, .container input{
+    max-width:70vw;
+}
+
 @media only screen and (max-width: 768px) {
     .container{
         width: 95vw;
-        box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2);
-        /* border-radius: 0px; */
+        
+        border-radius: 0px;
         padding:1rem;
         
     }

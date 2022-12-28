@@ -160,6 +160,8 @@ function download() {
 }
 function download2() {
   downloadbtn.style.display = "none";
+  var form=document.getElementById('form');
+  form.style.width="678px";
   window.print();
   downloadbtn.style.display = "block";
 }

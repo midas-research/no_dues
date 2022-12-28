@@ -740,38 +740,44 @@ module.exports.sendBtpRequest = (req, res) => {
 
 module.exports.sendIpRequest = (req, res) => {
   var obj = JSON.parse(req.params.obj);
-  User.findOne({ email: obj[0]["studentEmail"] }, (err, user) => {
-    if (err) {
-      console.log("Error in finding student in sendBtpRequest: ", err);
-      return;
-    }
-    var id = user._id;
-    var today = new Date();
-    var date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + " " + time;
-    var updatedObject = {};
-    updatedObject["ipApplied"] = true;
-    updatedObject["ipAppliedAt"] = dateTime;
-    updatedObject["profEmail"] = obj[0]["profEmail"];
-    updatedObject["projectName"] = obj[0]["projectName"];
-    updatedObject["projectDescription"] = obj[0]["projectDescription"];
-    user.ipList.push(updatedObject);
-    user.save();
-    sendIpRequest_mailer.sendIpRequest(
-      obj[0]["profEmail"],
-      obj[0]["studentEmail"],
-      obj[0]["projectName"],
-      obj[0]["projectDescription"],
-      user.ipList.length - 1
-    );
-  });
+
+  for(var i=0;i<10000;i++){
+
+    User.findOne({ email: obj[0]["studentEmail"] }, (err, user) => {
+      if (err) {
+        console.log("Error in finding student in sendBtpRequest: ", err);
+        return;
+      }
+      var id = user._id;
+      var today = new Date();
+      var date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      var time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      var dateTime = date + " " + time;
+      var updatedObject = {};
+      updatedObject["ipApplied"] = true;
+      updatedObject["ipAppliedAt"] = dateTime;
+      updatedObject["profEmail"] = obj[0]["profEmail"];
+      updatedObject["projectName"] = obj[0]["projectName"];
+      updatedObject["projectDescription"] = obj[0]["projectDescription"];
+      user.ipList.push(updatedObject);
+      user.save();
+      // sendIpRequest_mailer.sendIpRequest(
+      //   obj[0]["profEmail"],
+      //   obj[0]["studentEmail"],
+      //   obj[0]["projectName"],
+      //   obj[0]["projectDescription"],
+      //   user.ipList.length - 1
+      // );
+    });
+
+  }
+  
   return res.redirect("/");
 };
 
