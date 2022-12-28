@@ -303,59 +303,67 @@ body {
   cursor: pointer;
 }
 
-/* The Modal (background) */
-.modal {
+/* The Modal  */
+
+.modal , .modal1{
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  z-index: 2; /* Sit on top */
   left: 0px;
-  top: 0px;
- 
+  top: 0px; 
   width: 100%; 
   height: 100%; 
-  /* overflow: auto; Enable scroll if needed */
+  overflow:auto;
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   /* border: 10px solid black; */
-  border-radius: 20px;
+  align-items: center;
+  justify-content: center; 
 }
 
-.modal-content {
+.modal-content , .modal-content1{
   background-color: #fefefe;
-  margin: 9vh auto; /* 15% from the top and centered */
+
   padding: 20px;
   border: 1px solid #888;
-  width: 50%; /* Could be more or less, depending on screen size */
+  width: 70%; /* Could be more or less, depending on screen size */
 }
 
-.modal1 {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  border-radius: 20px;
-}
-
-.modal-content1 {
-  background-color: #fefefe;
-  margin: 10% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 50%; /* Could be more or less, depending on screen size */
-
-}
-
-.modal1 input {
+.modal input , .modal1 input{
   border: 1px solid black;
   width: 100%;
+  margin-bottom: 20px;
 }
-#submitBankDetailsForm, #submitPersonalDetailsForm{
+
+.modal input[type="submit"] , .modal1 input[type="submit"]{
+  width: 20%;
+  margin: auto;
+  background-color: #888;
+  color: black;
+}
+
+.modal input[type="submit"]:hover , .modal1 input[type="submit"]:hover{
+  background-color: #343a40;
+  color: #fefefe;
+}
+
+.modal h4 , .modal1 h4{
+  margin-bottom: 20px;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .modal-content{
+    width: 90%;
+  }
+  .modal-content1{
+    width: 90%;
+  }
+
+  
+}
+
+#submitBankDetailsForm , #submitPersonalDetailsForm{
   background-color: black;
   color:white;
   padding:5px;
@@ -363,86 +371,25 @@ body {
 }
 
 /* The Close Button */
-.close {
+.close , .close1{
   color: black;
-  float: right;
+  float:right;
   font-size: 28px;
   font-weight: bold;
+  display: block;
 }
 
-.close:hover,
-.close:focus {
+.close:hover , .close:focus , .close1:hover , .close1:focus{
   color:#aaa;
   text-decoration: none;
   cursor: pointer;
-}
-
-.close1 {
-  color: black;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close1:hover,
-.close1:focus {
-  color:#aaa;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.modal input {
-  margin-bottom: 20px;
-}
-
-.modal input[type="submit"] {
-  width: 20%;
-  margin: auto;
-  background-color: #888;
-  color: black;
-}
-
-.modal input[type="submit"]:hover {
-  background-color: #343a40;
-  color: #fefefe;
-}
-
-.modal h4 {
-  margin-bottom: 20px;
-}
-
-.modal1 input {
-  margin-bottom: 20px;
-}
-
-.modal1 input[type="submit"] {
-  width: 20%;
-  margin: auto;
-  background-color: #888;
-  color: black;
-}
-
-.modal1 input[type="submit"]:hover {
-  background-color: #343a40;
-  color: #fefefe;
-}
-
-.modal1 h4 {
-  margin-bottom: 20px;
 }
 
 #uploadBankDetails:hover {
   cursor: pointer;
 }
 
-.warning {
-  color: red;
-  font-size: small;
-  margin-top: -20px;
-  display: none;
-}
-
-#uploadPersonalDetails {
+#uploadPersonalDetails:hover {
   cursor: pointer;
 }
 
@@ -458,5 +405,13 @@ input[type=radio] {
   width: fit-content;
 }
 
+.container h2{
+  font-size: 2rem;
+}
 
-
+.warning {
+  color: red;
+  font-size: small;
+  margin-top: -20px;
+  display: none;
+}

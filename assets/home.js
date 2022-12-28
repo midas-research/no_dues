@@ -330,6 +330,8 @@ function createIpRequest() {
       </button>
 
       <div class="accordion-content">
+         <br>
+          
           <label for="proffs">Choose professor:  </label>
           
           <select name="proffs" class="ip_proff${ipCount}">
@@ -375,6 +377,7 @@ function createBtpRequest() {
     </button>
 
     <div class="accordion-content">
+        <br>
         <label for="proffs">Choose professor:</label>
         <select name="proffs" class="btp_proff${btpCount}">
           <option value="None">None</option>
@@ -700,7 +703,7 @@ downloadbtn.addEventListener("click", () => {
   // };
   var uploadBankDetails = document.getElementById("uploadBankDetails");
   uploadBankDetails.onclick = function () {
-    modal.style.display = "block";
+    modal.style.display = "flex";
     if (user[0].bankName != undefined) {
       document.getElementById("bankName").value = user[0].bankName;
     }
@@ -713,11 +716,40 @@ downloadbtn.addEventListener("click", () => {
     if (user[0].bankIfscCode != undefined) {
       document.getElementById("bankIfscCode").value = user[0].bankIfscCode;
     }
+    if (user[0].bankAccountHolder != undefined) {
+      document.getElementById("bankAccountHolder").value = user[0].bankAccountHolder;
+    }
   };
 
   var uploadPersonalDetails = document.getElementById("uploadPersonalDetails");
   uploadPersonalDetails.onclick = function () {
-    modal1.style.display = "block";
+    modal1.style.display = "flex";
+    personalMobile = document.getElementById("personalMobile");
+    personalEmail = document.getElementById("personalEmail");
+    leavingDate = document.getElementById("leavingDate");
+    withdrawal = document.getElementById("withdrawal");
+    completed = document.getElementById("completed");
+    if (user[0].personalDetails=='withdrawl') {
+      withdrawal.checked=true;
+      completed.checked=false;
+    }
+    else if (user[0].personalDetails == "completed") {
+       withdrawal.checked = false;
+       completed.checked = true;
+    }
+
+    if (user[0].personalMobile != undefined) {
+      personalEmail.value = user[0].personalMobile;
+    }
+    if (user[0].personalEmail != undefined) {
+      personalEmail.value = user[0].personalEmail;
+    }
+    if (user[0].leavingDate != undefined) {
+      leavingDate.value = user[0].leavingDate;
+    }
+    if (user[0].completed != undefined) {
+     completed.value =user[0].completed;
+    }
   };
 
   // When the user clicks on <span> (x), close the modal
