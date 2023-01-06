@@ -161,13 +161,12 @@ function download1() {
   });
 }
 function download2() { 
-  downloadbtn.style.display = "none";  
-  var form=document.getElementById('form');
-  let prev = form.style.width;
-  form.style.width="678px";
+  downloadbtn.style.display = "none";
+  var form = document.getElementById("form");
+  form.style.width = "678px";
   window.print();
-  form.style.width = prev;
-  downloadbtn.style.display = "block";
+  downloadbtn.style.display = "block"; 
+  window.location.href = `${CURRENT_URL}/download/${user._id}`;
 }
 
 function download3() {
