@@ -149,39 +149,71 @@ a.setAttribute("href", link);
 //PDF Download
 
 var downloadbtn = document.getElementById("download");
-if(screen.width>768){
-  downloadbtn.addEventListener("click", download2);
-}
-else{
-  console.log(screen.width);
-  downloadbtn.addEventListener("click", download3);
-}
-
+downloadbtn.addEventListener("click", download2);
 
 function download1() {
   let doc = new jsPDF("p", "pt", "a4");
-  var content = document.getElementById("body");
+  var content = document.getElementById("form");
+  content.style.width = "678px";
+
   doc.addHTML(content, function () {
     doc.save("No-Dues.pdf");
   });
 }
-function download2() {
-  downloadbtn.style.opacity = 0;
+function download2() { 
   downloadbtn.style.display = "none";  
   var form=document.getElementById('form');
   let prev = form.style.width;
   form.style.width="678px";
   window.print();
   form.style.width = prev;
-  downloadbtn.style.opacity = 1;
   downloadbtn.style.display = "block";
 }
+
 function download3() {
-  downloadbtn.style.opacity = 0;
-  downloadbtn.style.color='white';
-  downloadbtn.style.display = "none";
-  window.print();
-   downloadbtn.style.color = "black";
-  downloadbtn.style.opacity = 1;
-  downloadbtn.style.display = "block";
+  var form = document.getElementById("form");
+  let prev = form.style.width;
+  form.style.width = "678px";
+
+  html2canvas(form).then((canvas) => {     
+   
+    var pdf = new jsPDF("p", "pt", "a4");
+
+    var h = canvas.height;     
+    var w=  canvas.width;
+
+    for (var i = 0; i <= h / 842; i++) {
+      
+      var srcImg = canvas;
+      var sX = 0;
+      var sY = 842 * i; 
+      var sWidth = w;
+      var sHeight = 842;
+      var dX = 0;
+      var dY = 0;
+      var dWidth = 592;
+      var dHeight = (842*600.0)/w;
+      window.onePageCanvas = document.createElement("canvas");
+      onePageCanvas.setAttribute("width", 592);
+      onePageCanvas.setAttribute("height", 842);
+      var ctx = onePageCanvas.getContext("2d");      
+      ctx.drawImage(srcImg, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
+      var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
+      var width = onePageCanvas.width;
+      var height = onePageCanvas.clientHeight;
+      if (i > 0) {
+        pdf.addPage(592, 842); 
+      }
+      pdf.setPage(i + 1);
+      pdf.addImage(canvasDataURL, "PNG", 20, 40, width*0.9 , height*0.9 );
+    }
+    pdf.save("No Dues.pdf");
+    
+  });
+  form.style.width=prev;
+  
+  
 }
+
+        
+  
