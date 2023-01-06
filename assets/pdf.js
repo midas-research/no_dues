@@ -149,7 +149,14 @@ a.setAttribute("href", link);
 //PDF Download
 
 var downloadbtn = document.getElementById("download");
-downloadbtn.addEventListener("click", download2);
+if(screen.width>768){
+  downloadbtn.addEventListener("click", download2);
+}
+else{
+  console.log(screen.width);
+  downloadbtn.addEventListener("click", download3);
+}
+
 
 function download1() {
   let doc = new jsPDF("p", "pt", "a4");
@@ -163,9 +170,18 @@ function download2() {
   downloadbtn.style.display = "none";  
   var form=document.getElementById('form');
   let prev = form.style.width;
-  form.style.width="90vw";
+  form.style.width="678px";
   window.print();
   form.style.width = prev;
+  downloadbtn.style.opacity = 1;
+  downloadbtn.style.display = "block";
+}
+function download3() {
+  downloadbtn.style.opacity = 0;
+  downloadbtn.style.color='white';
+  downloadbtn.style.display = "none";
+  window.print();
+   downloadbtn.style.color = "black";
   downloadbtn.style.opacity = 1;
   downloadbtn.style.display = "block";
 }
