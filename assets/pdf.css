@@ -80,7 +80,7 @@ td, th {
     text-decoration: underline;
 }
 
-#form{
+#form, #dwld{
     padding: 15px;
     background-color: white; 
     width: 50vw;  
