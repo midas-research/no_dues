@@ -151,7 +151,7 @@ a.setAttribute("href", link);
 var downloadbtn = document.getElementById("download");
 downloadbtn.addEventListener("click", download2);
 
-function download() {
+function download1() {
   let doc = new jsPDF("p", "pt", "a4");
   var content = document.getElementById("body");
   doc.addHTML(content, function () {
@@ -163,7 +163,7 @@ function download2() {
   downloadbtn.style.display = "none";  
   var form=document.getElementById('form');
   let prev = form.style.width;
-  form.style.width="678px";
+  form.style.width="90vw";
   window.print();
   form.style.width = prev;
   downloadbtn.style.opacity = 1;
