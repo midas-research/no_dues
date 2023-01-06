@@ -24,7 +24,7 @@ tabledata.innerHTML += `
                         <th>Sl. No.</th>
                         <th>Department / Cell / Section</th>
                         <th>Office</th>
-                        <th>Dues</th>
+                        <th>No Dues</th>
                         <th>Signature</th>
                     </tr>`;
 
@@ -159,9 +159,13 @@ function download() {
   });
 }
 function download2() {
-  downloadbtn.style.display = "none";
+  downloadbtn.style.opacity = 0;
+  downloadbtn.style.display = "none";  
   var form=document.getElementById('form');
+  let prev = form.style.width;
   form.style.width="678px";
   window.print();
+  form.style.width = prev;
+  downloadbtn.style.opacity = 1;
   downloadbtn.style.display = "block";
 }
