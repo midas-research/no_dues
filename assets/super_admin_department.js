@@ -111,8 +111,7 @@ function isTrue(student) {
   return (
     checkDegree &&
     checkDepartment &&
-    checkBatch &&
-    check(student, curr_status, curr_admin)
+    checkBatch    
   );
 }
 
@@ -251,10 +250,11 @@ function clickFilter() {
 //getting Requests according to Admin
 function getAdminRequests() {
   var curr_admin = document.getElementById("admins").value;
+  var curr_status = document.getElementById("status").value;
 
   //Getting list of students
   var request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/user/getStudents/${curr_admin}`, false);
+  request.open("GET", `${CURRENT_URL}/user/getStudents/${curr_admin}/${curr_status}`, false);
   request.send();
   if (request.status === 200) {
     studentList = JSON.parse(request.responseText);
@@ -364,7 +364,7 @@ var search = document.getElementById("search");
 search.addEventListener("click", clickFilter);
 
 var status_button = document.getElementById("status");
-status_button.addEventListener("click", clickFilter);
+status_button.addEventListener("click", getAdminRequests);
 
 var admins_button = document.getElementById("admins");
 admins_button.addEventListener("click", getAdminRequests);
@@ -556,7 +556,7 @@ function addAcceptIPCode(student, obj, msg, idx) {
   return `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - IP/IS/UR</span>
+            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">IP/IS/UR</span></span>
             <span class="icon" aria-hidden="true"></span>
             
         </button>
@@ -586,7 +586,7 @@ function addAcceptIPCode(student, obj, msg, idx) {
 function addAcceptBTPCode(student, obj, msg, idx) {
   return `<div class="accordion-item filter-btech">
       <button id="accordion-button-1" aria-expanded="false">
-          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - BTP</span>
+          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
           <span class="icon" aria-hidden="true"></span>
           
       </button>
@@ -615,7 +615,7 @@ function addAcceptBTPCode(student, obj, msg, idx) {
 function addBTPCode(student, obj, msg, idx) {
   return ` <div class="accordion-item filter-btech">
             <button id="accordion-button-1" aria-expanded="false">
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - BTP</span>
+                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
                 <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
                 <span class="send_request accept_request" onclick="event.stopPropagation() ;btpApproved(this,${idx})"> Accept </span>
                 <span class="icon" aria-hidden="true"></span>
@@ -642,7 +642,7 @@ function addBTPCode(student, obj, msg, idx) {
 function addIPCode(student, obj, msg, idx) {
   return `<div class="accordion-item filter-btech">
             <button id="accordion-button-1" aria-expanded="false">                
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - IP/IS/UR</span>
+                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">IP/IS/UR</span></span>
                 <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
                 <span class="send_request accept_request" onclick="event.stopPropagation() ;ipApproved(this,${idx})"> Accept </span>
                 <span class="icon" aria-hidden="true"></span>
@@ -847,8 +847,10 @@ function clickProfFilter() {
 
 function generateProfRequests() {
   var currProf = document.getElementById("profFilter").value;
+  var status = document.getElementById("status").value;
 
-  let url = `${CURRENT_URL}/user/getStudents/professor/${currProf}`;
+  let url = `${CURRENT_URL}/user/getStudents/professor/${currProf}/${status}`;
+  
 
   //Getting list of students
   var request = new XMLHttpRequest();
@@ -872,8 +874,16 @@ function sendSelectedProf() {
 
       var studentEmail = list[0];
       var projectName = list[list.length - 2];
+      var eindex = projectName.indexOf("</span>");
+      var sindex = projectName.indexOf(">");
+
+      projectName = projectName.substring(sindex + 1, eindex);
 
       var admin = list[list.length - 1];
+      var eindex = admin.indexOf("</span>");
+      var sindex = admin.indexOf(">");
+      admin = admin.substring(sindex + 1, eindex);
+      
       if (admin == "BTP") {
         admin = "btp";
       } else {

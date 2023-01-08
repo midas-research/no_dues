@@ -74,38 +74,7 @@ footer a:hover{
 }
 
 
-/* Responsive */
 
-@media only screen and (max-width: 768px) {
-    #header{
-        display: none;
-    }
-    .container{
-        width: 95vw;
-        
-        border-radius: 0px;
-        padding:1rem;
-        
-    }
-    #navbar_right_i{
-        display: none;
-
-    }
-    #navbar_left_i {
-        display: none;
-
-    }
-    #main{
-        padding-left: 1px;
-        padding-right: 1px;      
-        background-color: white !important;
-    }
-    
-    footer{
-        display: none;
-    }
-
-}
 
 /* Navbar */
 
@@ -238,6 +207,7 @@ footer a:hover{
 
 .container h2,
 .container h3 {
+    margin-top:5px;
     text-align: center;
 }
 
@@ -259,10 +229,58 @@ footer a:hover{
 
 .accordion button .accordion-title {
     /* padding: 1em 1.5em 1em 0; */
-    max-width: 70%;
+    max-width: 80%;
     height: auto;
     padding: 0px;
     display: inline-block;
+}
+
+@media only screen and (max-width: 1200px){
+    .accordion button .accordion-title {
+        /* padding: 1em 1.5em 1em 0; */
+        max-width: 50%;
+        height: auto;
+        padding: 0px;
+        display: inline-block;
+    }
+}
+
+/* Responsive */
+
+@media only screen and (max-width: 768px) {
+    #header {
+        display: none;
+    }
+
+    .container {
+        width: 95vw;
+        border-radius: 0px;
+        padding: 1rem;
+
+    }
+
+    #navbar_right_i {
+        display: none;
+
+    }
+
+    #navbar_left_i {
+        display: none;
+
+    }
+
+    #main {
+        padding-left: 1px;
+        padding-right: 1px;
+        background-color: white !important;
+    }
+
+    footer {
+        display: none;
+    }
+
+
+
 }
 
 
