@@ -308,7 +308,7 @@ sheet.addEventListener("click", () => {
     layout: "topRight",
     timeout: 1500,
   }).show();
-  window.location.href = "/showSheet";
+  window.open(`${CURRENT_URL}/showSheet`, "_blank");
 });
 
 //code for selectAll, send Selected, Unselect All

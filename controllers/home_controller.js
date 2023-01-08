@@ -18,6 +18,7 @@ var XMLHttpRequest = require("xhr2");
 var xhr = new XMLHttpRequest();
 const axios = require("axios");
 const { CURRENT_URL, NODEMAILER_EMAIL_ID } = require("../config/config");
+const fs = require("fs");
 
 //Super Admin Operations
 module.exports.superAdmin = (req, res) => {
@@ -121,6 +122,194 @@ module.exports.superApproveManyDues = (req, res) => {
   res.status = 200;
   return res.end();
 };
+
+module.exports.updateAccess = (req, res) => {
+  
+  return res.render("updateAccess", {
+    title: "Update Access",
+    adminName: "nodues",
+    studentURL: JSON.stringify(
+      "https://docs.google.com/spreadsheets/d/1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY/edit?usp=sharing"
+    ),
+    adminURL: JSON.stringify(
+      "https://docs.google.com/spreadsheets/d/1hXUEUHWGt3TyrhvWPh25U8KlmutxcTVx2qfAdPHyCEY/edit?usp=sharing"
+    ),
+    professorURL: JSON.stringify(
+      "https://docs.google.com/spreadsheets/d/1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM/edit?usp=sharing"
+    ),
+    id: req.user._id,
+    url: JSON.stringify(CURRENT_URL),
+    layout: "updateAccess",
+  });
+
+};
+
+module.exports.updateAdmin=async (req,res)=>{
+  var admins_data;
+
+  var spreadsheetId = "1hXUEUHWGt3TyrhvWPh25U8KlmutxcTVx2qfAdPHyCEY";
+  var auth = new google.auth.GoogleAuth({
+    keyFile: "credentials.json",
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+  var client= await auth.getClient();
+  var googleSheets = google.sheets({ version: "v4", auth: client });
+  var metadata = await googleSheets.spreadsheets.get({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+  });
+  var data = await googleSheets.spreadsheets.values.get({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+    range: "Sheet1",
+  });
+  admins_data = data.data.values;
+  
+
+  fs.readFile(`data/admins.json`, (err, data) => {
+    if (err) {
+      console.log("Error in reading admins file: ", err);
+      return;
+    }
+ 
+    if (data != JSON.stringify(admins_data)) {
+      fs.writeFile(
+        `data/admins.json`,
+        JSON.stringify(admins_data),
+        (err) => {
+          if (err) {
+            console.log("Error in writing to admins file: ", err);
+            return;
+          }
+        }
+      );
+      
+    }
+  });
+  Admin.db.collection.drop();
+  Admin.addAdmins(admins_data);
+  res.status = 200;
+  return res.end();
+}
+
+module.exports.updateStudent = async (req, res) => {
+  var spreadsheetId = "1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY";
+  var auth = new google.auth.GoogleAuth({
+    keyFile: "credentials.json",
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+  var client = await auth.getClient();
+  var googleSheets = google.sheets({ version: "v4", auth: client });
+  var metadata = await googleSheets.spreadsheets.get({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+  });
+  var data = await googleSheets.spreadsheets.values.get({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+    range: "Sheet1",
+  });
+  students_data = data.data.values;
+  fs.readFile("data/students.json", (err, data) => {
+    if (err) {
+      console.log("Error in writing to admins file: ", err);
+      return;
+    }
+    if (data != JSON.stringify(students_data)) {
+      fs.writeFile(
+        "data/students.json",
+        JSON.stringify(students_data),
+        (err) => {
+          if (err) {
+            console.log("Error in writing to admins file: ", err);
+            return;
+          }
+        }
+      );
+    }
+  });
+
+  res.status = 200;
+  return res.end();
+};
+
+module.exports.updateProfessor = async (req, res) => {
+  var spreadsheetId = "1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM";
+  var auth = new google.auth.GoogleAuth({
+    keyFile: "credentials.json",
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+  });
+  var client = await auth.getClient();
+  var googleSheets = google.sheets({ version: "v4", auth: client });
+  var metadata = await googleSheets.spreadsheets.get({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+  });
+  var data = await googleSheets.spreadsheets.values.get({
+    auth: auth,
+    spreadsheetId: spreadsheetId,
+    range: "Sheet1",
+  });
+  professors_data = data.data.values;
+  professors_data.shift();
+  fs.readFile("data/professors.json", (err, data) => {
+    if (err) {
+      console.log("Error in writing to admins file: ", err);
+      return;
+    }
+    if (data != JSON.stringify(professors_data)) {
+      fs.writeFile(
+        "data/professors.json",
+        JSON.stringify(professors_data),
+        (err) => {
+          if (err) {
+            console.log("Error in writing to admins file: ", err);
+            return;
+          }
+        }
+      );
+    }
+  });
+  var proffNames = {};
+  for (var i in professors_data) {
+    if(i==0){
+      continue;
+    }
+    proffNames[professors_data[i][1]] = professors_data[i][0];
+  }
+  var text = `    
+    const getProffName = (email) => {
+        return proffNames[email];
+    }
+
+    module.exports.proffNames = proffNames;
+
+    const isProff = (email) => {
+        
+        if (email in proffNames) {
+            return true;
+        } else {
+            return false;
+        }
+    } 
+    module.exports={getProffName,isProff}; 
+    `;
+
+  fs.writeFile(
+    "data/getProffName.js",
+    "var proffNames = " + JSON.stringify(proffNames) + "\n" + text,
+    (err) => {
+      if (err) {
+        console.log("Error in writing to admins file: ", err);
+        return;
+      }
+    }
+  );
+  res.status = 200;
+  return res.end();
+};
+
+
 
 // Super Admin Department Wise
 
@@ -739,44 +928,42 @@ module.exports.sendBtpRequest = (req, res) => {
 };
 
 module.exports.sendIpRequest = (req, res) => {
-  var obj = JSON.parse(req.params.obj);
+  var obj = JSON.parse(req.params.obj); 
 
-  for(var i=0;i<10000;i++){
+  User.findOne({ email: obj[0]["studentEmail"] }, (err, user) => {
+    if (err) {
+      console.log("Error in finding student in sendBtpRequest: ", err);
+      return;
+    }
+    var id = user._id;
+    var today = new Date();
+    var date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+    var time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + " " + time;
+    var updatedObject = {};
+    updatedObject["ipApplied"] = true;
+    updatedObject["ipAppliedAt"] = dateTime;
+    updatedObject["profEmail"] = obj[0]["profEmail"];
+    updatedObject["projectName"] = obj[0]["projectName"];
+    updatedObject["projectDescription"] = obj[0]["projectDescription"];
+    user.ipList.push(updatedObject);
+    user.save();
+    sendIpRequest_mailer.sendIpRequest(
+      obj[0]["profEmail"],
+      obj[0]["studentEmail"],
+      obj[0]["projectName"],
+      obj[0]["projectDescription"],
+      user.ipList.length - 1
+    );
+  });
 
-    User.findOne({ email: obj[0]["studentEmail"] }, (err, user) => {
-      if (err) {
-        console.log("Error in finding student in sendBtpRequest: ", err);
-        return;
-      }
-      var id = user._id;
-      var today = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date + " " + time;
-      var updatedObject = {};
-      updatedObject["ipApplied"] = true;
-      updatedObject["ipAppliedAt"] = dateTime;
-      updatedObject["profEmail"] = obj[0]["profEmail"];
-      updatedObject["projectName"] = obj[0]["projectName"];
-      updatedObject["projectDescription"] = obj[0]["projectDescription"];
-      user.ipList.push(updatedObject);
-      user.save();
-      // sendIpRequest_mailer.sendIpRequest(
-      //   obj[0]["profEmail"],
-      //   obj[0]["studentEmail"],
-      //   obj[0]["projectName"],
-      //   obj[0]["projectDescription"],
-      //   user.ipList.length - 1
-      // );
-    });
-
-  }
+  
   
   return res.redirect("/");
 };

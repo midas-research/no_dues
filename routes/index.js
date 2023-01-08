@@ -22,6 +22,26 @@ router.get(
   homeController.superAdminDepartment
 );
 router.get(
+  "/super_admin/updateAccess",
+  passport.checkSuperAdminAuthentication,
+  homeController.updateAccess
+);
+router.get(
+  "/super_admin/updateadmin",
+  passport.checkSuperAdminAuthentication,
+  homeController.updateAdmin
+);
+router.get(
+  "/super_admin/updatestudent",
+  passport.checkSuperAdminAuthentication,
+  homeController.updateStudent
+);
+router.get(
+  "/super_admin/updateprofessor",
+  passport.checkSuperAdminAuthentication,
+  homeController.updateProfessor
+);
+router.get(
   "/superSendMessage/:dues",
   passport.checkSuperAdminAuthentication,
   homeController.superSendMessage

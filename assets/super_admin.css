@@ -1,91 +1,5 @@
-body {
-    width: 100vw;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
 
-#navbar {
-  height: 8vh;
-  background-color: #343a40;
-  width: 100vw;
-  display: flex;
-  padding-left: 15px;
-  padding-right: 15px;
-  justify-content: space-between;
-  align-items: center;
-}
 
-#navbar img {
-  width: 6vh;
-  height: 6vh;
-  border-radius: 50%;
-}
-
-#navbar_left {
-  display: flex;
-  align-items: center;
-}
-
-#navbar_right {
-  display: flex;
-  align-items: center;
-}
-
-#navbar_left img {
-  margin-right: 20px;
-}
-
-#navbar_right img {
-  margin-left: 20px;
-}
-
-#navbar_left_p {
-  display: inline-block;
-  color: white;
-  font-size: min(20px, 8vw);
-}
-
-#navbar_right_p {
-  display: flex;
-  align-items: center;
-  color: white;
-  font-size: min(20px, 8vw);
-}
-
-.icon-down:before {
-  content: "\25BC";
-  color: white;
-  margin-left: 10px;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-  padding: 7px;
-  /* border: 3px solid white; */
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color:  #343a40;
-  min-width: 150px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 16px;
-  z-index: 1;
-  color: rgb(255, 255, 255);
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown-content a {
-  color: rgb(255, 255, 255);
-  text-decoration: none;
-}
 
 #NoRequest{
   background-color: rgba(2, 2, 2, 0.575);
@@ -107,39 +21,16 @@ body {
     width: 100vw;
     background-color: #fff;
 }
-/* 67737e */
-/* 575a5e */
 
-@import url("https://fonts.googleapis.com/css?family=Hind:300,400&display=swap");
-/* * {
-  box-sizing: border-box;
-} */
-*::before, *::after {
-  box-sizing: border-box;
-}
 
-/* body {
-  margin: 0;
-  padding: 0;
-  font-family: "Hind", sans-serif;
-  background: #fff;
-  color: #4d5974;
-  display: flex;
-  min-height: 100vh;
-} */
+
 
 .container {
   margin: 0 auto;
   padding: 4rem;
-  width: 80rem;
+  width: 60vw;
 }
 
-/* button, select {
-  width: auto;
-  height: 4rem;
-  margin: 5px;
-  padding: 7px;
-} */
 
 .container h2 {
     text-align: center;
@@ -175,9 +66,9 @@ body {
   color: #03b5d2;
   border: 1px solid #03b5d2;
 }
-.accordion button .accordion-title {
+/* .accordion button .accordion-title {
   padding: 1em 1.5em 1em 0;
-}
+} */
 .accordion button .icon {
   display: inline-block;
   position: absolute;
@@ -211,10 +102,10 @@ body {
 
   margin-bottom: 10px;
   transition: all 0.3s ease-in-out;
-  border-radius: 5px;
-  color: #151515;
-  background: #ffc451;
-  border: 1px solid black;
+ 
+  color:#131313;
+  background: #fde163;  
+  border: 1px solid #151515;
   height: 3rem;
   margin-left: 5px;
 
@@ -223,7 +114,8 @@ body {
   padding: 10px 15px 10px 15px;
   height:auto;
   max-height: 3rem;
-  background: #fde163;
+  background: #d5f3f1;
+  border-radius: 10px;
 }
 
 
@@ -310,6 +202,8 @@ body {
  
   padding: 8px;
   margin-top: -8px;
+  margin-right:5px;
+  margin-left: 5px;
   height: 42px;
   color: black;
 }
@@ -366,40 +260,6 @@ body {
     padding-bottom: 18px !important;
 }
 
-/* #portfolio-filters {
-  padding: 0;
-  margin: 0 auto 20px auto;
-  list-style: none;
-  text-align: center;
-} */
-
-#portfolio-filters li {
-  cursor: pointer;
-  display: inline-block;
-  padding: 8px 15px 10px 15px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: #444444;
-  margin-bottom: 5px;
-  transition: all 0.3s ease-in-out;
-  border-radius: 3px;
-}
-
-#portfolio-filters li:hover, #portfolio-filters li.filter-active {
-  color: #151515;
-  background: #ffc451;
-}
-
-#portfolio-filters li:last-child {
-  margin-right: 0;
-}
-/* 
-#status {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  
-} */
 
 .brow{  
   padding-bottom: 0;
@@ -417,30 +277,6 @@ body {
 
 }
 
-/* select option, input {
-  cursor: pointer;
-  display: inline-block;
-  padding: 8px 15px 10px 15px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: #444444;
-  margin-bottom: 5px;
-  transition: all 0.3s ease-in-out;
-  border-radius: 3px;
-  
-} */
-
-
-
-/* #status option:hover {
-  color: #151515;
-  background: #ffc451;
-} */
-
-/* #status  li:last-child {
-  margin-right: 0;
-} */
 
 #past, #adminRequests, #sheet, #bankAccountDetails, #selectAll, #unselectAll, #sendAll, #back {
   cursor: pointer;
@@ -449,15 +285,5 @@ body {
 input[type="checkbox"] {
   position: absolute;
   right:140px;
-  
-  margin-top: 6px;
-  /* margin-right: 10px; */
-}
-
-#listBoys {
-  cursor: pointer;
-}
-
-#listGirls {
-  cursor: pointer;
+  margin-top: 6px;  
 }

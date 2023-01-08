@@ -379,14 +379,15 @@ sheet.addEventListener("click", () => {
     layout: "topRight",
     timeout: 1500,
   }).show();
-  window.location.href = `${CURRENT_URL}/showSheet`;
+  window.open(`${CURRENT_URL}/showSheet`, "_blank");
+  
 });
 
 //Home Functionality
-var home = document.getElementById("superAdminHome");
-home.addEventListener("click", () => {
-  window.location.href = `${CURRENT_URL}/super_admin`;
-});
+// var home = document.getElementById("superAdminHome");
+// home.addEventListener("click", () => {
+//   window.location.href = `${CURRENT_URL}/super_admin`;
+// });
 
 //code for selecting multiple students at a time
 var selectAll = document.getElementById("selectAll");
