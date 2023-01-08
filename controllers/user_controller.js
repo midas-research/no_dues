@@ -122,8 +122,19 @@ module.exports.getUser = async (req, res) => {
   });
 };
 
+function checkSuperAdmin(student, curr_status,superAdminName) {
+  if (curr_status == "pending") {
+    return student[superAdminName] == null;
+  } else if (curr_status == "accepted") {
+    return student[superAdminName] == true;
+  } else {
+    return student[superAdminName] == false;
+  }
+}
+
 module.exports.getStudents = (req, res) => {
   let studentList = [];
+  let status=req.params.status;
   User.find({}, (err, users) => {
     if (err) {
       console.log("Error in loading all the users");
@@ -131,7 +142,8 @@ module.exports.getStudents = (req, res) => {
     }
 
     for (var i in users) {
-      if (users[i]["type"] == undefined) {
+      
+      if (users[i]["type"] == undefined && checkSuperAdmin(users[i],status,'nodues')) {
         studentList.push(users[i]);
       }
     }
@@ -140,21 +152,37 @@ module.exports.getStudents = (req, res) => {
   });
 };
 
+function check(student, curr_status,adminName) {
+  
+  if (curr_status == "pending") {
+    return student[adminName + "Applied"] && student[adminName] == null;
+  } else if (curr_status == "accepted") {
+    return student[adminName] == true;
+  } else {
+    return student[adminName] == false;
+  }
+}
+
 module.exports.getStudentsAdmin = (req, res) => {
   let studentList = [];
   let adminName = req.params.adminName;
+  let status=req.params.status;
   User.find({}, (err, users) => {
     if (err) {
       console.log("Error in loading all the users");
       return;
     }
+    
 
     for (var i in users) {
+      
       if (
         users[i]["type"] == undefined &&
-        users[i][`${adminName}Applied`] == true
-      ) {
-        studentList.push(users[i]);
+        users[i][`${adminName}Applied`] == true)
+      {
+        if(check(users[i],status,adminName)){
+          studentList.push(users[i]);
+        }
       }
     }
 
@@ -165,6 +193,8 @@ module.exports.getStudentsAdmin = (req, res) => {
 module.exports.getStudentsProfessor = (req, res) => {
   let studentList = [];
   let profEmail = req.params.profEmail;
+  let status=req.params.status;
+
 
   User.find({}, (err, users) => {
     if (err) {
@@ -177,16 +207,46 @@ module.exports.getStudentsProfessor = (req, res) => {
         let check = true;
         for (var j in users[i]["ipList"]) {
           if (users[i]["ipList"][j]["profEmail"] == profEmail) {
-            studentList.push(users[i]);
-            check = false;
-            break;
+
+            var obj=users[i]['ipList'][j];
+           
+
+            if (status == "pending" && obj['ip'] == undefined) {
+              studentList.push(users[i]);
+              check = false;
+              break;
+            } else if (status == "accepted" && obj['ip'] == true) {
+              studentList.push(users[i]);
+              check = false;
+              break;
+            } else if (status == "rejected" && obj['ip'] == false) {
+              studentList.push(users[i]);
+              check = false;
+              break;
+            }
+            
           }
         }
         if (check) {
           for (var j in users[i]["btpList"]) {
             if (users[i]["btpList"][j]["profEmail"] == profEmail) {
-              studentList.push(users[i]);
-              break;
+
+              var obj=users[i]['btpList'][j];
+
+              if (status == "pending" && obj['btp'] == undefined) {
+                studentList.push(users[i]);
+                check = false;
+                break;
+              } else if (status == "accepted" && obj['btp'] == true) {
+                studentList.push(users[i]);
+                check = false;
+                break;
+              } else if (status == "rejected" && obj['btp'] == false) {
+                studentList.push(users[i]);
+                check = false;
+                break;
+              }
+              
             }
           }
         }

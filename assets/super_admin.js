@@ -7,12 +7,6 @@ var superAdminName = document.getElementById("adminName").innerHTML;
 
 var accordion = document.getElementsByClassName("accordion")[0];
 
-var request = new XMLHttpRequest();
-request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
-request.send();
-if (request.status === 200) {
-  studentList = JSON.parse(request.responseText);
-}
 
 function check(student, curr_status) {
   if (curr_status == "pending") {
@@ -120,8 +114,7 @@ function isTrue(student) {
     checkClearance &&
     checkDegree &&
     checkDepartment &&
-    checkBatch &&
-    check(student, curr_status)
+    checkBatch
   );
 }
 
@@ -239,11 +232,11 @@ function clickFilter() {
          <button id="accordion-button-1" aria-expanded="false">
              <span class="accordion-title">${currentList[i].email} - ${
         currentList[i].roll
-      } - ${currentList[i].name} - <span class="tag tag-tertiary">${k}</span></span>
-           
-            <span class="icon" aria-hidden="true"></span>  
-            <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>                       
-            <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+      } - ${currentList[i].name} - <span class="tag tag-tertiary">${k}</span></span>           
+                             
+            <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">         
+            <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span> 
+            <span class="icon" aria-hidden="true"></span>    
              
          </button>
          <div class="accordion-content">           
@@ -278,7 +271,19 @@ function clickFilter() {
   items.forEach((item) => item.addEventListener("click", toggleAccordion));
 }
 
-clickFilter();
+function applyStatus(){
+  var curr_status = document.getElementById("status").value;
+  var request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/user/getStudents/${curr_status}`, false);
+  request.send();
+  if (request.status === 200) {
+    studentList = JSON.parse(request.responseText);
+    clickFilter();
+  }
+
+}
+
+applyStatus();
 
 function sendMessage(e) {
   var dues = e.target.previousElementSibling.value;
@@ -307,13 +312,7 @@ function sendMessage(e) {
   );
   request.send();
 
-  request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
-  request.send();
-  if (request.status === 200) {
-    studentList = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 function approved(e) {
@@ -343,13 +342,7 @@ function approved(e) {
   );
   request.send();
 
-  request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
-  request.send();
-  if (request.status === 200) {
-    studentList = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 //Adding ClickFilter Option to search and status_button
@@ -357,7 +350,7 @@ var search = document.getElementById("search");
 search.addEventListener("click", clickFilter);
 
 var status_button = document.getElementById("status");
-status_button.addEventListener("click", clickFilter);
+status_button.addEventListener("click", applyStatus);
 
 //Sheet Functionality
 var sheet = document.getElementById("sheet");
@@ -402,11 +395,11 @@ sendAll.addEventListener("click", () => {
   var checkboxes = document.getElementsByClassName("tickbox");
   var obj = [];
   for (var i in checkboxes) {
-    //sendRequestButtons[i].click();
+ 
     if (checkboxes[i].checked == true) {
       if (checkboxes[i].previousElementSibling) {
         var text = checkboxes[i].previousElementSibling.innerHTML;
-        var index = text.indexOf(" ");
+        var index = text.indexOf(" ");       
         var studentEmail = text.substring(0, index);
         obj.push({
           studentEmail: studentEmail,
@@ -427,12 +420,6 @@ sendAll.addEventListener("click", () => {
     );
     request.send();
 
-    request = new XMLHttpRequest();
-    request.open("GET", `${CURRENT_URL}/user/getStudents`, false);
-    request.send();
-    if (request.status === 200) {
-      studentList = JSON.parse(request.responseText);
-      clickFilter();
-    }
+    applyStatus();
   }
 });

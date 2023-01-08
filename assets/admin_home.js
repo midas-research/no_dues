@@ -2,16 +2,11 @@ const CURRENT_URL = JSON.parse(
   document.getElementById("CURRENT_URL").innerHTML
 );
 
-var adminName = document.getElementById("adminName").innerHTML;
+var adminName = JSON.parse(document.getElementById("adminName").innerHTML);;
+
 var accordion = document.getElementsByClassName("accordion")[0];
 
 var studentList;
-var request = new XMLHttpRequest();
-request.open("GET", `${CURRENT_URL}/user/getStudents/${adminName}`, false);
-request.send(null);
-if (request.status === 200) {
-  studentList = JSON.parse(request.responseText);
-}
 
 //Checking for pending, rejected, accepted
 function check(student, curr_status) {
@@ -52,7 +47,7 @@ function isTrue(student) {
   }
 
   let res =
-    checkDegree && checkDepartment && checkBatch && check(student, curr_status);
+    checkDegree && checkDepartment && checkBatch;
 
   if (adminName == "hostel") {
     var currHostelTaken = document.getElementById("hostelTaken").value;
@@ -80,7 +75,7 @@ function displayCustomText(student) {
     if (student.hostelTaken == false) {
       hostelTaken = "Hostel Not Taken";
     }
-    return `<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name} - ${hostelTaken}</span>`;
+    return `<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${hostelTaken}</span></span>`;
   }
   return `<span class="accordion-title"> ${student.email} - ${student.roll} - ${student.name}</span>`;
 }
@@ -141,6 +136,21 @@ function clickFilter() {
     }
   }
   items.forEach((item) => item.addEventListener("click", toggleAccordion));
+}
+
+//applyStatus
+function applyStatus(){
+  
+  var curr_status = document.getElementById("status").value;
+  var request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/user/getStudents/${adminName}/${curr_status}`, false);
+  request.send(null);
+  if (request.status === 200) {
+    studentList = JSON.parse(request.responseText);
+    clickFilter();
+  }
+
+  console.log(studentList);
 }
 
 //html code for accepted div
@@ -217,10 +227,10 @@ search.addEventListener("click", clickFilter);
 
 //Whenever status_button is selected, filter requests
 var status_button = document.getElementById("status");
-status_button.addEventListener("click", clickFilter);
+status_button.addEventListener("click", applyStatus);
 
 //Adding requests with inital filters
-clickFilter();
+applyStatus();
 
 //Functionality if request accepted
 function approved(e) {
@@ -238,7 +248,7 @@ function approved(e) {
   obj.push({
     admin: adminName,
     email: email,
-    id: studentId,
+    id: studentId
   });
 
   var request = new XMLHttpRequest();
@@ -248,14 +258,7 @@ function approved(e) {
     false
   );
   request.send(null);
-
-  request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/user/getStudents/${adminName}`, false);
-  request.send(null);
-  if (request.status === 200) {
-    studentList = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 //Functionality if request rejected
@@ -289,13 +292,7 @@ function sendMessage(e) {
   );
   request.send();
 
-  request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/user/getStudents/${adminName}`, false);
-  request.send(null);
-  if (request.status === 200) {
-    studentList = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 //Show sheet functionality
@@ -363,12 +360,6 @@ sendAll.addEventListener("click", () => {
     );
     request.send(null);
 
-    request = new XMLHttpRequest();
-    request.open("GET", `${CURRENT_URL}/user/getStudents/${adminName}`, false);
-    request.send(null);
-    if (request.status === 200) {
-      studentList = JSON.parse(request.responseText);
-      clickFilter();
-    }
+    applyStatus();
   }
 });

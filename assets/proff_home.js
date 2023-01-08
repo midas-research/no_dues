@@ -6,12 +6,7 @@ var accordion = document.getElementsByClassName("accordion")[0];
 
 let student_list;
 let url = `${CURRENT_URL}/user/getStudents/professor/${profEmail}`;
-request = new XMLHttpRequest();
-request.open("GET", url, false);
-request.send(null);
-if (request.status === 200) {
-  student_list = JSON.parse(request.responseText);
-}
+
 
 function sendMessageBtp(e, idx) {
   var dues = e.target.previousElementSibling.value;
@@ -43,13 +38,7 @@ function sendMessageBtp(e, idx) {
   );
   request.send(null);
 
-  request = new XMLHttpRequest();
-  request.open("GET", url, false);
-  request.send(null);
-  if (request.status === 200) {
-    student_list = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 function sendMessageIp(e, idx) {
@@ -81,13 +70,7 @@ function sendMessageIp(e, idx) {
   );
   request.send(null);
 
-  request = new XMLHttpRequest();
-  request.open("GET", url, false);
-  request.send(null);
-  if (request.status === 200) {
-    student_list = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 function btpApproved(e, idx) {
@@ -109,13 +92,7 @@ function btpApproved(e, idx) {
   );
   request.send(null);
 
-  request = new XMLHttpRequest();
-  request.open("GET", url, false);
-  request.send(null);
-  if (request.status === 200) {
-    student_list = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 function ipApproved(e, idx) {
@@ -137,20 +114,14 @@ function ipApproved(e, idx) {
   );
   request.send(null);
 
-  request = new XMLHttpRequest();
-  request.open("GET", url, false);
-  request.send(null);
-  if (request.status === 200) {
-    student_list = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
 }
 
 function addAcceptIPCode(student, obj, msg, idx) {
   return `
       <div class="accordion-item filter-btech">
         <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - IP/IS/UR</span>
+            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">IP/IS/UR</span></span>
             <span class="icon" aria-hidden="true"></span>
             
         </button>
@@ -180,7 +151,7 @@ function addAcceptIPCode(student, obj, msg, idx) {
 function addAcceptBTPCode(student, obj, msg, idx) {
   return `<div class="accordion-item filter-btech">
       <button id="accordion-button-1" aria-expanded="false">
-          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - BTP</span>
+          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
           <span class="icon" aria-hidden="true"></span>
           
       </button>
@@ -209,7 +180,7 @@ function addAcceptBTPCode(student, obj, msg, idx) {
 function addBTPCode(student, obj, msg, idx) {
   return ` <div class="accordion-item filter-btech">
             <button id="accordion-button-1" aria-expanded="false">
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - BTP</span>
+                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
                 <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
                 <span class="send_request accept_request" onclick="event.stopPropagation() ;btpApproved(this,${idx})"> Accept </span>
                 <span class="icon" aria-hidden="true"></span>
@@ -236,7 +207,7 @@ function addBTPCode(student, obj, msg, idx) {
 function addIPCode(student, obj, msg, idx) {
   return `<div class="accordion-item filter-btech">
             <button id="accordion-button-1" aria-expanded="false">                
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - ${obj.projectName} - IP/IS/UR</span>
+                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">IP/IS/UR</span></span>
                 <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
                 <span class="send_request accept_request" onclick="event.stopPropagation() ;ipApproved(this,${idx})"> Accept </span>
                 <span class="icon" aria-hidden="true"></span>
@@ -438,16 +409,29 @@ function clickFilter() {
   items.forEach((item) => item.addEventListener("click", toggleAccordion));
 }
 
-clickFilter();
+//Status Function
+
+function applyStatus(){
+  var status = document.getElementById("status").value;
+  var request = new XMLHttpRequest();
+  request.open("GET", url + "/" + status, false);
+  request.send(null);
+  if (request.status === 200) {
+    student_list = JSON.parse(request.responseText);
+    clickFilter();
+  }
+}
+
+applyStatus();
 
 //OnClick functions for search and status button
-{
+
   var search = document.getElementById("search");
   search.addEventListener("click", clickFilter);
 
   var status_button = document.getElementById("status");
-  status_button.addEventListener("click", clickFilter);
-}
+  status_button.addEventListener("click",applyStatus);
+
 
 //SelectAll functionality
 var selectAll = document.getElementById("selectAll");
@@ -480,8 +464,16 @@ sendSelected.addEventListener("click", () => {
 
       var studentEmail = list[0];
       var projectName = list[list.length - 2];
+      var eindex = projectName.indexOf("</span>");
+      var sindex = projectName.indexOf(">");
 
+      projectName=projectName.substring(sindex+1,eindex);
+     
       var admin = list[list.length - 1];
+      var eindex = admin.indexOf("</span>");
+      var sindex = admin.indexOf(">");
+      admin=admin.substring(sindex+1,eindex);
+      
       if (admin == "BTP") {
         admin = "btp";
       } else {
@@ -495,6 +487,8 @@ sendSelected.addEventListener("click", () => {
         projectName: projectName,
       });
 
+      
+
       var request = new XMLHttpRequest();
       request.open(
         "GET",
@@ -505,11 +499,7 @@ sendSelected.addEventListener("click", () => {
     }
   }
 
-  var request = new XMLHttpRequest();
-  request.open("GET", url, false);
-  request.send(null);
-  if (request.status === 200) {
-    student_list = JSON.parse(request.responseText);
-    clickFilter();
-  }
+  applyStatus();
+
+  
 });

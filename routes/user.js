@@ -31,19 +31,19 @@ router.get(
 router.get("/failedSignIn", userController.failedSignIn);
 router.get("/getProfessorName/:profEmail", userController.getProfessorName);
 router.get(
-  "/getStudents",
+  "/getStudents/:status",
   passport.checkAuthentication,
   userController.getStudents
 );
 
 router.get(
-  "/getStudents/:adminName",
+  "/getStudents/:adminName/:status",
   passport.checkAuthentication,
   userController.getStudentsAdmin
 );
 
 router.get(
-  "/getStudents/professor/:profEmail",
+  "/getStudents/professor/:profEmail/:status",
   passport.checkAuthentication,
   userController.getStudentsProfessor
 );

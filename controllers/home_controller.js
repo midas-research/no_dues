@@ -93,7 +93,9 @@ module.exports.superApproveDues = (req, res) => {
 
 module.exports.superApproveManyDues = (req, res) => {
   var obj = JSON.parse(req.params.dues)[0];
+ 
   for (var i in obj) {
+  
     var studentEmail = obj[i].studentEmail;
     var adminName = obj[i].adminName;
     var updateObject = {};
@@ -114,6 +116,10 @@ module.exports.superApproveManyDues = (req, res) => {
       { email: studentEmail },
       updateObject,
       (err, user) => {
+        if (err) {
+          console.log("Error in Approving many Dues by SuperAdmin");
+          
+        }
         user.save();
         super_approved_mailer.approvedDues(studentEmail);
       }
@@ -441,11 +447,12 @@ module.exports.adminHome = (req, res) => {
     if (admin.substring(0, 9) == "academics") {
       admin = "academics";
     }
+  
 
     return res.render("admin_home", {
       title: "Admin - Home",
       originalName: originalName,
-      adminName: admin,
+      adminName: JSON.stringify(admin),
       url: JSON.stringify(CURRENT_URL),
       layout: "admin_home",
     });
@@ -456,7 +463,7 @@ module.exports.sendMessage = (req, res) => {
   var obj = JSON.parse(req.params.dues);
 
   User.findOne({ email: obj[0].email }, (err, user) => {
-    console.log(obj[0].email);
+   
     if (err) {
       console.log("Error in finding student from email id");
 
