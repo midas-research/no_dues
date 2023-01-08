@@ -18,7 +18,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="/assets/super_admin_department.css"
+      href="/assets/super_admin.css"
     />
     <link
       rel="stylesheet"
@@ -37,27 +37,31 @@
     <%- include('partials/header.ejs') %>
 
     <div id="navbar">
+    
       <div id="navbar_left">
         <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
-
-        <div class="dropdown">
-          <div id="navbar_left_p">No Dues</div>
+    
+        <div class="dropdown" id="navbar_left_p">
+          <div>No Dues</div>
           <span class="icon-down"></span>
           <div class="dropdown-content">
-            <a id="superAdminHome">Home</a><br />
-            <hr />
-            <a id="sheet">Show Sheet</a><br />
-            <hr />
-            <a href="/user/signout">Logout</a><br />
-          </div>
+            <a href="/super_admin" id="superAdminHome">Home</a>
+            <a href="/super_admin/adminRequests" id="adminRequests">Requests to Admins</a>
+            <a href="/super_admin/updateAccess">Update Access</a>
+            <!-- <a id="blockPortal">Block Portal</a>            -->
+            <a id="sheet">Show Sheet</a>
+            <a href="/user/signout">Logout</a>
+          </div>          
         </div>
       </div>
+    
       <div id="navbar_right">
         <div id="navbar_right_p">Hello Super Admin</div>
         <div id="navbar_right_i">
-          <img src="<%locals.user.image%>">
+          <img src="<%=locals.user.image%>">
         </div>
       </div>
+    
     </div>
 
     <div id="main">
@@ -160,6 +164,7 @@
         <div class="accordion"></div>
       </div>
     </div>
+    
     <%- include('partials/footer.ejs') %>
 
     <script src="../assets/super_admin_department.js"></script>

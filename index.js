@@ -122,6 +122,8 @@ app.listen(port, async (err) => {
     range: "Sheet1",
   });
   professors_data = data.data.values;
+  professors_data.shift();
+
   fs.readFile("./data/professors.json", (err, data) => {
     if (err) {
       console.log("Error in writing to admins file: ", err);
@@ -142,6 +144,9 @@ app.listen(port, async (err) => {
   });
   var proffNames = {};
   for (var i in professors_data) {
+    if(i==0){
+      continue;
+    }
     proffNames[professors_data[i][1]] = professors_data[i][0];
   }
   var text = `    

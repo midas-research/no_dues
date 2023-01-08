@@ -1,63 +1,62 @@
+@import url("https://fonts.googleapis.com/css?family=Hind:300,400&display=swap");
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* body */
+
+body {
+    overflow-x: hidden;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+/* Scroll Bar */
+
+*::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 0px;
+    background-color: #1d1d1d;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 25px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #72e0f8ab;
+}
+
+/* Header */
+
 #header {
     width: 100%;
     display: flex;
     height: 12vh;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center; 
-    
+    align-items: center;     
 }
 
-.tag{
-    color: white;
-    border-radius: 5px;
-    display: inline-block;
-    margin: 2px;
-    padding: 5px;
-
-}
-
-
-.tag-primary {   
-    background-color: rgb(250, 180, 50);    
-}
-
-.tag-secondary {
-    background-color: rgb(5, 190, 119);
-}
-
-.tag-tertiary {
-    background-color: rgb(6, 96, 169);
-}
-
-.accordion button .accordion-title {
-    /* padding: 1em 1.5em 1em 0; */
-    max-width: 70%;
-    height: auto;    
-    padding: 0px;
-    display: inline-block;
-
-}
-
-
-@media only screen and (max-width: 768px) {
-    #header {
-        display: none;
-    }
-}
-
-
-
-#header div{
+#header div {
     height: 100%;
     display: inline-block;
+}
+
+#header img {
+    height: 100%;
+    margin: auto 15px;
+
+}
+
+@media only screen and (max-width: 768px) {
     
 }
-img{
-    height:100%;
-    margin: auto 15px;
-   
-}
+
+/* Footer */
 
 footer{
     
@@ -71,44 +70,16 @@ footer{
    
 }
 footer a:hover{
-    text-decoration: none;
-    
-}
-body{
-    overflow-x:hidden;
-    position: relative;
+    text-decoration: none;    
 }
 
 
-*::-webkit-scrollbar {
-    width: 12px;
-    border-radius: 0px;
-    background-color: #1d1d1d;
-}
-
-*::-webkit-scrollbar-thumb {
-    border-radius: 25px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: #72e0f8ab;
-}
-
-
-.container {
-    margin: 0 auto;
-    padding: 2rem;
-    width: 60vw;
-    height: 100%;
-    background-color: rgb(255, 255, 255);
-    border-radius: 20px;
-    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
-}
-
-.container select, .container input{
-    max-width:70vw;
-}
+/* Responsive */
 
 @media only screen and (max-width: 768px) {
+    #header{
+        display: none;
+    }
     .container{
         width: 95vw;
         
@@ -125,79 +96,198 @@ body{
 
     }
     #main{
-        padding: 0px;
-      
+        padding-left: 1px;
+        padding-right: 1px;      
         background-color: white !important;
     }
+    
     footer{
         display: none;
     }
+
 }
+
+/* Navbar */
+
+/* Sticky Navbar CSS*/
 .sticky {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1;
 }
-.container h2,
-.container h3 {
-    text-align: center;
+
+#navbar {
+    box-sizing: border-box;
+    height: 10vh;    
+    width: 100vw;
+    display: flex;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    justify-content: space-between;
+    background-color: #343a40;
 }
 
+/* Images in Navbar */
+#navbar img {
+    width: 6vh;
+    height: 6vh;
+    border-radius: 50%;    
+}
+
+/* Items on Left */
+#navbar_left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding:0px;
+}
+
+/* Items on Right */
+#navbar_right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding:0px;    
+}
+
+/* Image on Left */
+#navbar_left img {
+    margin-right: 1vw;
+   
+}
+
+/* Image on Right */
+#navbar_right img {
+    margin-left: 1vw;
+}
+
+/* Text on Left */
+#navbar_left_p {
+    height: 100%;
+    color: white;
+    display: flex;    
+    font-size: min(20px, 8vw);
+    position: relative;    
+    justify-content: center;
+    align-items: center; 
+}
+
+
+/* Text on Right */
+#navbar_right_p {
+    height:100%;
+    display: flex;    
+    color: white;
+    font-size: min(20px, 8vw);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dropdown CSS */
+
+/* Dropdown Icon */
+.icon-down:before {
+    content: "\25BC";
+    color: white;
+    margin-left: 0.5vw;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top:100%;    
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    color: rgb(255, 255, 255);
+    font-size: 1rem;
+    margin: 0px;
+    text-align: center;   
+    
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    display: block;
+    background-color: #343a40;
+    margin: 0px;
+    /* min-height: 9vh; */
+    width:150%;
+    padding: 1.5vh; 
+    cursor: pointer;      
+}
+
+.dropdown-content a:hover {
+    border: 1px solid white;
+}
+
+/* Main Content */
 #main {
     width: 100vw;
     min-height: 80vh;
     height: auto;
     background-color: rgb(248, 248, 248);
     padding: 10px;
-    box-sizing: border-box;
+
 }
 
-#navbar {
-    height: 10vh;
-    background-color: #343a40;
-    width: 100vw;
-    display: flex;
-    padding-left: 15px;
-    padding-right: 15px;
-    justify-content: space-between;
+.container h2,
+.container h3 {
+    text-align: center;
 }
 
-#navbar img {
-    width: 6vh;
-    height: 6vh;
-    border-radius: 50%;
+.container {
+    margin: 0 auto;
+    padding: 2rem;
+    width: 60vw;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
 }
 
-#navbar_left {
-    display: flex;
-    align-items: center;
+.container select,
+.container input {
+    max-width: 70vw;
 }
 
-#navbar_right {
-    display: flex;
-    align-items: center;
-}
-
-#navbar_left img {
-    margin-right: 20px;
-}
-
-#navbar_right img {
-    margin-left: 20px;
-}
-
-#navbar_left_p {
+.accordion button .accordion-title {
+    /* padding: 1em 1.5em 1em 0; */
+    max-width: 70%;
+    height: auto;
+    padding: 0px;
     display: inline-block;
-    color: white;
-    font-size: min(20px, 8vw);
 }
 
-#navbar_right_p {
-    display: flex;
-    align-items: center;
+
+/* Tag CSS */
+
+.tag {
     color: white;
-    font-size: min(20px, 8vw);
+    border-radius: 5px;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px;
+    font-size: 16px;
+
+}
+
+.tag-primary {
+    background-color: rgb(250, 180, 50);
+}
+
+.tag-secondary {
+    background-color: rgb(5, 190, 119);
+}
+
+.tag-tertiary {
+    background-color: rgb(240, 111, 25);
 }
 
 

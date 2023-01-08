@@ -21,7 +21,7 @@ if (request.status === 200) {
 
 
 //Displaying Count
-{
+
   let count = 0;
 
   for (var i in admins_list) {
@@ -30,12 +30,14 @@ if (request.status === 200) {
     }
   }
   for (var i in user[0]["ipList"]) {
-    if (i["ip"] == true) {
+    
+    if (user[0]['ipList'][i]["ip"] == true) {
+      
       count += 1;
     }
   }
   for (var i in user[0]["btpList"]) {
-    if (i["btp"] == true) {
+    if (user[0]["btpList"][i]["btp"] == true) {
       count += 1;
     }
   }
@@ -48,7 +50,7 @@ if (request.status === 200) {
 
   document.getElementById("countCleared").innerHTML = `${count}`;
   document.getElementById("countAll").innerHTML = `${total}`;
-}
+
 
 var container = document.getElementById("admins_list_container");
 
@@ -558,7 +560,7 @@ downloadbtn.addEventListener("click", () => {
 });
 
 //Form Details (Bank And Personal)
-{
+
   var modal = document.getElementById("myModal");
   var modal1 = document.getElementById("myModal1");
   var closeModal = document.getElementsByClassName("close")[0];
@@ -769,7 +771,7 @@ downloadbtn.addEventListener("click", () => {
       modal1.style.display = "none";
     }
   };
-}
+
 
 
   

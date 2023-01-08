@@ -239,22 +239,18 @@ function clickFilter() {
          <button id="accordion-button-1" aria-expanded="false">
              <span class="accordion-title">${currentList[i].email} - ${
         currentList[i].roll
-      } - ${currentList[i].name} - ${k}</span>
-             <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-             <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>
-             <!--<i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this)"></i>-->
-             <span class="icon" aria-hidden="true"></span>
-         </button>
-         <div class="accordion-content">
-            
+      } - ${currentList[i].name} - <span class="tag tag-tertiary">${k}</span></span>
            
-           <div class="input-group mb-3">
+            <span class="icon" aria-hidden="true"></span>  
+            <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span>                       
+            <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
              
+         </button>
+         <div class="accordion-content">           
+           
+           <div class="input-group mb-3">             
              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
              <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
-             <!--<div class="input-group-append">
-                 <i class="fas fa-paper-plane send" onclick="sendMessage(event)"></i>
-             </div>-->
            </div>
            <span class="message">Latest Communication: </span><br>
            <span class="message">   ${message}</span>
@@ -373,14 +369,14 @@ sheet.addEventListener("click", () => {
     layout: "topRight",
     timeout: 1500,
   }).show();
-  window.location.href = `${CURRENT_URL}/showSheet`;
+  window.open(`${CURRENT_URL}/showSheet`, "_blank");
 });
 
 //Admin Requests Functionality
-var adminRequests = document.getElementById("adminRequests");
-adminRequests.addEventListener("click", () => {
-  window.location.href = `${CURRENT_URL}/super_admin/adminRequests`;
-});
+// var adminRequests = document.getElementById("adminRequests");
+// adminRequests.addEventListener("click", () => {
+//   window.location.href = `${CURRENT_URL}/super_admin/adminRequests`;
+// });
 
 //code for selecting multiple students at a time
 var selectAll = document.getElementById("selectAll");
