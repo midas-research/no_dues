@@ -85,6 +85,8 @@ var schemaObject = {
   noduesMessage: { type: String },
   noduesApprovedAt: { type: String },
   hostelTaken: { type: Boolean, default: undefined },
+  donationAdmin: { type: String, default: undefined },
+  donationAmount: {type: Number, default: 0},
 };
 
 for (var i = 0; i < names.length - 2; i++) {
@@ -93,6 +95,7 @@ for (var i = 0; i < names.length - 2; i++) {
   schemaObject[names[i] + "AppliedAt"] = { type: String };
   schemaObject[names[i] + "ApprovedAt"] = { type: String };
   schemaObject[names[i] + "Message"] = { type: String };
+  schemaObject[names[i] + "Fine"] = { type: Number, default: 0 };
 }
 
 const userSchema = new mongoose.Schema(schemaObject, {
@@ -100,11 +103,3 @@ const userSchema = new mongoose.Schema(schemaObject, {
 });
 const User = mongoose.model("User", userSchema);
 module.exports = User;
-
-// var request = new XMLHttpRequest();
-// request.open('GET', `${CURRENT_URL}/user/getAdmins`, false);
-// request.send(null);
-// if (request.status === 200) {
-//   adminsList = JSON.parse(request.responseText);
-//   admins_data = adminsList
-// }

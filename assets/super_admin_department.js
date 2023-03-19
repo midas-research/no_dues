@@ -586,7 +586,7 @@ function addAcceptIPCode(student, obj, msg, idx) {
 function addAcceptBTPCode(student, obj, msg, idx) {
   return `<div class="accordion-item filter-btech">
       <button id="accordion-button-1" aria-expanded="false">
-          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
+          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">BTP</span></span>
           <span class="icon" aria-hidden="true"></span>
           
       </button>
@@ -615,7 +615,7 @@ function addAcceptBTPCode(student, obj, msg, idx) {
 function addBTPCode(student, obj, msg, idx) {
   return ` <div class="accordion-item filter-btech">
             <button id="accordion-button-1" aria-expanded="false">
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
+                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">BTP</span></span>
                 <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
                 <span class="send_request accept_request" onclick="event.stopPropagation() ;btpApproved(this,${idx})"> Accept </span>
                 <span class="icon" aria-hidden="true"></span>

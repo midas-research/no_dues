@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="icon" href="../assets/images/icon.png" type="image/png" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link
       rel="stylesheet"
       type="text/css"
@@ -29,148 +26,165 @@
   </head>
 
   <body>
+
+    <!--Backend Info-->
     <p id="adminName" style="display: none"><%= adminName %></p>
     <p id="adminList" style="display: none"><%= adminList %></p>
     <p id="originalName" style="display: none"><%= originalName %></p>
     <p id="id" style="display: none"><%= id %></p>
     <p id="CURRENT_URL" style="display: none"><%= url %></p>
+
+    <!--Header-->
     <%- include('partials/header.ejs') %>
 
-    <div id="navbar">
+    <!--Navbar-->   
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div class="container-fluid">
     
-      <div id="navbar_left">
-        <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
     
-        <div class="dropdown" id="navbar_left_p">
-          <div>No Dues</div>
-          <span class="icon-down"></span>
-          <div class="dropdown-content">
-            <a href="/super_admin" id="superAdminHome">Home</a>
-            <a href="/super_admin/adminRequests" id="adminRequests">Requests to Admins</a>
-            <a href="/super_admin/updateAccess">Update Access</a>
-            <!-- <a id="blockPortal">Block Portal</a>            -->
-            <a id="sheet">Show Sheet</a>
-            <a href="/user/signout">Logout</a>
-          </div>          
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto  mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/super_admin" id="superAdminHome">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href=""  aria-current="page" >Requests to Admins</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/super_admin/updateAccess">Update Access</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="sheet">Show Sheet</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/signout">Logout</a>
+            </li>
+          </ul>
         </div>
-      </div>
     
-      <div id="navbar_right">
-        <div id="navbar_right_p">Hello Super Admin</div>
-        <div id="navbar_right_i">
-          <img src="<%=locals.user.image%>">
-        </div>
-      </div>
+        <a class="navbar-brand ms-auto d-lg-inline d-none">
     
+          <div>Hello Super-Admin
+          </div>
+          <div id="navbar_right_i"><img src="<%=locals.image%>">
+    
+        </a>
+    
+      </div>
+    </nav>
+
+    <!--Main Content-->
+    <div class="container">
+      <h2 style="margin-bottom: 40px; text-align: center">
+        Admin Wise Requests
+      </h2>
+
+      <div
+        class="d-flex align-items-center justify-content-center"
+        style="margin-bottom: 20px"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <h5 class="mr-3">Choose Admin:</h5>
+        <select class="mr-5 filter" name="" id="admins"></select>
+      </div>
+
+      <div
+        class="d-flex align-items-center justify-content-center"
+        style="margin-bottom: 20px"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <h5 class="mr-3 prof">Choose Professor:</h5>
+        <select class="mr-5 filter prof" name="" id="profFilter"></select>
+      </div>
+
+      <div
+        class="d-flex align-items-center justify-content-center"
+        style="margin-bottom: 10px"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <select class="filter" name="status" id="status">
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
+          <option value="accepted">Accepted</option>
+        </select>
+      </div>
+
+      <div
+        class="row d-flex align-items-center justify-content-center"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <select class="filter" name="degree" id="degree">
+          <option value="All">Degree (All)</option>
+          <option value="B. Tech">B.Tech</option>
+          <option value="M. Tech">M.Tech</option>
+          <option value="Phd">Phd</option>
+        </select>
+
+        <select class="filter" name="department" id="department">
+          <option value="All">Branch(All)</option>
+          <option value="CSE">CSE</option>
+          <option value="Mathematics">MATHS</option>
+          <option value="CB">CSB</option>
+          <option value="SSH">SSH</option>
+          <option value="ECE">ECE</option>
+          <option value="HCD">HCD</option>
+        </select>
+
+        <select
+          class="filter"
+          name="ip/btp"
+          id="ip/btp"
+          style="display: none"
+        >
+          <option value="all">IP/BTP</option>
+          <option value="btp">BTP</option>
+          <option value="ip">IP</option>
+        </select>
+
+        <input
+          class="filter"
+          type="number"
+          id="batch"
+          name="batch"
+          placeholder="BATCH"
+        />
+
+        <button class="filter" id="search">
+          <i class="fa fa-search" aria-hidden="true"></i> Search
+        </button>
+      </div>
+
+      <div
+        class="brow row d-flex align-items-center justify-content-center"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <button class="filter nex" id="selectAll">Select All</button>
+
+        <button class="filter nex" id="unselectAll">Unselect All</button>
+
+        <button class="filter nex" id="sendAll">Accept Selected</button>
+      </div>
+
+      <div class="accordion"></div>
     </div>
 
-    <div id="main">
-      <div class="container">
-        <h2 style="margin-bottom: 40px; text-align: center">
-          Admin Wise Requests
-        </h2>
-
-        <div
-          class="d-flex align-items-center justify-content-center"
-          style="margin-bottom: 20px"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <h5 class="mr-3">Choose Admin:</h5>
-          <select class="mr-5 filter" name="" id="admins"></select>
-        </div>
-
-        <div
-          class="d-flex align-items-center justify-content-center"
-          style="margin-bottom: 20px"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <h5 class="mr-3 prof">Choose Professor:</h5>
-          <select class="mr-5 filter prof" name="" id="profFilter"></select>
-        </div>
-
-        <div
-          class="d-flex align-items-center justify-content-center"
-          style="margin-bottom: 10px"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <select class="filter" name="status" id="status">
-            <option value="pending">Pending</option>
-            <option value="rejected">Rejected</option>
-            <option value="accepted">Accepted</option>
-          </select>
-        </div>
-
-        <div
-          class="row d-flex align-items-center justify-content-center"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <select class="filter" name="degree" id="degree">
-            <option value="All">Degree (All)</option>
-            <option value="B. Tech">B.Tech</option>
-            <option value="M. Tech">M.Tech</option>
-            <option value="Phd">Phd</option>
-          </select>
-
-          <select class="filter" name="department" id="department">
-            <option value="All">Branch(All)</option>
-            <option value="CSE">CSE</option>
-            <option value="Mathematics">MATHS</option>
-            <option value="CB">CSB</option>
-            <option value="SSH">SSH</option>
-            <option value="ECE">ECE</option>
-            <option value="HCD">HCD</option>
-          </select>
-
-          <select
-            class="filter"
-            name="ip/btp"
-            id="ip/btp"
-            style="display: none"
-          >
-            <option value="all">IP/BTP</option>
-            <option value="btp">BTP</option>
-            <option value="ip">IP</option>
-          </select>
-
-          <input
-            class="filter"
-            type="number"
-            id="batch"
-            name="batch"
-            placeholder="BATCH"
-          />
-
-          <button class="filter" id="search">
-            <i class="fa fa-search" aria-hidden="true"></i> Search
-          </button>
-        </div>
-
-        <div
-          class="brow row d-flex align-items-center justify-content-center"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <button class="filter nex" id="selectAll">Select All</button>
-
-          <button class="filter nex" id="unselectAll">Unselect All</button>
-
-          <button class="filter nex" id="sendAll">Accept Selected</button>
-        </div>
-
-        <div class="accordion"></div>
-      </div>
-    </div>
-    
+    <!-- Footer -->      
     <%- include('partials/footer.ejs') %>
 
     <script src="../assets/super_admin_department.js"></script>
     <script src="../assets/layout.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>

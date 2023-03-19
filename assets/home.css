@@ -1,78 +1,38 @@
-body {
-    width: 100vw;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+/* Requests List*/
 
-
-
-@import url("https://fonts.googleapis.com/css?family=Hind:300,400&display=swap");
-
-*::before, *::after {
-  box-sizing: border-box;
-}
-
-/* .container {
-  margin: 0 auto;
-  padding: 2rem;
-  width: 60vw;
-  height:100%;
-  background-color: rgb(255, 255, 255);
-  border-radius: 20px;
-  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+.requests-list{
   overflow-y: auto;
+  height: 65vh;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
-.container h2, .container h3 {
-    text-align: center;
-} */
 
-.buttons{
-  display:flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-}
-.addButton{
-  padding: 15px;
-  background-color:rgb(216, 32, 32);
-  font-size: 1rem;
-  font-weight: 400;
-  text-align: center;
-  border: 0px;
-  border-radius: 10px;
-  margin: 10px;
-  cursor: pointer;
-  color:white;
-  display: inline-block;
-  max-width: 50vw;
-}
+/* Accordion */
 
-.addButton:hover{
-  background-color: rgb(245, 92, 92);
-  
-  color:rgb(8, 8, 8);
-}
-
-@media only screen and (max-width: 768px) {
-  .buttons{
-    flex-direction: row;
-  }
-}
 .accordion .accordion-item {
+  border:0;
   border-bottom: 1px solid #e5e5e5;
 }
-.accordion .accordion-item button[aria-expanded=true] {
-  border-bottom: 1px solid #03b5d2;
+
+.accordion .accordion-item:hover{
+  border-bottom: 1px solid #60aca6;
 }
-.accordion button {
+
+.accordion button[aria-expanded=true]{ 
+  color: #60aca6;
+  border-bottom: 1px solid #60aca6;
+}
+
+.accordion button:hover {
+  color: #60aca6;
+}
+
+.accordion button{
   position: relative;
-  display: block;
   text-align: left;
   width: 100%;
-  padding: 1em 0;
+  padding: 1rem 0;
   color: #7288a2;
   font-size: 1.15rem;
   font-weight: 400;
@@ -80,251 +40,119 @@ body {
   background: none;
   outline: none;
 }
-.accordion button:hover, .accordion button:focus {
-  cursor: pointer;
-  color: #03b5d2;
-}
-.accordion button:hover::after, .accordion button:focus::after {
-  cursor: pointer;
-  color: #03b5d2;
-  border: 1px solid #03b5d2;
-}
-.accordion button .accordion-title {
-  /* padding: 1em 1.5em 1em 0; */
-  max-width: 70%;
-  height:auto;
-  display: inline-block;
- 
-}
-.accordion button .icon {
-  display: inline-block;
-  position: absolute;
-  top: 20px;
-  right: 0;
-  width: 22px;
-  height: 22px;
-  border: 1px solid;
-  border-radius: 22px;
-}
-.accordion button .icon::before {
-  display: block;
-  position: absolute;
-  content: "";
-  top: 9px;
-  left: 5px;
-  width: 10px;
-  height: 2px;
-  background: currentColor;
-}
-.accordion button .icon::after {
-  display: block;
-  position: absolute;
-  content: "";
-  top: 5px;
-  left: 9px;
-  width: 2px;
-  height: 10px;
-  background: currentColor;
-}
-.accordion button[aria-expanded=true] {
-  color: #03b5d2;
-}
-.accordion button[aria-expanded=true] .icon::after {
-  width: 0;
-}
-.accordion button[aria-expanded=true] + .accordion-content {
+
+
+/* Accordion Content */
+
+.accordion button[aria-expanded=true]+.accordion-content {
   opacity: 1;
   max-height: 20em;
   overflow-y: auto;
   transition: all 200ms linear;
   will-change: opacity, max-height;
 }
-.accordion .accordion-content {
+
+.accordion button[aria-expanded=false] + .accordion-content {
   opacity: 0;
   max-height: 0;
   overflow: hidden;
   transition: opacity 200ms linear, max-height 200ms linear;
   will-change: opacity, max-height;
 }
-.accordion .accordion-content p {
-  font-size: 1rem;
-  font-weight: 300;
-  margin: 2em 0;
+
+/* Accordion Icon */
+
+.accordion button[aria-expanded=true] .up {
+  display:block;
+}
+.accordion button[aria-expanded=true] .down {
+  display: none;
 }
 
-.send_request {
-    
-    font-size: 1.5rem;
-    position: absolute;
-    right: 40px !important;
-    border-radius: 8px;
-    padding: 8px;
-    margin-top: -8px;
+.accordion button[aria-expanded=false] .up {
+  display: none;
 }
 
-.request {
-    font-size: 1.5rem;
-    position: absolute;
-    right: 40px;
-    border-radius: 8px;
-    padding: 8px;
-    margin-top: -8px;
-    color: orange;
-}
-
-/* .send_request:hover {
-    background-color: gray;
-} */
-
-.request:hover {
-  background-color: gray;
-}
-
-.fa-spinner {
-  color: blue;
-}
-
-.fa-times-circle {
-  color: red;
-}
-
-.fa-check-circle {
-  color: green;
-}
-
-.fa-dot-circle {
-  color: grey;
-}
-
-#btp_proff {
-  margin-top: 30px;
-}
-
-#ip_proff {
-  margin-top: 30px;
-}
-
-#btp_comment {
-  margin-top: 10px;
-}
-
-#ip_comment {
-  margin-top: 10px;
-}
-
-#downloadbtn {
-  cursor: pointer;
-}
-
-/* The Modal  */
-
-.modal , .modal1{
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 2; /* Sit on top */
-  left: 0px;
-  top: 0px; 
-  width: 100%; 
-  height: 100%; 
-  overflow:auto;
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  /* border: 10px solid black; */
-  align-items: center;
-  justify-content: center; 
-}
-
-.modal-content , .modal-content1{
-  background-color: #fefefe;
-
-  padding: 20px;
-  border: 1px solid #888;
-  width: 70%; /* Could be more or less, depending on screen size */
-}
-
-.modal input , .modal1 input{
-  border: 1px solid black;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.modal input[type="submit"] , .modal1 input[type="submit"]{
-  width: 20%;
-  margin: auto;
-  background-color: #888;
-  color: black;
-}
-
-.modal input[type="submit"]:hover , .modal1 input[type="submit"]:hover{
-  background-color: #343a40;
-  color: #fefefe;
-}
-
-.modal h4 , .modal1 h4{
-  margin-bottom: 20px;
-}
-
-
-@media only screen and (max-width: 768px) {
-  .modal-content{
-    width: 90%;
-  }
-  .modal-content1{
-    width: 90%;
-  }
-
-  
-}
-
-#submitBankDetailsForm , #submitPersonalDetailsForm{
-  background-color: black;
-  color:white;
-  padding:5px;
-  /* align-items: center; */
-}
-
-/* The Close Button */
-.close , .close1{
-  color: black;
-  float:right;
-  font-size: 28px;
-  font-weight: bold;
+.accordion button[aria-expanded=false] .down {
   display: block;
 }
 
-.close:hover , .close:focus , .close1:hover , .close1:focus{
-  color:#aaa;
-  text-decoration: none;
-  cursor: pointer;
+.accordion button i{
+  font-size: 1.25rem;
 }
 
-#uploadBankDetails:hover {
-  cursor: pointer;
+
+/* ADD IP / BTP buttons */
+
+
+.custom-buttons button{
+  background-color: white ;
+  color: #60aca6;
+  font-size: 1rem;
+  letter-spacing: 0.5 px;
+  border-radius: 5px;
 }
 
-#uploadPersonalDetails:hover {
-  cursor: pointer;
+.custom-buttons button:hover{
+  outline: none;
+  border: 1px solid #60aca6;
+  box-shadow: none;
 }
 
-#submitBankDetailsForm {
-  cursor: pointer;
+/* Status Buttons*/
+.status-button:not(.request){
+  background-color: none;
+  cursor: default;    
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
-#submitPersonalDetailsForm {
-  cursor: pointer;
+.request{
+  background-color: #60aca6;
+  border: 1px solid #60aca6;
+  color: white;
+}
+.request:hover {
+  background-color: #4b8883;
+  border: 1px solid #60aca6;
+  color:white;
 }
 
-input[type=radio] {
-  width: fit-content;
+.pending, .pending:hover {  
+  border: 1px solid #f5b907;  
+  color: #f5b907;
+  
 }
 
-.container h2{
-  font-size: 2rem;
+.rejected,
+.rejected:hover { 
+  border: 1px solid #dc3545;
+  color: #dc3545; 
 }
 
-.warning {
-  color: red;
-  font-size: small;
-  margin-top: -20px;
-  display: none;
+.accepted,
+.accepted:hover {
+  border: 1px solid #198754;
+  color: #198754;
 }
+
+
+/* Download Button */
+#downloadbtn {
+  color: #3DAFA8;
+  background: white;
+  border: 2px solid #3dafa8;
+  border-radius: 10px;
+  font-size: 1.25em;
+}
+
+#downloadbtn:hover {
+  background: #3DAFA8;
+  color: white;
+  border: 2px solid #3dafa8;
+  font-weight: 500;
+}
+
+
+
+

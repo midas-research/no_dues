@@ -48,19 +48,17 @@ if (request.status === 200) {
     user[0]["ipList"].length +
     user[0]["btpList"].length;
 
-  document.getElementById("countCleared").innerHTML = `${count}`;
-  document.getElementById("countAll").innerHTML = `${total}`;
+  // document.getElementById("countCleared").innerHTML = `${count}`;
+  // document.getElementById("countAll").innerHTML = `${total}`;
 
 
-var container = document.getElementById("admins_list_container");
+var container = document.getElementsByClassName('requests-list')[0];
 
 //Creating request div
 function createRequest(admin) {
-  
-
-  let adminName=admin;
-  if(adminName=='academics'){
-    adminName+=user[0]['degree'][0];
+  let adminName = admin;
+  if (adminName == "academics") {
+    adminName += user[0]["degree"][0];
   }
 
   let details = {};
@@ -76,26 +74,46 @@ function createRequest(admin) {
   if (displayAddress == "") {
     displayAddress = "NA";
   }
-  
+  let displayMessage ="There are no comments from the admin of this department.";
 
-  container.innerHTML += `<div class="accordion-item">
-    <button id="row accordion-button-1" aria-expanded="false">
-        <span class="accordion-title">${originalName}</span>
-               
-        <i class="fas fa-share request ${
-          admin + "Symbol"
-        } " onclick="requestFunction(event)" data-toggle="tooltip" data-placement="bottom" title="Send Request"></i>
+  if(user[0][adminName+'Messgae']){
+    displayMessage=user[0][adminName+'Message'];    
+  }
+
+  let displayFine ="NA";
+
+  if (user[0][adminName + "Fine"]) {
+    displayFine = user[0][adminName + "Fine"];
+  }
+
+  container.innerHTML += `
+  <div class="accordion-item container">
+    <button class="row" type="button" aria-expanded="false">
+
+          <div class="accordion-title col-8">${originalName}</div>
+
+          <div class="col-3 text-center"> 
+            <div class="status-button btn request ${admin + 'Status'} " onclick="requestFunction(event)">Request </div> 
+          </div>
+          
+          <div class="col-1 text-center">     
+            <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+            <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+          </div>      
         
-        <span class="icon" aria-hidden="true"></span>
-
     </button>
+    <div class="accordion-content row">
 
-    <div class="accordion-content">
-        ${customInfo(admin)}        
-        <p>Admin - ${displayName} [${displayAddress}]</p>
-        <p id="${
-          admin + "Message"
-        }" class="message">There are no comments from the admin of this department.</p>
+        <div class="accordion-body">
+
+          ${customInfo(admin)}        
+          <p>Admin :  ${displayName} [${displayAddress}]</p>
+          <p>Message: <span class="${admin+'Message'}"> ${displayMessage}</span></p>
+          <p>Fine: <span class="${admin+'Fine'}">${displayFine}</span></p>
+        
+        
+        </div>
+        
     </div>
   </div>`;
 }
@@ -121,50 +139,72 @@ function customInfo(admin) {
 //Creating requests for each admin
 admins_list.map(createRequest);
 
-//Symbol Update for Admins
-function updateSymbolMessage(user, admin) {
-  
-  var symbol = document.getElementsByClassName(admin + "Symbol")[0];
+//Status Update for Admins
+function updateStatusMessage(user, admin) {
+  var status = document.getElementsByClassName(admin + "Status")[0];
 
+  //Rejected
   if (user[0][admin + "Message"] && !user[0][admin]) {
-    document.getElementById(admin + "Message").innerHTML =
-      user[0][admin + "Message"];
-    symbol.classList.remove("fa-share");
-    symbol.classList.remove("request");
-    symbol.classList.add("send_request");
-    symbol.classList.remove("fa-spinner");
-    symbol.classList.add("fa-times-circle");
-    symbol.setAttribute("title", "Not Cleared");
-  } else if (user[0][admin + "Applied"] && !user[0][admin]) {
-    var symbol = document.getElementsByClassName(admin + "Symbol")[0];
-    symbol.classList.remove("fa-share");
-    symbol.classList.remove("request");
-    symbol.classList.add("send_request");
-    symbol.classList.add("fa-spinner");
-    symbol.setAttribute("title", "Pending");
-  } else if (user[0][admin + "Applied"] && user[0][admin] == true) {
-    if (symbol.classList.contains("fa-spinner")) {
-      symbol.classList.remove("fa-spinner");
-      symbol.classList.add("fa-check-circle");
-      symbol.setAttribute("title", "Cleared");
-    } else if (symbol.classList.contains("fa-times-circle")) {
-      symbol.classList.remove("fa-times-circle");
-      symbol.classList.add("fa-check-circle");
-      symbol.setAttribute("title", "Cleared");
-    } else if (symbol.classList.contains("fa-share")) {
-      symbol.classList.remove("fa-share");
-      symbol.classList.remove("request");
-      symbol.classList.add("send_request");
-      symbol.classList.add("fa-check-circle");
-      symbol.setAttribute("title", "Cleared");
+
+    let displayFine = "NA";
+    if (user[0][admin + "Fine"]) {
+      displayFine = user[0][admin + "Fine"];
     }
-    document.getElementById(admin + "Message").innerHTML =
-      "Dues for this department has been approved";
+
+    document.getElementsByClassName(admin + "Message")[0].innerHTML = user[0][admin + "Message"];
+    document.getElementsByClassName(admin + "Fine")[0].innerHTML = displayFine;
+    status.classList.remove("request");
+    status.classList.remove("accepted");
+    status.classList.add("rejected");
+    status.classList.remove("pending");
+    status.innerHTML = "Rejected";
+  }
+  //Pending
+  else if (user[0][admin + "Applied"] && !user[0][admin]) {    
+    status.classList.remove("request");
+    status.classList.remove("accepted");
+    status.classList.remove("rejected");
+    status.classList.add("pending");
+    status.innerHTML = "Pending";
+  } 
+  
+  //Accepted
+  else if (user[0][admin + "Applied"] && user[0][admin] == true) {
+    status.classList.remove("request");
+    status.classList.add("accepted");
+    status.classList.remove("rejected");
+    status.classList.remove("pending");
+  
+    document.getElementsByClassName(admin + "Message")[0].innerHTML = "Dues for this department has been approved";
+    document.getElementsByClassName(admin + "Fine")[0].innerHTML = "NA";
+    status.innerHTML = "Accepted";
   }
 }
 
 for (var i in admins_list) {
-  updateSymbolMessage(user, admins_list[i]);
+  updateStatusMessage(user, admins_list[i]);
+}
+
+//Toggle Button
+ function toggleAccordion() {
+   const items = document.querySelectorAll(".accordion button");
+   
+   const itemToggle = this.getAttribute("aria-expanded");
+
+   for (i = 0; i < items.length; i++) {
+     items[i].setAttribute("aria-expanded", "false");
+   }
+
+   if (itemToggle == "false") {
+     this.setAttribute("aria-expanded", "true");
+   }
+   
+ }
+
+function applyToggle(){
+  const items = document.querySelectorAll(".accordion button");
+
+  items.forEach((item) => item.addEventListener("click", toggleAccordion));
 }
 
 //To get admin name
@@ -185,12 +225,14 @@ function getAdminName(s) {
 
 //Sending Request
 function requestFunction(event) {
-  event.stopPropagation();
+  
   var list = event.target.classList;
+  
   if (list.contains("request") == false) {
     return;
   }
-  var adminName = getAdminName(event.target.previousElementSibling.innerHTML);
+  var adminName = getAdminName(event.target.parentElement.previousElementSibling.innerHTML);
+ 
 
   if (user[0][adminName + "Applied"]) {
     alert("You have already requested!");
@@ -212,6 +254,7 @@ function requestFunction(event) {
     }
 
     if (hostelTaken == undefined) {
+      
       alert("Please tell your hostel status! ");
       return;
     }
@@ -226,21 +269,6 @@ function requestFunction(event) {
   window.location.href = `${CURRENT_URL}/request/${JSON.stringify(obj)}`;
 }
 
-function applyToggle() {
-  const items = document.querySelectorAll(".accordion button");
-  function toggleAccordion() {
-    const itemToggle = this.getAttribute("aria-expanded");
-
-    for (i = 0; i < items.length; i++) {
-      items[i].setAttribute("aria-expanded", "false");
-    }
-
-    if (itemToggle == "false") {
-      this.setAttribute("aria-expanded", "true");
-    }
-  }
-  items.forEach((item) => item.addEventListener("click", toggleAccordion));
-}
 
 //Professor BTP and IP Request
 
@@ -323,32 +351,41 @@ function sendIpRequest(num) {
 
 function createIpRequest() {
   ipCount += 1;
+  
   container.innerHTML += `
-  <div class="accordion-item">
-      <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title">IP / IS / UR</span>
-        <i class="fas fa-share request ip_signal" data-toggle="tooltip" data-placement="bottom" onclick="sendIpRequest(ipCount)" title="Send Request"></i>
-        <span class="icon" aria-hidden="true"></span>
+  <div class="accordion-item container">
+      <button  class="row" type="button" aria-expanded="false">
+        <div class="accordion-title col-8">IP / IS / UR </div>
+        <div class="col-3 text-center"> 
+            <div class="status-button btn request" onclick="sendIpRequest(ipCount)">Request </div> 
+        </div>
+        <div class="col-1 text-center">     
+            <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+            <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+        </div>
       </button>
 
       <div class="accordion-content">
-         <br>
           
-          <label for="proffs">Choose professor:  </label>
+          <div class="accordion-body">
           
-          <select name="proffs" class="ip_proff${ipCount}">
-            <option value="None">None</option>
-          </select>                    
-          <br>
-          
-          <label  for="projectName">Project Name: 
-            <input type="text" id="ipProjectName${ipCount}" class="form-control" placeholder="Enter Project Name">
-          </label>
-          <br>
-          
-          <label for="projectDescription">Project Description:
-            <textarea class="form-control" id="ipProjectDescription${ipCount}" rows="3" cols="30" ></textarea>
-          </label>    
+            <label for="proffs">Choose professor:  </label>
+            
+            <select name="proffs" class="ip_proff${ipCount}">
+              <option value="None">None</option>
+            </select>                    
+            <br>
+            
+            <label  for="projectName">Project Name: 
+              <input type="text" id="ipProjectName${ipCount}" class="form-control" placeholder="Enter Project Name">
+            </label>
+            <br>
+            
+            <label for="projectDescription">Project Description:
+              <textarea class="form-control" id="ipProjectDescription${ipCount}" rows="3" cols="30" ></textarea>
+            </label> 
+            <br>   
+          </div>  
       </div>
   </div>`;
 
@@ -363,37 +400,46 @@ function createIpRequest() {
     ip_proff.appendChild(newOption);
   }
   total += 1;
-  document.getElementById("countAll").innerHTML = `${total}`;
-
+ 
   applyToggle();
+  
+  
 }
 
 function createBtpRequest() {
   btpCount += 1;
   container.innerHTML += `
-  <div class="accordion-item">
-    <button id="accordion-button-11" aria-expanded="false">
-      <span class="accordion-title">BTP / Scholarly Paper / Thesis</span>
-      <i class="fas fa-share request btp_signal btp_sendRequest" data-toggle="tooltip" onclick="sendBtpRequest(btpCount)" data-placement="bottom" title="Send Request"></i>
-      <span class="icon" aria-hidden="true"></span>
+  <div class="accordion-item container">
+    <button  class="row" type="button" aria-expanded="false">
+      <div class="accordion-title col-8">BTP / Scholarly Paper / Thesis</div>
+      <div class="col-3 text-center"> 
+          <div class="status-button btn request" onclick="sendBtpRequest(btpCount)">Request </div> 
+      </div>      
+       
+      <div class="col-1 text-center">     
+          <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+          <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+      </div>
     </button>
-
     <div class="accordion-content">
-        <br>
-        <label for="proffs">Choose professor:</label>
-        <select name="proffs" class="btp_proff${btpCount}">
-          <option value="None">None</option>
-        </select>        
-        <br>
-        
-        <label  for="projectName">Project Name: 
-          <input type="text" id="btpProjectName${btpCount}" class="form-control" placeholder="Enter Project Name">
-        </label>
-        <br>
-        
-        <label for="projectDescription">Project Description:
-          <textarea class="form-control" id="btpProjectDescription${btpCount}" rows="3" cols="30" ></textarea>
-        </label>
+        <div class="accordion-body">
+          
+          <label for="proffs">Choose professor:</label>
+          <select name="proffs" class="btp_proff${btpCount}">
+            <option value="None">None</option>
+          </select>        
+          <br>
+          
+          <label  for="projectName">Project Name: 
+            <input type="text" id="btpProjectName${btpCount}" class="form-control" placeholder="Enter Project Name">
+          </label>
+          <br>
+          
+          <label for="projectDescription">Project Description:
+            <textarea class="form-control" id="btpProjectDescription${btpCount}" rows="3" cols="30" ></textarea>
+          </label>
+          <br>  
+        </div>
         
     </div>
   </div> `;
@@ -407,85 +453,97 @@ function createBtpRequest() {
     newOption.setAttribute("value", professorsList[i][1]);
     btp_proff.appendChild(newOption);
   }
-  applyToggle();
+  
   total += 1;
-  document.getElementById("countAll").innerHTML = `${total}`;
+  // document.getElementById("countAll").innerHTML = `${total}`;
+  
+  applyToggle();
 }
 
 function createIpSentRequest(obj) {
-  let msg = "No Comment";
-  let signal = "fa-spinner";
-  let color = "blue";
-  let title = "Pending";
+  let className="pending";
+  let msg="No Message from the Professor";
+  let status="Pending";
+
 
   if (obj["ip"] == false) {
-    signal = "fa-times-circle";
-    color = "red";
-    title = "Rejected";
-    msg = obj["ipMessage"];
+    status = "Rejected";
+    className = "rejected";
+    msg = "Your dues has been approved!";
   } else if (obj["ip"] == true) {
-    signal = "fa-check-circle";
-    color = "green";
-    title = "Cleared";
+    status = "Accepted";
+    className='accepted';
     msg = "Your dues has been approved!";
   }
 
   container.innerHTML += `
-    <div class="accordion-item">
-      <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title"> IP / IS / UR - <span class="tag tag-primary">${
-          obj["projectName"]
-        }</span> - <span class="tag tag-secondary">${
-    professorsName[obj["profEmail"]]
-  }</span></span>
-        <i style="color: ${color};" class="send_request fas ${signal} " data-toggle="tooltip" data-placement="bottom" title="${title}"></i>
-        <span class="icon" aria-hidden="true"></span>
-      </button>
+    <div class="accordion-item container">
 
+      <button  class="row" type="button" aria-expanded="false">
+        <div class="accordion-title col-8">IP / IS / UR <span class="tag tag-primary">${obj["projectName"]}</span> <span class="tag tag-secondary">${professorsName[obj["profEmail"]]}</span> </div>
+        <div class="col-3 text-center"> 
+          <div class="status-button btn ${className}" onclick="sendIpRequest(ipCount)">${status} </div> 
+        </div>         
+        <div class="col-1 text-center">     
+            <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+            <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+        </div>
+      </button>      
+      
       <div class="accordion-content">
-        Description:
-            <ul>
-                <li>Project Name: ${obj["projectName"]}</li>
-                <li>Project Description: ${obj["projectDescription"]}</li>
-            </ul>
-        <hr>
-        Comments:
-        <br>
-        ${msg}          
+        <div class="accordion-body">
+          Description:
+              <ul>
+                  <li>Project Name: ${obj["projectName"]}</li>
+                  <li>Project Description: ${obj["projectDescription"]}</li>
+              </ul>
+          <hr>
+          Comments:
+          <br>
+          ${msg}
+          <br>          
+        </div>
       </div>
-  </div>`;
-  applyToggle();
+    </div>`;
+  
 }
 
 function createBtpSentRequest(obj) {
-  let msg = "No Comment";
-  let signal = "fa-spinner";
-  let color = "blue";
-  let title = "Pending";
+  let className = "pending";
+  let msg = "No Message from the Professor";
+  let status = "Pending";
 
   if (obj["btp"] == false) {
-    signal = "fa-times-circle";
-    color = "red";
-    title = "Rejected";
-    msg = obj["btpMessage"];
-  }
-  if (obj["btp"] == true) {
-    signal = "fa-check-circle";
-    color = "green";
-    title = "Cleared";
+    status = "Rejected";
+    className = "rejected";
+    msg = "Your dues has been approved!";
+  } 
+  else if (obj["btp"] == true) {
+    status = "Accepted";
+    className = "accepted";
     msg = "Your dues has been approved!";
   }
 
   container.innerHTML += `
-    <div class="accordion-item">
-      <button id="accordion-button-11" aria-expanded="false">
-        <span class="accordion-title"> BTP / Scholarly Paper / Thesis - <span class="tag tag-primary">${
+    <div class="accordion-item container">
+      
+      <button  class="row" type="button" aria-expanded="false">
+        <div class="accordion-title col-8">BTP / Scholarly Paper / Thesis <span class="tag tag-primary">${
           obj["projectName"]
-        }</span> - <span class="tag tag-secondary">${professorsName[obj["profEmail"]]}</span></span>
-        <i style="color: ${color};" class="send_request fas ${signal}" data-toggle="tooltip" data-placement="bottom" title="${title}"></i>
-        <span class="icon" aria-hidden="true"></span>
+        }</span>  <span class="tag tag-secondary">${
+    professorsName[obj["profEmail"]]
+  }</span></div>
+        
+        <div class="col-3 text-center"> 
+          <div class="status-button btn ${className}" onclick="sendBtpRequest(btpCount)">${status} </div> 
+        </div>
+        
+        <div class="col-1 text-center">     
+            <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+            <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+        </div>
       </button>
-
+      
       <div class="accordion-content">
           Description: 
             <ul>
@@ -495,38 +553,27 @@ function createBtpSentRequest(obj) {
           <hr>          
           Comments:
           <br>
-          ${msg}         
+          ${msg}
+          <br>           
       </div>
-  </div>`;
-  applyToggle();
+    </div>`;  
 }
+
+//Adding Already Sent Requests or New Requests
 
 if (user[0]["ipList"].length == 0) {
   createIpRequest();
 }
+else{
+  user[0]["ipList"].map(createIpSentRequest);
+}
 if (user[0]["btpList"].length == 0) {
   createBtpRequest();
 }
-
-//Adding Already Sent Requests
-user[0]["ipList"].map(createIpSentRequest);
-user[0]["btpList"].map(createBtpSentRequest);
-
-//Accordian Button
-
-const items = document.querySelectorAll(".accordion button");
-function toggleAccordion() {
-  const itemToggle = this.getAttribute("aria-expanded");
-
-  for (i = 0; i < items.length; i++) {
-    items[i].setAttribute("aria-expanded", "false");
-  }
-
-  if (itemToggle == "false") {
-    this.setAttribute("aria-expanded", "true");
-  }
+else{
+  user[0]["btpList"].map(createBtpSentRequest);
 }
-items.forEach((item) => item.addEventListener("click", toggleAccordion));
+
 applyToggle();
 
 setInterval(() => {
@@ -537,9 +584,8 @@ setInterval(() => {
     user = [];
     user.push(JSON.parse(request.responseText));
   }
-
   for (var i in admins_list) {
-    updateSymbolMessage(user, admins_list[i]);
+    updateStatusMessage(user, admins_list[i]);
   }
 }, 3000);
 
@@ -559,219 +605,78 @@ downloadbtn.addEventListener("click", () => {
   window.location.href = `${CURRENT_URL}/download/${user[0]._id}`;
 });
 
-//Form Details (Bank And Personal)
 
-  var modal = document.getElementById("myModal");
-  var modal1 = document.getElementById("myModal1");
-  var closeModal = document.getElementsByClassName("close")[0];
-  var closeModal1 = document.getElementsByClassName("close1")[0];
-  var submitModal = document.querySelector('.modal input[type="submit"]');
-  var submitModal1 = document.querySelector('.modal1 input[type="submit"]');
-  var bankName, bankBranch, bankAccountNo, bankIfscCode, bankAccountHolder;
-  document.getElementById("bankName").onkeypress = function () {
-    document.getElementById("bankNameWarning").style.display = "none";
-  };
-  document.getElementById("bankBranch").onkeypress = function () {
-    document.getElementById("bankBranchWarning").style.display = "none";
-  };
-  document.getElementById("bankAccountNo").onkeypress = function () {
-    document.getElementById("bankAccountNoWarning").style.display = "none";
-  };
-  document.getElementById("bankAccountHolder").onkeypress = function () {
-    document.getElementById("bankAccountHolderWarning").style.display = "none";
-  };
-  document.getElementById("bankIfscCode").onkeypress = function () {
-    document.getElementById("bankIfscCodeWarning").style.display = "none";
-  };
-  var personalMobile,
-    personalEmail,
-    leavingDate,
-    leavingReason,
-    completed,
-    withdrawal;
-  document.getElementById("personalMobile").onkeypress = function () {
-    document.getElementById("personalMobileWarning").style.display = "none";
-  };
-  document.getElementById("personalEmail").onkeypress = function () {
-    document.getElementById("personalEmailWarning").style.display = "none";
-  };
-  document.getElementById("leavingDate").onkeypress = function () {
-    document.getElementById("leavingDateWarning").style.display = "none";
-  };
-  document.getElementById("completed").onclick = function () {
-    document.getElementById("leavingReasonWarning").style.display = "none";
-  };
-  document.getElementById("withdrawal").onclick = function () {
-    document.getElementById("leavingReasonWarning").style.display = "none";
-  };
-  submitModal.onclick = function () {
-    bankName = document.getElementById("bankName").value;
-    bankBranch = document.getElementById("bankBranch").value;
-    bankAccountNo = document.getElementById("bankAccountNo").value;
-    bankIfscCode = document.getElementById("bankIfscCode").value;
-    bankAccountHolder = document.getElementById("bankAccountHolder").value;
-    var c = 0;
-    if (bankName == "") {
-      document.getElementById("bankNameWarning").style.display = "block";
-      c++;
+//Profile Button
+var profilebtn = document.getElementById("profile");
+profilebtn.addEventListener("click", () => {
+  var obj = {};
+  obj.user = JSON.stringify(user);
+
+  window.location.href = `${CURRENT_URL}/profile`;
+});
+
+//Form Details (Donation)
+
+  for (var i in admins_list) {
+    let donationAdmin = document.getElementById("donationAdmin");
+    let adminName = admins_list[i];
+    if (adminName == "academics") {
+      adminName += user[0]["degree"][0];
     }
-    if (bankBranch == "") {
-      document.getElementById("bankBranchWarning").style.display = "block";
-      c++;
+
+    let details = {};
+    var request = new XMLHttpRequest();
+    request.open("GET", `${CURRENT_URL}/user/getAdmin/${adminName}`, false);
+    request.send(null);
+    if (request.status === 200) {
+      details = JSON.parse(request.responseText)[0];
     }
-    if (bankAccountNo == "") {
-      document.getElementById("bankAccountNoWarning").style.display = "block";
-      c++;
-    }
-    if (bankIfscCode == "") {
-      document.getElementById("bankIfscCodeWarning").style.display = "block";
-      c++;
-    }
-    if (bankAccountHolder == "") {
-      document.getElementById("bankAccountHolderWarning").style.display =
-        "block";
-      c++;
-    }
-    if (c > 0) {
+    let originalName = details["originalAdminName"];
+
+    var option = document.createElement("option");
+    option.value = adminName;
+    option.text = originalName;
+    donationAdmin.add(option);
+  }
+
+  var submitDonationDetails = document.getElementById("submitDonationDetails");
+
+  var donationAdmin, donationAmount;
+
+  submitDonationDetails.onclick = function () {
+    let donationDetails = {};
+    donationAdmin = document.getElementById("donationAdmin").value;
+    donationAmount = document.getElementById("donationAmount").value;
+
+    if(donationAmount<1 || donationAmount>10000){
       return;
     }
-    var bankDetails = {};
-    bankDetails.bankName = bankName;
-    bankDetails.bankBranch = bankBranch;
-    bankDetails.bankAccountNo = bankAccountNo;
-    bankDetails.bankIfscCode = bankIfscCode;
-    bankDetails.bankAccountHolder = bankAccountHolder;
-    bankDetails.email = user[0]["email"];
-    window.location.href = `${CURRENT_URL}/sendBankDetails/${JSON.stringify(
-      bankDetails
-    )}`;
-    modal.style.display = "none";
-  };
-  submitModal1.onclick = function () {
-    personalMobile = document.getElementById("personalMobile").value;
-    personalEmail = document.getElementById("personalEmail").value;
-    leavingDate = document.getElementById("leavingDate").value;
-    withdrawal = document.getElementById("withdrawal");
-    completed = document.getElementById("completed");
-    var c = 0;
-    if (personalMobile == "") {
-      document.getElementById("personalMobileWarning").style.display = "block";
-      c++;
-    }
-    if (personalEmail == "") {
-      document.getElementById("personalEmailWarning").style.display = "block";
-      c++;
-    }
-    if (leavingDate == "") {
-      document.getElementById("leavingDateWarning").style.display = "block";
-      c++;
-    }
-    if (!withdrawal.checked && !completed.checked) {
-      document.getElementById("leavingReasonWarning").style.display = "block";
-      c++;
-    }
-    if (c > 0) {
-      return;
-    }
-    var personalDetails = {};
-    personalDetails.personalMobile = personalMobile;
-    personalDetails.personalEmail = personalEmail;
-    personalDetails.leavingDate = leavingDate;
 
-    if (withdrawal.checked) {
-      personalDetails.leavingReason = "withdrawal";
-    }
-    if (completed.checked) {
-      personalDetails.leavingReason = "completed";
-    }
+    donationDetails.donationAdmin = donationAdmin;
+    donationDetails.donationAmount = donationAmount;
+    donationDetails.email = user[0]["email"];
 
-    personalDetails.email = user[0]["email"];
-    window.location.href = `${CURRENT_URL}/sendPersonalDetails/${JSON.stringify(
-      personalDetails
-    )}`;
-    modal1.style.display = "none";
+    var request = new XMLHttpRequest();
+    request.open(
+      "GET",
+      `${CURRENT_URL}/sendDonationDetails/${JSON.stringify(donationDetails)}`,
+      false
+    );
+    request.send(null);
+
+    window.location.href = `${CURRENT_URL}/`;
   };
 
-  // When the user clicks on the button, open the modal
-  // window.onload = function () {
-  //   if (
-  //     !user[0]["bankName"] ||
-  //     !user[0]["bankBranch"] ||
-  //     !user[0]["bankAccountNo"] ||
-  //     !user[0]["bankIfscCode"]
-  //   ) {
-  //     modal.style.display = "block";
-  //   }
-  // };
-  var uploadBankDetails = document.getElementById("uploadBankDetails");
-  uploadBankDetails.onclick = function () {
-    modal.style.display = "flex";
-    if (user[0].bankName != undefined) {
-      document.getElementById("bankName").value = user[0].bankName;
-    }
-    if (user[0].bankBranch != undefined) {
-      document.getElementById("bankBranch").value = user[0].bankBranch;
-    }
-    if (user[0].bankAccountNo != undefined) {
-      document.getElementById("bankAccountNo").value = user[0].bankAccountNo;
-    }
-    if (user[0].bankIfscCode != undefined) {
-      document.getElementById("bankIfscCode").value = user[0].bankIfscCode;
-    }
-    if (user[0].bankAccountHolder != undefined) {
-      document.getElementById("bankAccountHolder").value = user[0].bankAccountHolder;
-    }
-  };
+  function updateDonationDetails() {
+    donationAdmin = document.getElementById("donationAdmin");
+    donationAmount = document.getElementById("donationAmount");
 
-  var uploadPersonalDetails = document.getElementById("uploadPersonalDetails");
-  uploadPersonalDetails.onclick = function () {
-    modal1.style.display = "flex";
-    personalMobile = document.getElementById("personalMobile");
-    personalEmail = document.getElementById("personalEmail");
-    leavingDate = document.getElementById("leavingDate");
-    withdrawal = document.getElementById("withdrawal");
-    completed = document.getElementById("completed");
-    if (user[0].personalDetails=='withdrawl') {
-      withdrawal.checked=true;
-      completed.checked=false;
+    if (user[0].donationAdmin != undefined) {
+      donationAdmin.value = user[0].donationAdmin;
+      donationAmount.value = user[0].donationAmount;
+      submitDonationDetails.style.display = "none";
+      document.getElementById("donationDetails").disabled = true;
     }
-    else if (user[0].personalDetails == "completed") {
-       withdrawal.checked = false;
-       completed.checked = true;
-    }
+  }
 
-    if (user[0].personalMobile != undefined) {
-      personalEmail.value = user[0].personalMobile;
-    }
-    if (user[0].personalEmail != undefined) {
-      personalEmail.value = user[0].personalEmail;
-    }
-    if (user[0].leavingDate != undefined) {
-      leavingDate.value = user[0].leavingDate;
-    }
-    if (user[0].completed != undefined) {
-     completed.value =user[0].completed;
-    }
-  };
-
-  // When the user clicks on <span> (x), close the modal
-  closeModal.onclick = function () {
-    modal.style.display = "none";
-  };
-  closeModal1.onclick = function () {
-    modal1.style.display = "none";
-  };
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-    if (event.target == modal1) {
-      modal1.style.display = "none";
-    }
-  };
-
-
-
-  
+  updateDonationDetails();

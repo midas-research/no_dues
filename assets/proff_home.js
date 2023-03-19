@@ -126,12 +126,8 @@ function addAcceptIPCode(student, obj, msg, idx) {
             
         </button>
         <div class="accordion-content">
-      
-          <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <span class="reject_request input-group-append" onclick="sendMessageIp(event,${idx})"> Reject </span>  
-          </div>
           <div>
+            <i style='color:red;'>Please Inform the No Dues Department in-case you want to reject this Request!</i><br>  
             
             <h5>Description: </h5>
             <ul>
@@ -151,16 +147,15 @@ function addAcceptIPCode(student, obj, msg, idx) {
 function addAcceptBTPCode(student, obj, msg, idx) {
   return `<div class="accordion-item filter-btech">
       <button id="accordion-button-1" aria-expanded="false">
-          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
+          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">BTP</span></span>
           <span class="icon" aria-hidden="true"></span>
           
       </button>
       <div class="accordion-content">
+
+        <i style='color:red;'>Please Inform the No Dues Department in-case you want to reject this Request!</i><br>  
       
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-          <span class="reject_request input-group-append" onclick="sendMessageBtp(event,${idx})"> Reject </span>   
-        </div>
+       
         <div>
           <h5>Description: </h5>
           <ul>
@@ -180,7 +175,7 @@ function addAcceptBTPCode(student, obj, msg, idx) {
 function addBTPCode(student, obj, msg, idx) {
   return ` <div class="accordion-item filter-btech">
             <button id="accordion-button-1" aria-expanded="false">
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class=".tag .tag-primary">${obj.projectName}</span> - <span class=".tag .tag-secondary">BTP</span></span>
+                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">BTP</span></span>
                 <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
                 <span class="send_request accept_request" onclick="event.stopPropagation() ;btpApproved(this,${idx})"> Accept </span>
                 <span class="icon" aria-hidden="true"></span>

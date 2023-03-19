@@ -470,10 +470,15 @@ module.exports.sendMessage = (req, res) => {
       return;
     }
     var id = user._id;
-    var attribute = obj[0].admin + "Message";
+   
+    var msg = obj[0].admin + "Message";
+    var fine=obj[0].admin+"Fine";
+
+    
     var updatedObject = {};
     updatedObject[obj[0].admin] = false;
-    updatedObject[attribute] = obj[0].message;
+    updatedObject[msg] = obj[0].message;
+    updatedObject[fine] = obj[0].fine;
     updatedObject[obj[0].admin + "ApprovedAt"] = null;
 
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
@@ -865,6 +870,19 @@ module.exports.home = (req, res) => {
   });
 };
 
+module.exports.home_profile = (req, res) => {
+  var obj = [];
+  obj.push(req.user);
+  return res.render("home_profile", {
+    title: "Profile",
+    user: JSON.stringify(obj),
+    name: req.user.name,
+    image: req.user.image,
+    url: JSON.stringify(CURRENT_URL),
+    layout: "home_profile",
+  });
+};
+
 module.exports.request = (req, res) => {
   var obj = JSON.parse(req.params.obj)[0];
 
@@ -969,8 +987,6 @@ module.exports.sendIpRequest = (req, res) => {
       user.ipList.length - 1
     );
   });
-
-  
   
   return res.redirect("/");
 };
@@ -1021,8 +1037,30 @@ module.exports.sendBankDetails = (req, res) => {
       return;
     }
     user.save();
+   
   });
-  return res.redirect("/");
+  res.status = 200;
+  return res.end();
+};
+
+module.exports.sendDonationDetails = (req, res) => {
+  var obj = JSON.parse(req.params.donationDetails);
+  var updateObject = {};
+  updateObject.donationAdmin = obj.donationAdmin;
+  updateObject.donationAmount = obj.donationAmount;
+
+  console.log(obj);
+ 
+  User.findOneAndUpdate({ email: obj["email"] }, updateObject, (err, user) => {
+    if (err) {
+      console.log("Error in finding student in sendDonationDetails: ", err);
+      return;
+    }
+    user.save();
+  });
+
+  res.status = 200;
+  return res.end();
 };
 
 module.exports.sendPersonalDetails = (req, res) => {
@@ -1037,9 +1075,12 @@ module.exports.sendPersonalDetails = (req, res) => {
       console.log("Error in finding student in sendPersonalDetails: ", err);
       return;
     }
-    user.save();
+    user.save();    
   });
-  return res.redirect("/");
+
+  res.status = 200;
+  return res.end();
+
 };
 
 module.exports.getFunction = (req, res) => {

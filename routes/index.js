@@ -10,6 +10,12 @@ router.get(
   passport.checkUserAuthentication,
   homeController.home
 );
+router.get(
+  "/profile",
+  passport.checkAuthentication,
+  passport.checkUserAuthentication,
+  homeController.home_profile
+);
 
 router.get(
   "/super_admin",
@@ -148,6 +154,11 @@ router.get(
   "/sendBankDetails/:bankDetails",
   passport.checkAuthentication,
   homeController.sendBankDetails
+);
+router.get(
+  "/sendDonationDetails/:donationDetails",
+  passport.checkAuthentication,
+  homeController.sendDonationDetails
 );
 router.get(
   "/sendPersonalDetails/:personalDetails",
