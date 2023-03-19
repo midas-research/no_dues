@@ -196,12 +196,12 @@ function addNormalCode(student, msg) {
             <!--Accept-->
 
             <div class="col-1 text-center"> 
-               <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;approved(this)"></i>
+               <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;approved(this)" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
             </div>
             
             <!--Reject-->
             <div class="col-1 text-center"> 
-               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)"></i>
+               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
             </div>
             
             <div class="col-1 text-center">     
