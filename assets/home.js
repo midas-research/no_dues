@@ -671,7 +671,7 @@ profilebtn.addEventListener("click", () => {
     donationAdmin = document.getElementById("donationAdmin");
     donationAmount = document.getElementById("donationAmount");
 
-    if (user[0].donationAdmin != undefined) {
+    if (user[0].donationAdmin != 'None') {
       donationAdmin.value = user[0].donationAdmin;
       donationAmount.value = user[0].donationAmount;
       submitDonationDetails.style.display = "none";

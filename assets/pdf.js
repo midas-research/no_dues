@@ -49,7 +49,7 @@ for (var i in admins_list) {
   let displayAddress = adminObj["displayAddress"];
   let displayName = adminObj["displayName"];
   let clearance;
-  if (user[admins_list[i]] == true) {
+  if (user[admins_list[i]] == true || user['nodues']==true) {
     clearance = "Yes";
   } else {
     clearance = "No";

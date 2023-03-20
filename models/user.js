@@ -81,12 +81,13 @@ var schemaObject = {
   other_email: { type: String },
   date_of_leaving: { type: String },
   reason_of_leaving: { type: String },
-  nodues: { type: Boolean },
+  nodues: { type: Boolean, default: false },
   noduesMessage: { type: String },
   noduesApprovedAt: { type: String },
   hostelTaken: { type: Boolean, default: undefined },
-  donationAdmin: { type: String, default: undefined },
+  donationAdmin: { type: String, default: 'None' },
   donationAmount: {type: Number, default: 0},
+  totalFine: {type:Number, default: 0},
 };
 
 for (var i = 0; i < names.length - 2; i++) {

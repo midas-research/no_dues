@@ -3,15 +3,6 @@ const CURRENT_URL = JSON.parse(
   document.getElementById("CURRENT_URL").innerHTML
 );
 
-
-//Download Button
-var downloadbtn = document.getElementById("downloadbtn");
-downloadbtn.addEventListener("click", () => {
-  var obj = {};
-  obj.student = user[0];
-  window.location.href = `${CURRENT_URL}/download/${user[0]._id}`;
-});
-
 //Profile Button
 var homebtn = document.getElementById("home");
 homebtn.addEventListener("click", () => {

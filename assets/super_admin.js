@@ -38,7 +38,9 @@ function addAcceptCode(student, msg,k) {
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             </div>
 
-            <div class="accordion-title col-8">${student.email} - ${student.roll} - ${student.name} <span class="tag tag-tertiary">${k}</span></div>
+            <div class="accordion-title col-8">${student.email} - ${
+    student.roll
+  } - ${student.name} <span class="tag tag-tertiary">${k}</span></div>
 
             <!--Accept-->
             <div class="col-1 text-center"> 
@@ -65,7 +67,9 @@ function addAcceptCode(student, msg,k) {
               <span class="message">${msg}</span>
 
               <div class="admins-status">
-                ${addcontent(student)} 
+                ${addDonationContent(currentList[i])}
+                ${addFineContent(currentList[i])} 
+                ${addClearanceContent(currentList[i])} 
               </div>
             
             </div>
@@ -74,10 +78,14 @@ function addAcceptCode(student, msg,k) {
         </div> `;
 }
 
-function addcontent(student) {
-  uncleared = `<hr><h5>UnCleared Status: </h5>
+
+function addClearanceContent(student) {
+  uncleared = `<hr>
+            <p><em>UnCleared Status: </em></p>
               <ul>`;
-  cleared = `<h5>Cleared Status: </h5> 
+  cleared = `
+  <hr>
+  <p><em>Cleared Status: </em></p> 
             <ul>`;
   for (var i in adminList) {
     var j = student[adminList[i]];
@@ -122,6 +130,32 @@ function addcontent(student) {
   uncleared += `</ul>`;
   cleared += `</ul>`;
   return cleared + uncleared;
+}
+
+function addFineContent(student) {
+  content = `<hr>
+            <p>Total Fine : ${student['totalFine']} </p>
+            <ul>
+            `;
+  
+  for (var i in adminList) {
+    var j = student[adminList[i]+'Fine'];
+    if (j == 0) {
+      continue;
+    }    
+    content += `<li> ${adminList[i]}: ${student[adminList[i]+'Fine']}</li>`;    
+  }  
+  content += `</ul>`;
+  return content;
+}
+
+function addDonationContent(student) {
+  content = `<hr>
+            <p>Total Donation : ${student["donationAmount"]} </p>
+            <p>Donation Department: ${student["donationAdmin"]}</p>  `;
+
+  
+  return content;
 }
 
 function check(student, curr_status) {
@@ -247,7 +281,11 @@ function clickFilter() {
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             </div>
 
-            <div class="accordion-title col-8">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name} <span class="tag tag-tertiary">${k}</span></div>
+            <div class="accordion-title col-8">${currentList[i].email} - ${
+        currentList[i].roll
+      } - ${
+        currentList[i].name
+      } <span class="tag tag-tertiary">${k}</span></div>
 
             <!--Accept-->
 
@@ -281,7 +319,9 @@ function clickFilter() {
               <span class="message">${message}</span>
 
               <div class="admins-status">
-                ${addcontent(currentList[i])} 
+                ${addDonationContent(currentList[i])}
+                ${addFineContent(currentList[i])} 
+                ${addClearanceContent(currentList[i])} 
               </div>
             
             </div>

@@ -20,6 +20,7 @@ const axios = require("axios");
 const { CURRENT_URL, NODEMAILER_EMAIL_ID } = require("../config/config");
 const fs = require("fs");
 
+
 //Super Admin Operations
 module.exports.superAdmin = (req, res) => {
   var admins_list = Admin.admins;
@@ -316,7 +317,6 @@ module.exports.updateProfessor = async (req, res) => {
 };
 
 
-
 // Super Admin Department Wise
 
 module.exports.superAdminDepartment = (req, res) => {
@@ -336,95 +336,6 @@ module.exports.superAdminDepartment = (req, res) => {
     layout: "super_admin_department",
   });
 };
-
-// module.exports.sendAdminMessage = (req, res) => {
-//   var obj = JSON.parse(req.params.dues);
-
-//   User.findOne({ email: obj[0].email }, (err, user) => {
-//     if (err) {
-//       console.log("Error in finding student from email id");
-//       return;
-//     }
-//     var id = user._id;
-//     var attribute = obj[0].admin + "Message";
-//     var updatedObject = {};
-//     updatedObject[obj[0].admin] = false;
-//     updatedObject[attribute] = obj[0].message;
-//     updatedObject[obj[0].admin + "ApprovedAt"] = null;
-
-//     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
-//       user.save();
-//       return res.redirect("/super_admin/adminRequests");
-//     });
-//     message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
-//   });
-//   return;
-// };
-
-
-// module.exports.approveAdmin = (req, res) => {
-//   var obj = JSON.parse(req.params.dues);
-//   User.findOne({ email: obj[0].email }, (err, user) => {
-//     if (err) {
-//       console.log("Error in finding student from email id");
-//       return;
-//     }
-//     var id = user._id;
-//     var updateObject = {};
-//     var today = new Date();
-//     var date =
-//       today.getFullYear() +
-//       "-" +
-//       (today.getMonth() + 1) +
-//       "-" +
-//       today.getDate();
-//     var time =
-//       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-//     var dateTime = date + " " + time;
-//     updateObject[obj[0].admin] = true;
-//     updateObject[obj[0].admin + "ApprovedAt"] = dateTime;
-
-//     User.findByIdAndUpdate(id, updateObject, (err, user) => {
-//       user.save();
-//       return res.redirect("/super_admin/adminRequests");
-//     });
-//     approved_mailer.approvedDues(obj[0].admin, obj[0].email);
-//   });
-//   return;
-// };
-
-// module.exports.approveManyAdmins = (req, res) => {
-//   var obj = JSON.parse(req.params.dues)[0];
-//   for (var i in obj) {
-//     var studentEmail = obj[i].studentEmail;
-//     var adminName = obj[i].adminName;
-//     var updateObject = {};
-//     updateObject[adminName] = true;
-//     var today = new Date();
-//     var date =
-//       today.getFullYear() +
-//       "-" +
-//       (today.getMonth() + 1) +
-//       "-" +
-//       today.getDate();
-//     var time =
-//       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-//     var dateTime = date + " " + time;
-//     updateObject[adminName + "ApprovedAt"] = dateTime;
-
-//     User.findOneAndUpdate(
-//       { email: studentEmail },
-//       updateObject,
-//       (err, user) => {
-//         user.save();
-//         approved_mailer.approvedDues(adminName, studentEmail);
-//       }
-//     );
-//   }
-//   return res.redirect("/super_admin/adminRequests");
-// };
-
-
 
 //Admin Operations
 
@@ -479,6 +390,7 @@ module.exports.sendMessage = (req, res) => {
     updatedObject[obj[0].admin] = false;
     updatedObject[msg] = obj[0].message;
     updatedObject[fine] = obj[0].fine;
+    updatedObject['totalFine']=user.totalFine+fine;
     updatedObject[obj[0].admin + "ApprovedAt"] = null;
 
     User.findByIdAndUpdate(id, updatedObject, (err, user) => {
