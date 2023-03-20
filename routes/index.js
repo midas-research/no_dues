@@ -63,29 +63,6 @@ router.get(
   homeController.superApproveManyDues
 );
 
-router.get(
-  "/block/student",
-  passport.checkSuperAdminAuthentication,
-  homeController.blockStudent
-);
-
-router.get(
-  "/block/admin",
-  passport.checkSuperAdminAuthentication,
-  homeController.blockAdmin
-);
-
-router.get(
-  "/unblock/student",
-  passport.checkSuperAdminAuthentication,
-  homeController.unblockStudent
-);
-
-router.get(
-  "/unblock/admin",
-  passport.checkSuperAdminAuthentication,
-  homeController.unblockAdmin
-);
 
 
 router.get(
