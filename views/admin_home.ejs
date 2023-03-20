@@ -77,6 +77,7 @@
         <h4> LIST OF STUDENTS </h4>
       </div>
       
+      
       <div class="row mx-0 p-3">
 
         <!-- Pending Rejected Accepted-->
@@ -110,14 +111,14 @@
 
           <div class="row d-flex flex-row justify-content-around align-items-center" data-aos="fade-up" data-aos-delay="100">
             
-            <select class="filter form-select mt-1 mb-1" name="degree" id="degree" onclick="clickFilter()">
+            <select class="filter form-select mt-2 mb-2" name="degree" id="degree" onclick="clickFilter()">
               <option selected value="All">Degree (All)</option>
               <option value="B. Tech">B.Tech</option>
               <option value="M. Tech">M.Tech</option>
               <option value="Phd">Phd</option>
             </select>
           
-            <select class="filter form-select mt-1 mb-1" aria-label="Default select example" name="department" id="department">
+            <select class="filter form-select mt-2 mb-2" aria-label="Default select example" name="department" id="department">
               <option value="All">Branch(All)</option>
               <option value="CSE">CSE</option>
               <option value="Mathematics">MATHS</option>
@@ -127,7 +128,7 @@
               <option value="HCD">HCD</option>
             </select>
 
-            <div class="input-group mt-1 mb-1 batch-filter">
+            <div class="input-group mt-2 mb-2 batch-filter">
               <input class="form-control" type="number" id="batch" name="batch" placeholder="BATCH" >
               
               <div class="input-group-append">
@@ -139,7 +140,7 @@
             
           
             <% if (adminName=="hostel" ) { %>
-              <select class="filter form-select mt-1 mb-1" aria-label="Default select example" name="hostelTaken" id="hostelTaken">
+              <select class="filter form-select mt-2 mb-2" aria-label="Default select example" name="hostelTaken" id="hostelTaken">
                 <option value="all">Taken/Not Taken</option>
                 <option value="true">Taken Hostel</option>
                 <option value="false">Not Taken</option>
@@ -147,7 +148,7 @@
             <% } %>
             
             <!--Utility-->
-            <div class="btn-group utility mt-1 mb-1" role="group">
+            <div class="btn-group utility mt-2 mb-2" role="group">
               <button type="button" class="btn" id="selectAll">Select All</button>
               <button type="button" class="btn" id="unselectAll">Unselect All</button>
               <button type="button" class="btn" id="sendAll">Accept Selected</button>

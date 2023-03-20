@@ -8,16 +8,6 @@ var superAdminName = document.getElementById("adminName").innerHTML;
 var accordion = document.getElementsByClassName("accordion")[0];
 
 
-function check(student, curr_status) {
-  if (curr_status == "pending") {
-    return student[superAdminName] == null;
-  } else if (curr_status == "accepted") {
-    return student[superAdminName] == true;
-  } else {
-    return student[superAdminName] == false;
-  }
-}
-
 function adminsLeft(student) {
   for (var i in adminList) {
     if (!(student[adminList[i]] == true)) {
@@ -40,82 +30,48 @@ function adminsLeft(student) {
   return true;
 }
 
-function addAcceptCode(student, msg) {
-  return `<div class="accordion-item filter-btech">
-        <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${student.email} - ${
-    student.roll
-  } - ${student.name}</span>
-            <span class="icon" aria-hidden="true"></span>
+function addAcceptCode(student, msg,k) {
+  return `
+        <div class="accordion-item container">
+          <button class="row accordion-heading" type="button" aria-expanded="false">
+            <div class="col-1 text-center">
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+            </div>
+
+            <div class="accordion-title col-8">${student.email} - ${student.roll} - ${student.name} <span class="tag tag-tertiary">${k}</span></div>
+
+            <!--Accept-->
+            <div class="col-1 text-center"> 
+
+            </div>
             
-        </button>
-        <div class="accordion-content">
-          <div class="input-group mb-3">
-             
-            <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
-            <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
+            <!--Reject-->
+            <div class="col-1 text-center"> 
+               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+            </div>
+          </button>
+          <div class="accordion-content ">
+
+            <div class="accordion-body">
+              <form class="custom-form mx-auto">
+                <label>Message: </label>
+                <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+                <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event)" > Reject</button>
+              </form>            
+
+              <hr class="mt-2 mb-2">
+
+              <span class="message">Latest Communication: </span><br>
+              <span class="message">${msg}</span>
+
+              <div class="admins-status">
+                ${addcontent(student)} 
+              </div>
+            
+            </div>
+            
           </div>
-
-          
-          <span class="message">Approved : ${
-            student[superAdminName + "ApprovedAt"]
-          }</span><br>
-          <span class="message">Latest Communication before Accepting: </span><br>
-          <span class="message">${msg}</span><br>
-          <hr>
-          <div class="admins-status">
-              ${addcontent(student)} 
-          </div>
-
-        </div>
-        
-      </div>`;
-}
-
-function isTrue(student) {
-  var curr_status = document.getElementById("status").value;
-  var curr_degree = document.getElementById("degree").value;
-  var curr_department = document.getElementById("department").value;
-  var curr_batch = document.getElementById("batch").value;
-  var clearance = document.getElementById("clearance").value;
-
-  var k = "not cleared";
-  if (adminsLeft(student)) {
-    k = "cleared";
-  }
-
-  var checkDegree = curr_degree == student["degree"];
-  var checkDepartment = curr_department == student["department"];
-  var checkBatch = curr_batch == student["batch"];
-
-  var checkClearance = clearance == k;
-
-  if (!curr_batch) {
-    curr_batch = -1;
-  }
-
-  if (clearance == "all") {
-    checkClearance = true;
-  }
-
-  if (curr_degree == "All") {
-    checkDegree = true;
-  }
-
-  if (curr_department == "All") {
-    checkDepartment = true;
-  }
-
-  if (curr_batch == -1) {
-    checkBatch = true;
-  }
-
-  return (
-    checkClearance &&
-    checkDegree &&
-    checkDepartment &&
-    checkBatch
-  );
+        </div> `;
 }
 
 function addcontent(student) {
@@ -168,10 +124,65 @@ function addcontent(student) {
   return cleared + uncleared;
 }
 
-function clickFilter() {
-  var curr_status = document.getElementById("status").value;
+function check(student, curr_status) {
+  if (curr_status == "pending") {
+    return student[superAdminName] == null;
+  } else if (curr_status == "accepted") {
+    return student[superAdminName] == true;
+  } else {
+    return student[superAdminName] == false;
+  }
+}
+
+function isTrue(student) {
+  
   var curr_degree = document.getElementById("degree").value;
   var curr_department = document.getElementById("department").value;
+  var curr_batch = document.getElementById("batch").value;
+  var clearance = document.getElementById("clearance").value;
+
+  var k = "not cleared";
+  if (adminsLeft(student)) {
+    k = "cleared";
+  }
+
+  var checkDegree = curr_degree == student["degree"];
+  var checkDepartment = curr_department == student["department"];
+  var checkBatch = curr_batch == student["batch"];
+
+  var checkClearance = clearance == k;
+
+  if (!curr_batch) {
+    curr_batch = -1;
+  }
+
+  if (clearance == "all") {
+    checkClearance = true;
+  }
+
+  if (curr_degree == "All") {
+    checkDegree = true;
+  }
+
+  if (curr_department == "All") {
+    checkDepartment = true;
+  }
+
+  if (curr_batch == -1) {
+    checkBatch = true;
+  }
+
+  return (
+    checkClearance &&
+    checkDegree &&
+    checkDepartment &&
+    checkBatch
+  );
+}
+
+//Applying filters and adding request components
+function clickFilter() {
+  let curr_status = document.getElementsByClassName("status")[0].id;
   var curr_batch = document.getElementById("batch").value;
 
   if (!curr_batch) {
@@ -190,22 +201,19 @@ function clickFilter() {
     document.getElementById("selectAll").disabled = true;
     document.getElementById("unselectAll").disabled = true;
     document.getElementById("sendAll").disabled = true;
-
-    document.getElementById("selectAll").style.display = "none";
-    document.getElementById("unselectAll").style.display = "none";
-    document.getElementById("sendAll").style.display = "none";
   } else {
     document.getElementById("selectAll").disabled = false;
     document.getElementById("unselectAll").disabled = false;
     document.getElementById("sendAll").disabled = false;
 
-    document.getElementById("selectAll").style.display = "flex";
-    document.getElementById("unselectAll").style.display = "flex";
-    document.getElementById("sendAll").style.display = "flex";
+    document.getElementById("selectAll").style.display = "block";
+    document.getElementById("unselectAll").style.display = "block";
+    document.getElementById("sendAll").style.display = "block";
   }
 
+  //No Requests for this filter
   if (currentList.length == 0) {
-    accordion.innerHTML = '<div id="NoRequest"> No Requests Found!</div>';
+    accordion.innerHTML = `<div class="alert alert-dark mx-3" role="alert">No Requests Found</div>`;
     return;
   }
 
@@ -219,41 +227,67 @@ function clickFilter() {
       message = "You have not sent any message currently.";
     }
 
-    if (check(currentList[i], curr_status) && curr_status == "accepted") {
-      accordion.innerHTML += addAcceptCode(currentList[i], message);
-    } else if (check(currentList[i], curr_status)) {
-      k = "Not Clear";
-      if (adminsLeft(currentList[i])) {
-        k = "All Clear";
-      }
-     
-      accordion.innerHTML += `
-       <div class="accordion-item filter-btech">
-         <button id="accordion-button-1" aria-expanded="false">
-             <span class="accordion-title">${currentList[i].email} - ${
-        currentList[i].roll
-      } - ${currentList[i].name} - <span class="tag tag-tertiary">${k}</span></span>           
-                             
-            <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">         
-            <span class="accept_request" onclick="event.stopPropagation() ;approved(this)"> Accept </span> 
-            <span class="icon" aria-hidden="true"></span>    
-             
-         </button>
-         <div class="accordion-content">           
-           
-           <div class="input-group mb-3">             
-             <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
-             <span class="reject_request input-group-append" onclick="sendMessage(event)"> Reject </span>   
-           </div>
-           <span class="message">Latest Communication: </span><br>
-           <span class="message">   ${message}</span>
-           <hr>
-           <div class="admins-status">
-              ${addcontent(currentList[i])} 
-            </div>
-         </div>
-       </div>`;
+    k = "Not Clear";
 
+    if (adminsLeft(currentList[i])) {
+      k = "All Clear";
+    }
+
+    if (check(currentList[i], curr_status) && curr_status == "accepted") {
+      accordion.innerHTML += addAcceptCode(currentList[i], message,k);
+    } 
+    else if (check(currentList[i], curr_status)) {      
+      
+
+      accordion.innerHTML += `
+        <div class="accordion-item container">
+          <button class="row accordion-heading" type="button" aria-expanded="false">
+
+            <div class="col-1 text-center">
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+            </div>
+
+            <div class="accordion-title col-8">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name} <span class="tag tag-tertiary">${k}</span></div>
+
+            <!--Accept-->
+
+            <div class="col-1 text-center"> 
+               <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;approved(this)" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
+            </div>
+            
+            <!--Reject-->
+            <div class="col-1 text-center"> 
+               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+            </div>
+            
+            <div class="col-1 text-center">     
+              <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+              <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+            </div>      
+          
+          </button>
+          <div class="accordion-content ">
+
+            <div class="accordion-body">
+              <form class="custom-form mx-auto">
+                <label>Message: </label>
+                <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">                
+                <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event)" > Reject</button>
+              </form>            
+
+              <hr class="mt-2 mb-2">
+
+              <span class="message">Latest Communication: </span><br>
+              <span class="message">${message}</span>
+
+              <div class="admins-status">
+                ${addcontent(currentList[i])} 
+              </div>
+            
+            </div>
+            
+          </div>
+        </div> `;
     }
   }
 
@@ -271,8 +305,9 @@ function clickFilter() {
   items.forEach((item) => item.addEventListener("click", toggleAccordion));
 }
 
-function applyStatus(){
-  var curr_status = document.getElementById("status").value;
+//Pending Rejected Accepted
+function applyStatus() {
+  let curr_status = document.getElementsByClassName("status")[0].id;
   var request = new XMLHttpRequest();
   request.open("GET", `${CURRENT_URL}/user/getStudents/${curr_status}`, false);
   request.send();
@@ -280,24 +315,19 @@ function applyStatus(){
     studentList = JSON.parse(request.responseText);
     clickFilter();
   }
-
 }
 
-applyStatus();
-
+//Functionality if request rejected
 function sendMessage(e) {
   var dues = e.target.previousElementSibling.value;
   if (dues == "") {
     alert("You need to give a message before rejecting!");
     return;
   }
-  var message = e.target.parentElement.nextElementSibling;
-  message.innerHTML = dues;
-  var email =
-    e.target.parentElement.parentElement.previousElementSibling.childNodes[1]
-      .textContent;
+  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;
   var index = email.indexOf(" ");
   var obj = [];
+
   obj.push({
     admin: superAdminName,
     message: dues,
@@ -315,9 +345,9 @@ function sendMessage(e) {
   applyStatus();
 }
 
+//Functionality if request accepted
 function approved(e) {
-  var r = e.parentElement.parentElement;
-  var emailroll = e.parentElement.childNodes[1].innerHTML;
+  var emailroll = e.parentElement.previousElementSibling.innerHTML;
   var email = emailroll.substring(0, emailroll.indexOf(" -"));
 
   var studentId;
@@ -345,12 +375,50 @@ function approved(e) {
   applyStatus();
 }
 
-//Adding ClickFilter Option to search and status_button
-var search = document.getElementById("search");
-search.addEventListener("click", clickFilter);
+//Whenever status_button is selected, filter requests
+var pending = document.getElementById("pending");
+var rejected = document.getElementById("rejected");
+var accepted = document.getElementById("accepted");
 
-var status_button = document.getElementById("status");
-status_button.addEventListener("click", applyStatus);
+pending.addEventListener("click", function(){
+  pending.classList.add('status');
+  rejected.classList.remove('status');
+  accepted.classList.remove('status');
+  applyStatus();
+});
+
+rejected.addEventListener("click", function () {
+  pending.classList.remove("status");
+  rejected.classList.add("status");
+  accepted.classList.remove("status");
+  applyStatus();
+});
+
+accepted.addEventListener("click", function () {
+  pending.classList.remove("status");
+  rejected.classList.remove("status");
+  accepted.classList.add("status");
+  applyStatus();
+});
+
+//Adding requests with inital filters
+applyStatus();
+
+//Whenever search is selected, filter requests
+
+const filters = document.querySelectorAll(".filter");
+filters.forEach(function (btn) {
+  btn.addEventListener("click",clickFilter);
+});
+
+document.getElementById('batchButton').addEventListener('click',clickFilter);
+
+//Functionality of reject button in accordion button
+function clickAlternate(e){  
+  
+  let element=e.target.parentElement.parentElement.parentElement.childNodes[3].childNodes[1].childNodes[1].childNodes[5];
+  element.click();
+}
 
 //Sheet Functionality
 var sheet = document.getElementById("sheet");
@@ -365,11 +433,6 @@ sheet.addEventListener("click", () => {
   window.open(`${CURRENT_URL}/showSheet`, "_blank");
 });
 
-//Admin Requests Functionality
-// var adminRequests = document.getElementById("adminRequests");
-// adminRequests.addEventListener("click", () => {
-//   window.location.href = `${CURRENT_URL}/super_admin/adminRequests`;
-// });
 
 //code for selecting multiple students at a time
 var selectAll = document.getElementById("selectAll");
@@ -397,10 +460,12 @@ sendAll.addEventListener("click", () => {
   for (var i in checkboxes) {
  
     if (checkboxes[i].checked == true) {
-      if (checkboxes[i].previousElementSibling) {
-        var text = checkboxes[i].previousElementSibling.innerHTML;
-        var index = text.indexOf(" ");       
+      if (checkboxes[i].nextSibling) {
+        var obj = [];
+        var text = checkboxes[i].parentElement.nextElementSibling.innerHTML;
+        var index = text.indexOf(" -");
         var studentEmail = text.substring(0, index);
+
         obj.push({
           studentEmail: studentEmail,
           adminName: superAdminName,

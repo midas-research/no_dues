@@ -50,8 +50,7 @@ sheetAccess.addEventListener("click", () => {
 
 function updateIframe(){
   var status = document.querySelectorAll(".active a")[0].getAttribute("id");
-  var url=JSON.parse(document.getElementById(`${status}URL`).innerHTML);
-  
+  var url=JSON.parse(document.getElementById(`${status}URL`).innerHTML);  
 
   iframe.setAttribute(
     "src",

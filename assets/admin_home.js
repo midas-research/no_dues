@@ -86,7 +86,6 @@ function displayCustomText(student) {
 function clickFilter() {
   
   var curr_batch = document.getElementById("batch").value;
-  console.log(curr_batch);
   let curr_status = document.getElementsByClassName("status")[0].id;
 
   if (!curr_batch) {
@@ -251,7 +250,7 @@ function addCode(student) {
   }
 
   if (curr_status == "accepted") {
-    addAcceptCode(student, 'Message: Your dues are approved.<br> Fine: NA');
+    addAcceptCode(student, message);
   } else {
     addNormalCode(student, message);
   }
@@ -408,18 +407,18 @@ sendAll.addEventListener("click", () => {
   for (var i in checkboxes) {
     
     if (checkboxes[i].checked == true) {
-      if (checkboxes[i].nextSibling) {
+      if(checkboxes[i].nextSibling){
         var text = checkboxes[i].parentElement.nextElementSibling.innerHTML;
-        
+
         var index = text.indexOf(" -");
         var studentEmail = text.substring(0, index);
-               
 
         obj.push({
           studentEmail: studentEmail,
           adminName: adminName,
-        });
-      }
+        });  
+      }         
+          
     }
   }
   if (obj.length != 0) {

@@ -11,6 +11,7 @@ var originalName = JSON.parse(
 var studentList;
 var addAdmins = document.getElementById("admins");
 
+//Adding Options to Choose Admin Filter
 function format(text) {
   let arr = text.split(" ");
   var name = "";
@@ -31,62 +32,63 @@ for (var i in adminList) {
   addAdmins.add(option);
 }
 
-
 var option = document.createElement("option");
 option.value = "professor";
 option.text = "Professor";
 addAdmins.add(option);
 
+addAdmins.addEventListener('click',applyStatus);
 
 //html Code For Accepted Requests
 function addAcceptCode(student, msg, curr_admin) {
-  return `<div class="accordion-item filter-btech">
-        <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${student.email} - ${
-    student.roll
-  } - ${student.name}</span>
-            <span class="icon" aria-hidden="true"></span>
+  return `<div class="accordion-item container">
+      <button class="row accordion-heading" type="button" aria-expanded="false">
             
-        </button>
-        <div class="accordion-content">
-          <div class="input-group mb-3">
-             
-            <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
-            <span class="reject_request input-group-append" onclick="sendMessage(event,'${curr_admin}')"> Reject </span>   
-          </div>
+            <div class="col-1 text-center">
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+            </div>
 
-          <span class="message">Approved : ${
-            student[curr_admin + "ApprovedAt"]
-          }</span><br>
-          <span class="message">Latest Communication before Accepting: </span><br>
-          <span class="message">${msg}</span><br>
-          <span class="message">Requested : ${
-            student[curr_admin + "AppliedAt"]
-          }</span>
+            <div class="accordion-title col-8">${displayCustomText(student)}</div>
 
-        </div>
-      </div>`;
-}
+            <!--Accept-->
 
-//Filter Logic (clickFilter->isTrue->check)
-function check(student, curr_status, curr_admin) {
-  if (curr_status == "pending") {
-    return (
-      student[curr_admin + "Applied"] == true && student[curr_admin] == null
-    );
-  } else if (curr_status == "accepted") {
-    return student[curr_admin] == true;
-  } else {
-    return student[curr_admin] == false;
-  }
+            <div class="col-1 text-center"> 
+            </div>
+            
+            <!--Reject-->
+            <div class="col-1 text-center"> 
+               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+            </div>
+            
+            <div class="col-1 text-center">     
+              <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+              <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+            </div>    
+      </button>
+
+      <div class="accordion-content ">
+          <div class="accordion-body">
+            <form class="custom-form mx-auto">
+              <label>Message: </label>
+              <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+              <label>Fine:  </label>
+              <input type="number" class="mt-2 form-control" placeholder="Fine..." >
+              <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event)" > Reject</button>
+            </form>  
+            <hr class="mt-2 mb-2">
+            <span class="message">Latest Communication: </span><br>
+            <span class="message">${msg}</span>          
+          </div>          
+      </div>
+    </div>`;
 }
 
 function isTrue(student) {
-  var curr_status = document.getElementById("status").value;
+  
   var curr_degree = document.getElementById("degree").value;
   var curr_department = document.getElementById("department").value;
   var curr_batch = document.getElementById("batch").value;
-  var curr_admin = document.getElementById("admins").value;
+  
 
   var checkDegree = curr_degree == student["degree"];
   var checkDepartment = curr_department == student["department"];
@@ -115,45 +117,22 @@ function isTrue(student) {
   );
 }
 
-function clickFilter() {
-  var curr_admin = document.getElementById("admins").value;
-  if (curr_admin == "professor") {
-    var sendAll = document.getElementById("sendAll");
-    sendAll.removeEventListener("click", sendSelectedAdmin);
-    sendAll.addEventListener("click", sendSelectedProf);
-
-    var search = document.getElementById("search");
-    search.removeEventListener("click", clickFilter);
-    search.addEventListener("click", clickProfFilter);
-
-    var status_button = document.getElementById("status");
-    status_button.removeEventListener("click", clickFilter);
-    status_button.addEventListener("click", clickProfFilter);
-
-    document.getElementsByClassName("prof")[1].style.display = "inline-block";
-    document.getElementsByClassName("prof")[0].style.display = "inline-block";
-    document.getElementById("ip/btp").style.display = "inline-block";
-    generateProfRequests();
-    return;
-  } else {
-    var sendAll = document.getElementById("sendAll");
-    sendAll.addEventListener("click", sendSelectedAdmin);
-    sendAll.removeEventListener("click", sendSelectedProf);
-
-    var search = document.getElementById("search");
-    search.addEventListener("click", clickFilter);
-    search.removeEventListener("click", clickProfFilter);
-
-    var status_button = document.getElementById("status");
-    status_button.removeEventListener("click", clickProfFilter);
-    status_button.addEventListener("click", clickFilter);
-
-    document.getElementsByClassName("prof")[0].style.display = "none";
-    document.getElementsByClassName("prof")[1].style.display = "none";
-    document.getElementById("ip/btp").style.display = "none";
+function displayCustomText(student) {
+  var curr_admin = document.getElementById("admins").value; 
+  if (curr_admin == "hostel") {
+    var hostelTaken = "Hostel Taken";
+    if (student.hostelTaken == false) {
+      hostelTaken = "Hostel Not Taken";
+    }
+    return `${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${hostelTaken}</span>`;
   }
+  return `${student.email} - ${student.roll} - ${student.name}`;
+}
 
-  var curr_status = document.getElementById("status").value;
+function clickAdminFilter() {
+  var curr_admin = document.getElementById("admins").value;  
+
+  let curr_status = document.getElementsByClassName("status")[0].id;
 
   //Filtering and adding students to currentList
   var currentList = [];
@@ -168,23 +147,15 @@ function clickFilter() {
     document.getElementById("selectAll").disabled = true;
     document.getElementById("unselectAll").disabled = true;
     document.getElementById("sendAll").disabled = true;
-
-    document.getElementById("selectAll").style.display = "none";
-    document.getElementById("unselectAll").style.display = "none";
-    document.getElementById("sendAll").style.display = "none";
   } else {
     document.getElementById("selectAll").disabled = false;
     document.getElementById("unselectAll").disabled = false;
     document.getElementById("sendAll").disabled = false;
-
-    document.getElementById("selectAll").style.display = "flex";
-    document.getElementById("unselectAll").style.display = "flex";
-    document.getElementById("sendAll").style.display = "flex";
   }
 
   //if there are no requests
   if (currentList.length == 0) {
-    accordion.innerHTML = '<div id="NoRequest"> No Requests Found!</div>';
+    accordion.innerHTML = `<div class="alert alert-dark mx-3" role="alert">No Requests Found</div>`;
     return;
   }
 
@@ -206,29 +177,52 @@ function clickFilter() {
     } else {
       //html code for pending/rejected filter
       accordion.innerHTML += `
-        <div class="accordion-item filter-btech">
-          <button id="accordion-button-1" aria-expanded="false">
-              <span class="accordion-title">${currentList[i].email} - ${currentList[i].roll} - ${currentList[i].name}</span>
-              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-              <span class="accept_request" onclick="event.stopPropagation() ;approved(this,'${curr_admin}')"> Accept </span>
-              <!--<i class="fas fa-check-circle send_request" onclick="event.stopPropagation() ;approved(this,'${curr_admin}')"></i>-->
-              <span class="icon" aria-hidden="true"></span>
-          </button>
-          <div class="accordion-content">
-            
-            
-            <div class="input-group mb-3">
+      <div class="accordion-item container">
+        <button class="row accordion-heading" type="button" aria-expanded="false">
+
+              <div class="col-1 text-center">
+                <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+              </div>
+
+              <div class="accordion-title col-8">${displayCustomText(currentList[i])}</div>
+
+              <!--Accept-->
+
+              <div class="col-1 text-center"> 
+                <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;approved(this)" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
+              </div>
               
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2" required>
-              <span class="reject_request input-group-append" onclick="sendMessage(event,'${curr_admin}')"> Reject </span>   
-              <!--<div class="input-group-append">
-                  <i class="fas fa-paper-plane send" onclick="sendMessage(event,'${curr_admin}')"></i>
-              </div>-->
+              <!--Reject-->
+              <div class="col-1 text-center"> 
+                <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+              </div>
+              
+              <div class="col-1 text-center">     
+                <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+                <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+              </div>      
+            
+        </button>
+        <div class="accordion-content ">
+
+            <div class="accordion-body">
+              <form class="custom-form mx-auto">
+                <label>Message: </label>
+                <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+                <label>Fine:  </label>
+                <input type="number" class="mt-2 form-control" placeholder="Fine..." >
+                <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event,'${curr_admin}')" > Reject</button>
+              </form>            
+
+              <hr class="mt-2 mb-2">
+
+              <span class="message">Latest Communication: </span><br>
+              <span class="message">${message}</span>
+            
             </div>
-            <span class="message">Latest Communication: </span><br>
-            <span class="message">   ${message}</span>
-          </div>
-        </div>`;
+            
+        </div>
+      </div>`;
     }
   }
 
@@ -248,9 +242,13 @@ function clickFilter() {
 }
 
 //getting Requests according to Admin
-function getAdminRequests() {
+function applyStatusAdmin() {
   var curr_admin = document.getElementById("admins").value;
-  var curr_status = document.getElementById("status").value;
+  var curr_status = document.getElementsByClassName("status")[0].id; 
+
+
+  document.getElementById("profFilter").style.display = "none";
+  document.getElementById("ip/btp").style.display = "none";
 
   //Getting list of students
   var request = new XMLHttpRequest();
@@ -258,30 +256,31 @@ function getAdminRequests() {
   request.send();
   if (request.status === 200) {
     studentList = JSON.parse(request.responseText);
+    
+    //applying filter
+    clickAdminFilter();
   }
 
-  //applying filter
-  clickFilter();
+  
 }
 
 //Accepting a Request
-function approved(e, curr_admin) {
-  var r = e.parentElement.parentElement;
-  var emailroll = e.parentElement.childNodes[1].innerHTML;
+function approved(e) { 
+  var curr_admin = document.getElementById("admins").value;
+  var emailroll = e.parentElement.previousElementSibling.innerHTML;
   var email = emailroll.substring(0, emailroll.indexOf(" -"));
-
+  
   var studentId;
   for (var i in studentList) {
     if (studentList[i]["email"] == email) {
       studentId = studentList[i]["_id"];
     }
   }
-
   var obj = [];
   obj.push({
     admin: curr_admin,
     email: email,
-    id: studentId,
+    id: studentId
   });
 
   var request = new XMLHttpRequest();
@@ -291,28 +290,31 @@ function approved(e, curr_admin) {
     false
   );
   request.send(null);
-
-  getAdminRequests();
+  applyStatus();
 }
 
 //Rejecting a Request
-function sendMessage(e, curr_admin) {
-  var dues = e.target.previousElementSibling.value;
+function sendMessage(e) {
+  var curr_admin = document.getElementById("admins").value;
+  var fine = e.target.previousElementSibling.value;
+  var dues = e.target.previousElementSibling.previousElementSibling.previousElementSibling.value;
+  
   if (dues == "") {
     alert("You need to give a message before rejecting!");
     return;
   }
-  var message = e.target.parentElement.nextElementSibling;
-  message.innerHTML = dues;
-  var email =
-    e.target.parentElement.parentElement.previousElementSibling.childNodes[1]
-      .textContent;
-  var index = email.indexOf(" ");
+
+  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;
+ 
+  var index = email.indexOf(" -");
+  email = email.substring(0, index);  
+
   var obj = [];
   obj.push({
     admin: curr_admin,
     message: dues,
-    email: email.substring(0, index),
+    fine: fine,
+    email: email,
   });
 
   var request = new XMLHttpRequest();
@@ -323,51 +325,65 @@ function sendMessage(e, curr_admin) {
   );
   request.send();
 
-  getAdminRequests();
+  applyStatus();
 }
 
-//Approving Multiple Admin Requests
-function sendSelectedAdmin() {
-  var checkboxes = document.getElementsByClassName("tickbox");
-  var obj = [];
-  var curr_admin = document.getElementById("admins").value;
-  for (var i in checkboxes) {
-    if (checkboxes[i].checked == true) {
-      if (checkboxes[i].previousElementSibling) {
-        var text = checkboxes[i].previousElementSibling.innerHTML;
-        var index = text.indexOf(" ");
-        var studentEmail = text.substring(0, index);
-        obj.push({
-          studentEmail: studentEmail,
-          adminName: curr_admin,
-        });
-      }
+//Functionality of reject button in accordion button
+function clickAlternateAdmin(e){  
+  let element=e.target.parentElement.parentElement.parentElement.childNodes[3].childNodes[1].childNodes[1].childNodes[9];
+  element.click();
+}
+
+//Whenever status_button is selected, filter requests
+var pending = document.getElementById("pending");
+var rejected = document.getElementById("rejected");
+var accepted = document.getElementById("accepted");
+
+pending.addEventListener("click", function(){
+  pending.classList.add('status');
+  rejected.classList.remove('status');
+  accepted.classList.remove('status');
+  applyStatus();
+});
+
+rejected.addEventListener("click", function () {
+  pending.classList.remove("status");
+  rejected.classList.add("status");
+  accepted.classList.remove("status");
+  applyStatus();
+});
+
+accepted.addEventListener("click", function () {
+  pending.classList.remove("status");
+  rejected.classList.remove("status");
+  accepted.classList.add("status");
+  applyStatus();
+});
+
+
+//Whenever search is selected, filter requests
+const filters = document.querySelectorAll(".filter");
+filters.forEach(function (btn) {
+  btn.addEventListener("click",function(){
+    var curr_admin = document.getElementById("admins").value;
+    if(curr_admin=='professor'){
+      clickProfFilter();
     }
+    else{
+      clickAdminFilter();
+    }
+  });
+});
+
+document.getElementById('batchButton').addEventListener('click',function(){
+  var curr_admin = document.getElementById("admins").value;
+  if(curr_admin=='professor'){
+    clickProfFilter();
   }
-  if (obj.length != 0) {
-    var obj2 = [];
-    obj2.push(obj);
-    var request = new XMLHttpRequest();
-    request.open(
-      "GET",
-      `${CURRENT_URL}/approveManyDues/${JSON.stringify(obj2)}`,
-      false
-    );
-    request.send(null);
-
-    getAdminRequests();
+  else{
+    clickAdminFilter();
   }
-}
-
-//Adding Search button, Admin Button and Status Button Functionality
-var search = document.getElementById("search");
-search.addEventListener("click", clickFilter);
-
-var status_button = document.getElementById("status");
-status_button.addEventListener("click", getAdminRequests);
-
-var admins_button = document.getElementById("admins");
-admins_button.addEventListener("click", getAdminRequests);
+});
 
 //Sheet Functionality
 var sheet = document.getElementById("sheet");
@@ -383,11 +399,6 @@ sheet.addEventListener("click", () => {
   
 });
 
-//Home Functionality
-// var home = document.getElementById("superAdminHome");
-// home.addEventListener("click", () => {
-//   window.location.href = `${CURRENT_URL}/super_admin`;
-// });
 
 //code for selecting multiple students at a time
 var selectAll = document.getElementById("selectAll");
@@ -409,14 +420,64 @@ unselectAll.addEventListener("click", () => {
   }
 });
 
+//Approving Multiple Admin Requests
+function sendSelectedAdmin() {
+  var curr_admin = document.getElementById("admins").value;
+  var checkboxes = document.getElementsByClassName("tickbox");
+  var obj = [];
+
+  for (var i in checkboxes) {
+    
+    if (checkboxes[i].checked == true) {
+      if(checkboxes[i].nextSibling){
+        var text = checkboxes[i].parentElement.nextElementSibling.innerHTML;
+
+        var index = text.indexOf(" -");
+        var studentEmail = text.substring(0, index);
+
+        obj.push({
+          studentEmail: studentEmail,
+          adminName: curr_admin,
+        });  
+      }         
+          
+    }
+  }
+  if (obj.length != 0) {
+    var obj2 = [];
+    obj2.push(obj);
+    var request = new XMLHttpRequest();
+    request.open(
+      "GET",
+      `${CURRENT_URL}/approveManyDues/${JSON.stringify(obj2)}`,
+      false
+    );
+    request.send(null);
+
+    applyStatus();
+  }
+
+
+
+  
+}
+
 //code for sending multiple students at a time
 var sendAll = document.getElementById("sendAll");
-sendAll.addEventListener("click", sendSelectedAdmin);
+sendAll.addEventListener("click", function(){
+  var curr_admin = document.getElementById("admins").value;
+  if(curr_admin=='professor'){
+    sendSelectedProf();
+  }
+  else{
+    sendSelectedAdmin();
+  }
+});
 
 //Professor Functions
 
 var profButton = document.getElementById("profFilter");
-profButton.addEventListener("click", generateProfRequests);
+profButton.addEventListener("click", applyStatusProfessor);
 
 let professorsList = [];
 
@@ -447,11 +508,8 @@ function sendMessageBtp(e, idx) {
     alert("You need to give a message before rejecting!");
     return;
   }
-  var message = e.target.parentElement.nextElementSibling;
-  message.innerHTML = dues;
-  var email =
-    e.target.parentElement.parentElement.previousElementSibling.childNodes[1]
-      .textContent;
+  
+  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;
   var index = email.indexOf(" ");
   var obj = [];
   obj.push({
@@ -470,21 +528,18 @@ function sendMessageBtp(e, idx) {
   );
   request.send(null);
 
-  generateProfRequests();
+  applyStatus();
 }
 
 function sendMessageIp(e, idx) {
   var profEmail = document.getElementById("profFilter").value;
   var dues = e.target.previousElementSibling.value;
+
   if (dues == "") {
     alert("You need to give a message before rejecting!");
     return;
-  }
-  var message = e.target.parentElement.nextElementSibling;
-  message.innerHTML = dues;
-  var email =
-    e.target.parentElement.parentElement.previousElementSibling.childNodes[1]
-      .textContent;
+  }  
+  var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;
   var index = email.indexOf(" ");
   var obj = [];
   obj.push({
@@ -503,13 +558,12 @@ function sendMessageIp(e, idx) {
   );
   request.send(null);
 
-  generateProfRequests();
+  applyStatus();
 }
 
 function btpApproved(e, idx) {
   var profEmail = document.getElementById("profFilter").value;
-  var r = e.parentElement.parentElement;
-  var emailroll = e.parentElement.childNodes[1].innerHTML;
+  var emailroll = e.parentElement.previousElementSibling.innerHTML;
   var email = emailroll.substring(0, emailroll.indexOf(" -"));
 
   var obj = [];
@@ -526,13 +580,12 @@ function btpApproved(e, idx) {
   );
   request.send(null);
 
-  generateProfRequests();
+  applyStatus();
 }
 
 function ipApproved(e, idx) {
   var profEmail = document.getElementById("profFilter").value;
-  var r = e.parentElement.parentElement;
-  var emailroll = e.parentElement.childNodes[1].innerHTML;
+  var emailroll = e.parentElement.previousElementSibling.innerHTML;
   var email = emailroll.substring(0, emailroll.indexOf(" -"));
 
   var obj = [];
@@ -549,121 +602,226 @@ function ipApproved(e, idx) {
   );
   request.send(null);
 
-  generateProfRequests();
+  applyStatus();
 }
+
+function clickAlternateProf(e){  
+  let element=e.target.parentElement.parentElement.parentElement.childNodes[3].childNodes[1].childNodes[1].childNodes[5];
+  element.click();
+}
+
+//Code To Create Components
 
 function addAcceptIPCode(student, obj, msg, idx) {
   return `
-      <div class="accordion-item filter-btech">
-        <button id="accordion-button-1" aria-expanded="false">
-            <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">IP/IS/UR</span></span>
-            <span class="icon" aria-hidden="true"></span>
-            
-        </button>
-        <div class="accordion-content">
-      
-          <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <span class="reject_request input-group-append" onclick="sendMessageIp(event,${idx})"> Reject </span>  
-          </div>
-          <div>
-            
-            <h5>Description: </h5>
-            <ul>
-              <li>Project Name: ${obj.projectName}</li>
-              <li>Project Description: ${obj.projectDescription}</li>
-            </ul>
-            <span class="message">Approved : ${obj["ipApprovedAt"]}</span><br>
-            <span class="message">Latest Communication before Accepting: </span>
-            <span class="message">${msg}</span><br>
-            <span class="message">Requested : ${obj["ipAppliedAt"]}</span>
-            <br>
-          </div>
+    <div class="accordion-item container">
+      <button class="row accordion-heading" type="button" aria-expanded="false">
+
+        <div class="col-1 text-center">
+          <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
         </div>
-      </div>`;
+
+        <div class="accordion-title col-8">${student.email} - ${student.roll} - ${student.name} <span class="tag tag-primary">${obj.projectName}</span> <span class="tag tag-secondary">IP/IS/UR</span></div>
+
+        <!--Accept-->
+
+        <div class="col-1 text-center"> </div>
+        
+        <!--Reject-->
+        <div class="col-1 text-center"> 
+            <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+        </div>    
+          
+      </button>
+      <div class="accordion-content ">
+
+          <div class="accordion-body">
+
+            <form class="custom-form mx-auto">
+              <label>Message: </label>
+              <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+              <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessageIp(event,${idx})" > Reject</button>
+            </form> 
+            
+
+            <div>
+              <p>Description: </p>
+              <ul>
+                <li>Project Name: ${obj.projectName}</li>
+                <li>Project Description: ${obj.projectDescription}</li>
+              </ul>
+            </div>
+      
+            <span class="message">Latest Communication: </span><br>
+            <span class="message">${msg}</span>
+          
+          </div>
+          
+      </div>
+    </div>`;
 }
 
 function addAcceptBTPCode(student, obj, msg, idx) {
-  return `<div class="accordion-item filter-btech">
-      <button id="accordion-button-1" aria-expanded="false">
-          <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">BTP</span></span>
-          <span class="icon" aria-hidden="true"></span>
+  return `
+    <div class="accordion-item container">
+      <button class="row accordion-heading" type="button" aria-expanded="false">
+            <div class="col-1 text-center">
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+            </div>
+
+            <div class="accordion-title col-8">${student.email} - ${student.roll} - ${student.name} <span class="tag tag-primary">${obj.projectName}</span> <span class="tag tag-secondary">BTP</span></div>
+
+            <!--Accept-->
+
+            <div class="col-1 text-center">               
+            </div>
+            
+            <!--Reject-->
+            <div class="col-1 text-center"> 
+               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+            </div>    
           
       </button>
-      <div class="accordion-content">
+      <div class="accordion-content ">
+
+          <div class="accordion-body">
+
+            <form class="custom-form mx-auto">
+              <label>Message: </label>
+              <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+              <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessageBtp(event,${idx})" > Reject</button>
+            </form>            
+
+            <hr class="mt-2 mb-2">
+            
+            
+            <div>
+              <p>Description: </p>
+              <ul>
+                <li>Project Name: ${obj.projectName}</li>
+                <li>Project Description: ${obj.projectDescription}</li>
+              </ul>
+            </div>
       
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-          <span class="reject_request input-group-append" onclick="sendMessageBtp(event,${idx})"> Reject </span>   
-        </div>
-        <div>
-          <h5>Description: </h5>
-          <ul>
-            <li>Project Name: ${obj.projectName}</li>
-            <li>Project Description: ${obj.projectDescription}</li>
-          </ul>         
+            <span class="message">Latest Communication: </span><br>
+            <span class="message">${msg}</span>
           
-          <span class="message">Approved : ${obj["btpApprovedAt"]}</span><br>
-          <span class="message">Latest Communication before Accepting: </span>
-          <span class="message">${msg}</span><br>
-          <span class="message">Requested : ${obj["btpAppliedAt"]}</span><br>
-        </div>
+          </div>
+          
       </div>
     </div>`;
 }
 
 function addBTPCode(student, obj, msg, idx) {
-  return ` <div class="accordion-item filter-btech">
-            <button id="accordion-button-1" aria-expanded="false">
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">BTP</span></span>
-                <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-                <span class="send_request accept_request" onclick="event.stopPropagation() ;btpApproved(this,${idx})"> Accept </span>
-                <span class="icon" aria-hidden="true"></span>
-            </button>
-            <div class="accordion-content">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                <span class="reject_request input-group-append" onclick="sendMessageBtp(event,${idx})"> Reject </span><br> 
-                <hr>
-              </div>
-              <div>
-                <h5>Description: </h5>
-                <ul>
-                  <li>Project Name: ${obj.projectName}</li>
-                  <li>Project Description: ${obj.projectDescription}</li>
-                </ul>
-              </div>
-              <span class="message">Latest Communication: </span>
-              <span class="message">${msg}</span>
+  return `
+    <div class="accordion-item container">
+      <button class="row accordion-heading" type="button" aria-expanded="false">
+
+            <div class="col-1 text-center">
+              <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             </div>
-          </div>`;
+
+            <div class="accordion-title col-8">${student.email} - ${student.roll} - ${student.name} <span class="tag tag-primary">${obj.projectName}</span> <span class="tag tag-secondary">BTP</span></div>
+
+            <!--Accept-->
+
+            <div class="col-1 text-center"> 
+               <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;btpApproved(this,${idx})" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
+            </div>
+            
+            <!--Reject-->
+            <div class="col-1 text-center"> 
+               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+            </div>
+            
+            <div class="col-1 text-center">     
+              <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+              <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+            </div>      
+          
+      </button>
+      <div class="accordion-content ">
+
+          <div class="accordion-body">
+            <form class="custom-form mx-auto">
+              <label>Message: </label>
+              <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+              <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessageBtp(event,${idx})" > Reject</button>
+            </form>            
+
+            <hr class="mt-2 mb-2">
+
+            <div>
+              <p>Description:</p>
+              <ul>
+                <li>Project Name: ${obj.projectName}</li>
+                <li>Project Description: ${obj.projectDescription}</li>
+              </ul>
+            </div>
+      
+            <span class="message">Latest Communication: </span><br>
+            <span class="message">${msg}</span>
+          
+          </div>
+          
+      </div>
+    </div>`;
 }
 
 function addIPCode(student, obj, msg, idx) {
-  return `<div class="accordion-item filter-btech">
-            <button id="accordion-button-1" aria-expanded="false">                
-                <span class="accordion-title">${student.email} - ${student.roll} - ${student.name} - <span class="tag tag-primary">${obj.projectName}</span> - <span class="tag tag-secondary">IP/IS/UR</span></span>
-                <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
-                <span class="send_request accept_request" onclick="event.stopPropagation() ;ipApproved(this,${idx})"> Accept </span>
-                <span class="icon" aria-hidden="true"></span>
-            </button>
-            <div class="accordion-content">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Send a message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                <span class="reject_request input-group-append" onclick="sendMessageIp(event,${idx})"> Reject </span><br><br>
-                <hr>
-              </div>
-              <div>
-                <h5>Description: </h5>
-                <ul>
-                  <li>Project Name: ${obj.projectName}</li>
-                  <li>Project Description: ${obj.projectDescription}</li>
-                </ul>
-              </div>
-              <span class="message">Latest Communication: </span>
-              <span class="message">${msg}</span>
-            </div>
-          </div>`;
+  return`
+    <div class="accordion-item container">
+      <button class="row accordion-heading" type="button" aria-expanded="false">
+
+        <div class="col-1 text-center">
+          <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
+        </div>
+
+        <div class="accordion-title col-8">${student.email} - ${student.roll} - ${student.name} <span class="tag tag-primary">${obj.projectName}</span> <span class="tag tag-secondary">IP/IS/UR</span></div>
+
+        <!--Accept-->
+
+        <div class="col-1 text-center"> 
+            <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;ipApproved(this,${idx})" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
+        </div>
+        
+        <!--Reject-->
+        <div class="col-1 text-center"> 
+            <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+        </div>
+        
+        <div class="col-1 text-center">     
+          <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+          <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+        </div>      
+          
+      </button>
+      <div class="accordion-content ">
+
+        <div class="accordion-body">
+          <form class="custom-form mx-auto">
+            <label>Message: </label>
+            <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
+            <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessageIp(event,${idx})" > Reject</button>
+          </form>            
+
+          <hr class="mt-2 mb-2">
+
+          <div>
+            <p>Description: </p>
+            <ul>
+              <li>Project Name: ${obj.projectName}</li>
+              <li>Project Description: ${obj.projectDescription}</li>
+            </ul>
+          </div>
+    
+          <span class="message">Latest Communication: </span><br>
+          <span class="message">${msg}</span>
+        
+        </div>
+          
+      </div>
+    </div>`;
 }
 
 function addAcceptRequestCode(type, obj, student, idx, msg) {
@@ -682,11 +840,13 @@ function addRequestCode(type, obj, student, idx, msg) {
   }
 }
 
+//Filters
+
 function checkProf(student) {
   var profEmail = document.getElementById("profFilter").value;
   var type = document.getElementById("ip/btp").value;
 
-  var status = document.getElementById("status").value;
+  var status = document.getElementsByClassName("status")[0].id;
   let lists = [];
 
   if (type == "btp") {
@@ -727,6 +887,7 @@ function checkProf(student) {
   }
 }
 
+//Filtering accroding to status and type
 function clickProfFilter() {
   var profEmail = document.getElementById("profFilter").value;
   var degree = document.getElementById("degree").value;
@@ -737,7 +898,7 @@ function clickProfFilter() {
   if (!batch) {
     batch = -1;
   }
-  var status = document.getElementById("status").value;
+  var status = document.getElementsByClassName("status")[0].id;
   var currentList = [];
 
   for (var i in studentList) {
@@ -810,24 +971,21 @@ function clickProfFilter() {
     document.getElementById("selectAll").disabled = true;
     document.getElementById("unselectAll").disabled = true;
     document.getElementById("sendAll").disabled = true;
-
-    document.getElementById("selectAll").style.display = "none";
-    document.getElementById("unselectAll").style.display = "none";
-    document.getElementById("sendAll").style.display = "none";
   } else {
     document.getElementById("selectAll").disabled = false;
     document.getElementById("unselectAll").disabled = false;
     document.getElementById("sendAll").disabled = false;
 
-    document.getElementById("selectAll").style.display = "flex";
-    document.getElementById("unselectAll").style.display = "flex";
-    document.getElementById("sendAll").style.display = "flex";
+    document.getElementById("selectAll").style.display = "block";
+    document.getElementById("unselectAll").style.display = "block";
+    document.getElementById("sendAll").style.display = "block";
   }
+
 
   accordion.innerHTML = "";
   currentList.map(checkProf);
   if (accordion.innerHTML == "") {
-    accordion.innerHTML = '<div id="NoRequest"> No Requests Found!</div>';
+    accordion.innerHTML = `<div class="alert alert-dark mx-3" role="alert">No Requests Found</div>`;
     return;
   }
 
@@ -845,11 +1003,15 @@ function clickProfFilter() {
   items.forEach((item) => item.addEventListener("click", toggleAccordion));
 }
 
-function generateProfRequests() {
+//Filtering according to degree, batch etc and then going to filtering by status and type
+function applyStatusProfessor() {
   var currProf = document.getElementById("profFilter").value;
-  var status = document.getElementById("status").value;
+  var status = document.getElementsByClassName("status")[0].id; 
 
   let url = `${CURRENT_URL}/user/getStudents/professor/${currProf}/${status}`;
+
+  document.getElementById("profFilter").style.display = "block";
+  document.getElementById("ip/btp").style.display = "block";
   
 
   //Getting list of students
@@ -867,48 +1029,72 @@ function sendSelectedProf() {
   var checkboxes = document.getElementsByClassName("tickbox");
 
   for (var i in checkboxes) {
-    if (checkboxes[i].previousElementSibling) {
-      var obj = [];
-      var text = checkboxes[i].previousElementSibling.innerHTML;
-      var list = text.split(" - ");
+    if (checkboxes[i].checked == true) {
+      if (checkboxes[i].nextSibling) {
+        var obj = [];
+        var text = checkboxes[i].parentElement.nextElementSibling.innerHTML;
+        var list = text.split(" - ");
 
-      var studentEmail = list[0];
-      var projectName = list[list.length - 2];
-      var eindex = projectName.indexOf("</span>");
-      var sindex = projectName.indexOf(">");
+        var studentEmail = list[0];
+        var project = list[list.length - 1];
 
-      projectName = projectName.substring(sindex + 1, eindex);
+        var eindex = project.indexOf("</span>");
+        var sindex = project.indexOf(">");
+        projectName = project.substring(sindex + 1, eindex);
 
-      var admin = list[list.length - 1];
-      var eindex = admin.indexOf("</span>");
-      var sindex = admin.indexOf(">");
-      admin = admin.substring(sindex + 1, eindex);
-      
-      if (admin == "BTP") {
-        admin = "btp";
-      } else {
-        admin = "ip";
+        var admin = project.substring(eindex + 7, project.length);
+
+        var eindex = admin.indexOf("</span>");
+        var sindex = admin.indexOf(">");
+
+        admin = admin.substring(sindex + 1, eindex);
+
+        if (admin == "BTP") {
+          admin = "btp";
+        } else {
+          admin = "ip";
+        }
+
+        obj.push({
+          profEmail: profEmail,
+          studentEmail: studentEmail,
+          admin: admin,
+          projectName: projectName,
+        });
       }
-
-      obj.push({
-        profEmail: profEmail,
-        studentEmail: studentEmail,
-        admin: admin,
-        projectName: projectName,
-      });
-
-      var request = new XMLHttpRequest();
-      request.open(
-        "GET",
-        `${CURRENT_URL}/approveEmailProf/${JSON.stringify(obj)}`,
-        false
-      );
-      request.send(null);
     }
+
+    var request = new XMLHttpRequest();
+    request.open(
+      "GET",
+      `${CURRENT_URL}/approveEmailProf/${JSON.stringify(obj)}`,
+      false
+    );
+    request.send(null);
   }
 
-  generateProfRequests();
+  applyStatus();
+}
+
+function clickAlternate(e) {
+  var curr_admin = document.getElementById("admins").value;
+  if(curr_admin=='professor'){
+    clickAlternateProf(e);
+  }
+  else{
+    clickAlternateAdmin(e);
+  }
+}
+
+function applyStatus(){
+  var curr_admin = document.getElementById("admins").value;
+  if(curr_admin=='professor'){
+    applyStatusProfessor();
+  }
+  else{
+    applyStatusAdmin();
+  }
 }
 
 //Generating Requests
-getAdminRequests();
+applyStatus();
