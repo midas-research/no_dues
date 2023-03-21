@@ -3,7 +3,7 @@ const CURRENT_URL = JSON.parse(
   document.getElementById("CURRENT_URL").innerHTML
 );
 
-var adminName = JSON.parse(document.getElementById("adminName").innerHTML);;
+var adminName = JSON.parse(document.getElementById("adminName").innerHTML);
 
 var accordion = document.getElementsByClassName("accordion")[0];
 
