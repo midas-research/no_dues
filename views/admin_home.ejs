@@ -135,14 +135,13 @@
                 <button class="btn btn-outline-secondary" id="batchButton" type="button"><i class="bi bi-search"></i></button>
               </div>
 
-            </div>
-          
+            </div>          
             
           
-            <% if (adminName=="hostel" ) { %>
+            <% if (adminName=='"hostel"') { %>
               <select class="filter form-select mt-2 mb-2" aria-label="Default select example" name="hostelTaken" id="hostelTaken">
-                <option value="all">Taken/Not Taken</option>
-                <option value="true">Taken Hostel</option>
+                <option value="all">Hostel Status</option>
+                <option value="true">Taken</option>
                 <option value="false">Not Taken</option>
               </select>
             <% } %>
