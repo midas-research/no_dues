@@ -1,6 +1,6 @@
 /* Requests list */
 .list {
-  height: 57vh;
+  min-height: 50vh;
   overflow-y: auto;
 }
 

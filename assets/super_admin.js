@@ -67,9 +67,9 @@ function addAcceptCode(student, msg,k) {
               <span class="message">${msg}</span>
 
               <div class="admins-status">
-                ${addDonationContent(currentList[i])}
-                ${addFineContent(currentList[i])} 
-                ${addClearanceContent(currentList[i])} 
+                ${addDonationContent(student)}
+                ${addFineContent(student)} 
+                ${addClearanceContent(student)} 
               </div>
             
             </div>
