@@ -1,0 +1,152 @@
+/* Form Content */
+
+.details-box {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid grey;
+    padding: 0px 0px 10px 0px;
+}
+
+
+.details-box .details-heading {
+    background: #3DAFA8;
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 10px 0px 10px 0px;
+}
+
+/* .details-box .form-label {
+    font-family: 'Roboto';
+} */
+
+.details-box .form {
+    padding-right: 15px;
+}
+
+.details-box .top-row {
+    color: grey;
+}
+
+
+.details-box .submit-btn {
+    background: white;
+    color: #3dafa8;
+    border: 3px solid #3dafa8;
+    border-radius: 20px;
+    padding: 5px 30px 5px 30px;
+}
+
+.details-box .submit-btn:hover {
+    background: #3DAFA8;
+    color: white;
+    border: 3px solid #3dafa8;
+    transition: all 0.3s ease;
+}
+
+.details-box .personal-image {
+    height: 100px;
+}
+
+.details-box .inp {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.details-box .inp .label {
+    position: absolute;
+    top: 20px;
+    left: 12px;
+    font-size: 14px;
+    color: rgba(0, 0, 0);
+    font-weight: 500;
+    transform-origin: 0 0;
+    transform: translate3d(0, 0, 0);
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.details-box .inp .focus-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.details-box .inp input, .details-box .inp select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    border: 1px solid grey;
+    font-family: inherit;
+    padding: 16px 12px 0 12px;
+    height: 56px;
+    font-size: 16px;
+    font-weight: 400;
+    background: rgba(255, 255, 255);
+    color: #000;
+    transition: all 0.15s ease;
+}
+
+.details-box .inp input:hover, .details-box .inp select:hover {
+    background: rgba(255, 255, 255);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.details-box .inp input:not(:-moz-placeholder-shown)+.label, .details-box .inp select:not(:-moz-placeholder-shown)+.label {
+    color: rgba(0, 0, 0, 0.5);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+
+.details-box .inp input:not(:-ms-input-placeholder)+.label, .details-box .inp select:not(:-ms-input-placeholder)+.label {
+    color: rgba(0, 0, 0, 0.5);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+
+.details-box .inp input:not(:placeholder-shown)+.label, .details-box .inp select:not(:placeholder-shown)+.label {
+    color: rgba(0, 0, 0, 0.5);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+
+.details-box .inp input:focus, .details-box .inp select:focus{
+    background: rgba(255, 255, 255);
+    outline: none;
+    box-shadow: inset 0 -2px 0 #3dafa8;
+    border: 1px solid #3dafa8;
+}
+
+.details-box .inp input:focus+.label, .details-box .inp select:focus+.label{
+    color: #3dafa8;
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+
+.details-box .inp input:focus+.label+.focus-bg, .details-box .inp select:focus+.label+.focus-bg{
+    transform: scaleX(1);
+    transition: all 0.1s ease;
+}
+
+
+.details-box fieldset[disabled] input {
+    background: white !important;
+}
+
+
+.details-box .form-check-input:checked {
+    background: white;
+    border: 5px solid #3fada8;
+}
+
+.details-box fieldset[disabled] select {
+    background: white !important;
+}
+
+

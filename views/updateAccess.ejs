@@ -5,27 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="icon" href="../assets/images/icon.png" type="image/png" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-    />
-    <link rel="stylesheet" type="text/css" href="/assets/super_admin.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/layout.css" />    
+    <link rel="stylesheet" type="text/css" href="/assets/forms.css" />
     <link rel="stylesheet" type="text/css" href="/assets/updateAccess.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
-    />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
   </head>
 
   <body>
+
+    <!-- Backend Info -->
     <p id="adminName" style="display: none"><%= adminName %></p>
     <p id="id" style="display: none"><%= id %></p>
     <p id="CURRENT_URL" style="display: none"><%= url %></p>
@@ -39,104 +34,118 @@
       <%= professorURL %>
     </p>
 
+    <!-- Header -->
     <%- include('partials/header.ejs') %>
 
-    <div id="navbar">
-
-      <div id="navbar_left">
-        <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
-
-        <div class="dropdown" id="navbar_left_p">
-          <div >No Dues</div>
-          <span class="icon-down"></span>
-          <div class="dropdown-content">
-            <a href="/super_admin" id="superAdminHome">Home</a>
-            <a href="/super_admin/adminRequests" id="adminRequests">Requests to Admins</a>
-            <a href="/super_admin/updateAccess">Update Access</a>
-            <!-- <a id="blockPortal">Block Portal</a>            -->
-            <a id="sheet">Show Sheet</a>
-            <a href="/user/signout">Logout</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div class="container-fluid">
+    
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto  mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/super_admin" id="superAdminHome">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/super_admin/adminRequests" id="adminRequests">Requests to Admins</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active"  aria-current="page" href="">Update Access</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="sheet">Show Sheet</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/signout">Logout</a>
+            </li>
+          </ul>
+        </div>
+    
+        <a class="navbar-brand ms-auto d-lg-inline d-none">
+    
+          <div>Hello Super-Admin
           </div>
-        </div>
+          <div id="navbar_right_i"><img src="<%=locals.image%>">
+    
+        </a>
+    
+      </div>
+    </nav>
+
+    <!-- Main Content -->   
+
+    <div class="container details-box mt-3 mb-2">
+    
+      <div class='details-heading text-center' >
+        <h4> UPDATE ACCESS </h4>
       </div>
 
-      <div id="navbar_right">
-        <div id="navbar_right_p">Hello Super Admin</div>
-        <div id="navbar_right_i">
-          <img src="<%=locals.user.image%>">
-        </div>
-      </div>
+      <div class="row mx-0 p-3 " data-aos="fade-up" data-aos-delay="100">
 
+        <!-- Admins Professors Students  -->
+        <nav class="navbar navbar-expand navbar-custom-inner mb-2">
+        
+          <div class="mx-auto" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                <a class="nav-link" id="admin">Admins</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="professor">Professors</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="student">Students</a>
+              </li>        
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Buttons -->
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <button id="updateAccess"
+            class='btn mx-2 btn-outline-dark data-toggle="button" aria-pressed="false" autocomplete="off"'> Save Changes</button>
+          <button id="sheetAccess" class='btn mx-2 btn-outline-dark data-toggle="button" aria-pressed="false" autocomplete="off" '>
+            Open Sheet</button>
+        </div>  
+
+      </div>   
+
+      <div class="row mx-0 p-3">
+        
+        <iframe id='excel' display="block" height="450" width="100%" overflow="auto"></iframe>
+        
+      </div>
+    
+    
     </div>
 
-    <div id="main">
-      <div class="container" style="width: 80vw; min-height: 70vh">
-        <h2 style="margin-bottom: 20px">Update Access</h2>
-
-        <div class="d-flex align-items-center justify-content-center" , style="margin-bottom: 10px" , data-aos="fade-up" ,
-            data-aos-delay="100" ,>
-
-            <nav class="navbar navbar-expand ">            
-            
-              <div class="" id="navbarNav">
-                <ul class="navbar-nav">
-                  <li class="nav-item active">
-                    <a class="nav-link"  id="admin">Admins</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  id="professor">Professors</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  id="student">Students</a>
-                  </li>
-                  
-                </ul>
-              </div>
-            </nav>
-
-        </div>
-
-
-
-        <div
-          class="d-flex align-items-center justify-content-center",
-          style="margin-bottom: 10px",
-          data-aos="fade-up",
-          data-aos-delay="100",
-        >
-
-        <button id="updateAccess" class='btn btn-outline-info mr-3 data-toggle="button" aria-pressed="false" autocomplete="off"'> Save Changes</button>
-        <button id="sheetAccess" class='btn btn-outline-info ml-3 data-toggle="button" aria-pressed="false" autocomplete="off" '> Open Sheet</button>
-          
-        </div>
-
-        <div class="accordion">
-          <center>
-          <iframe  id='excel' display="block" height="450" width="100%" overflow="auto"></iframe>
-          </center>
-
-          
-        </div>
-
-
-      </div>
-    </div>
+    <!-- Footer -->
     <%- include('partials/footer.ejs') %>
+
     <script src="../assets/updateAccess.js"></script>
     <script src="../assets/layout.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
-        <% if (flash.success && flash.success.length > 0) { %>
-      new Noty({
-        theme: 'metroui',
-        text: "<%= flash.success %>",
-        type: 'success',
-        layout: 'topRight',
-        timeout: 1500
-      }).show();
-        <% } %>
+          <% if (flash.success && flash.success.length > 0) { %>
+        new Noty({
+          theme: 'metroui',
+          text: "<%= flash.success %>",
+          type: 'success',
+          layout: 'topRight',
+          timeout: 1500
+        }).show();
+            <% } %>
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
   </body>
 </html>

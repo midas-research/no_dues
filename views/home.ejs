@@ -8,122 +8,144 @@
     <%= title %>
   </title>
   <link rel="icon" href="../assets/images/icon.png" type="image/png" />
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
   <link rel="stylesheet" type="text/css" href="/assets/home.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/forms.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
-<body class="scrollbar-primary">
-  <p id="user" style="display: none">
-    <%= user %>
-  </p>
-  <p id="CURRENT_URL" style="display: none">
-    <%= url %>
-  </p>
+<body>
+
+  <!--Backend Info-->
+  <div>
+    <p id="user" style="display: none">
+      <%= user %>
+    </p>
+    <p id="CURRENT_URL" style="display: none">
+      <%= url %>
+    </p>
+  </div>
+
+  <!--Header-->
   <%- include('partials/header.ejs') %>
 
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h4><strong>Enter your bank details below.</strong></h4>
-      <label for="bankName">Enter your Bank name</label>
-      <input type="text" id="bankName" name="firstname" placeholder="Bank name.." />
-      <p class="warning" id="bankNameWarning">*Don't leave it empty.</p>
-      <label for="bankBranch">Enter your Bank branch</label>
-      <input type="text" id="bankBranch" name="firstname" placeholder="Branch name.." />
-      <p class="warning" id="bankBranchWarning">*Don't leave it empty.</p>
-      <label for="bankAccountHolder">Enter Account Holder Name</label>
-      <input type="text" id="bankAccountHolder" name="firstname" placeholder="Account Holder Name.." />
-      <p class="warning" id="bankAccountHolderWarning">
-        *Don't leave it empty.
-      </p>
-      <label for="bankAccountNo">Enter your Account No.</label>
-      <input type="text" id="bankAccountNo" name="firstname" placeholder="Account no.." />
-      <p class="warning" id="bankAccountNoWarning">*Don't leave it empty.</p>
-      <label for="bankIfscCode">Enter your IFSC code</label>
-      <input type="text" id="bankIfscCode" name="firstname" placeholder="IFSC code.." />
-      <p class="warning" id="bankIfscCodeWarning">*Don't leave it empty.</p>
-      <input type="submit" value="Submit" id="submitBankDetailsForm" />
-    </div>
-  </div>
-  <div id="myModal1" class="modal1">
-    <div class="modal-content1">
-      <span class="close1">&times;</span>
-      <h4><strong>Enter your personal details below.</strong></h4>
-      <label for="personalMobile">Enter your Mobile number</label> <br />
-      <input type="text" id="personalMobile" name="personalMobile" placeholder="+91-XXXXXXXXXX" />
-      <br>
-      <p class="warning" id="personalMobileWarning">*Don't leave it empty.</p>
-      <label for="personalEmail">Enter your Personal email(non-iiitd)</label>
-      <input type="text" id="personalEmail" name="personalEmail" placeholder="abc@xyz.com" >
-      <br>
-      <p class="warning" id="personalEmailWarning">*Don't leave it empty.</p>
-      <label for="leavingDate">Enter date of leaving</label>
-      <input type="date" id="leavingDate" name="leavingDate" placeholder="DD-MM-YYYY" >
-      <br>
-      <p class="warning" id="leavingDateWarning">*Don't leave it empty.</p>
-      <label for="completed">Completed</label>
-      <input type="radio" id="completed" name="reason" value="Completed" ><br >
-      <label for="withdrawal">Withdrawal</label>
-      <input type="radio" id="withdrawal" name="reason" value="Withdrawal" ><br >
-      <p class="warning" id="leavingReasonWarning">*Don't leave it empty.</p>
-      <input type="submit" value="Submit" id="submitPersonalDetailsForm" >
-    </div>
-  </div>
+  <!--Navbar--> 
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid">
 
-  <div id="navbar">
-    <div id="navbar_left">
-      <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto  mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile">Profile</a>
+          </li>         
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signout">Logout</a>
+          </li>
+        </ul>
+      </div>
+  
+      <a class="navbar-brand ms-auto d-lg-inline d-none">
 
-      <div id="navbar_left_p" class="dropdown">
-        <div >No Dues</div>
-        <span class="icon-down"></span>
-        <div class="dropdown-content">
-          <a id="uploadBankDetails">Bank Details</a>  
-          <a id="uploadPersonalDetails">Personal Details</a>
-          <a id="downloadbtn">Download</a>
-          <a href="/user/signout">Logout</a>
+        <div>Hello <%= locals.name %></div>
+        <div id="navbar_right_i"><img src="<%=locals.image%>">
+
+      </a>
+  
+    </div>
+  </nav>
+
+  <!--Requests, Certificate And Donation-->
+
+  <div class="container mb-3 scroll-bar-primary">
+
+    <div class="row">
+
+      <!--Requests-->
+      
+      <div class="col left-col details-box mt-3">
+          <div class='details-heading row mx-0'>
+            <div class="col-6 custom-title"><h4>YOUR DUES</h4></div>
+      
+            <div class="col-6 custom-buttons d-flex justify-column-center align-items-center">
+              <button type="button" class="btn btn-light mx-1 " onclick="createIpRequest()"> <i class="bi bi-plus-circle"></i> IP Request</button>
+              <button type="button" class="btn btn-light mx-1" onclick="createBtpRequest()"> <i class="bi bi-plus-circle"></i> BTP Request</button>
+            </div>
+          </div>
+      
+          <div class="accordion requests-list">
+          </div>
+      
+      </div>
+
+      
+      <!--Certificates and Donation-->
+      <div class="col-md-auto mt-3 d-flex flex-column align-items-center justify-content-start">
+        
+        <!--Certificate-->
+        <button type="button" id="downloadbtn" class="btn btn-outline-primary mt-3">GET CERTIFICATE <i class="bi bi-box-arrow-in-up-right" aria-hidden="true"></i></button>
+
+        <!--Donation-->
+        <div class='details-box mt-3'>
+          <div class='details-heading text-center'>            
+            <h4> DONATION (IF ANY)</h4> 
+            <sub> You Can Save Only Once</sub>          
+          </div>
+          <div class='details-info'>  
+            <form>
+              <fieldset id="donationDetails">
+                <div class="form-row px-5">
+                  <div class="col mt-3 mx-3">
+                    <label class="inp" for="donationAdmin">
+                      <select name="donationAdmin" id="donationAdmin" class='form-control' required>
+                      </select>
+                      <span class="label">Choose Department</span>
+                      <span class="focus-bg"></span>
+                    </label>
+                  </div>
+                  <div class="col mt-3 mx-3">
+                    <label class="inp" for="securityAmount">
+                      <input placeholder="" id="securityAmount" type="number" class='form-control' value="10000" disabled>
+                      <span class="label">Security Amount</span>
+                      <span class="focus-bg"></span>
+                    </label>
+                  </div>
+                  <div class="col mt-3 mx-3">
+                    <label class="inp" for="donationAmount">
+                      <input placeholder="" id="donationAmount" type="number" class='form-control' max='10000' min='1' required>
+                      <span class="label">Donation Amount</span>
+                      <span class="focus-bg"></span>
+                    </label>
+                  </div>
+                </div>
+                <center><button id='submitDonationDetails' type='button' class='mt-4 submit-btn'>SAVE</button></center>
+              </fieldset>
+            </form> 
+          </div>
         </div>
       </div>
     </div>
-    <div id="navbar_right">
-      <div id="navbar_right_p">Hello <%= locals.name %>
-      </div>
-      <div id="navbar_right_i"><img src="<%=locals.image%>"> </div>
-    </div>
-  </div>
-
-  <div id="main">
-    <div class="container scrollbar-primary">
-      <h2>DEPARTMENTS FOR NO-DUES</h2>
-      <br>
-      <h3>
-        Total Dues Cleared: <span id="countCleared"></span> /
-        <span id="countAll"></span>
-      </h3>
-
-      <div class="accordion" id="admins_list_container"></div>
-      <div class="buttons">
-        <button class="addButton" onclick="createIpRequest()">
-          Add IP Request
-        </button>
-        <button class="addButton" onclick="createBtpRequest()">
-          Add BTP Request
-        </button>
-
-      </div>
-      
-    </div>
+  
   </div>
   
+  <!--Footer-->
   <%- include('partials/footer.ejs') %>
+  
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-  <script src="../assets/home.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"   integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <script src="../assets/layout.js"></script>
+  <script src="../assets/home.js"></script>  
   <script>
     $(function() {
       $('[data-toggle="tooltip"]').tooltip();

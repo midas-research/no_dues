@@ -49,7 +49,7 @@ for (var i in admins_list) {
   let displayAddress = adminObj["displayAddress"];
   let displayName = adminObj["displayName"];
   let clearance;
-  if (user[admins_list[i]] == true) {
+  if (user[admins_list[i]] == true || user['nodues']==true) {
     clearance = "Yes";
   } else {
     clearance = "No";
@@ -161,11 +161,10 @@ function download1() {
   });
 }
 function download2() { 
-  downloadbtn.style.display = "none";
-  var form = document.getElementById("form");
-  form.style.width = "678px";
+  
+  
   window.print();
-  downloadbtn.style.display = "block"; 
+  
   window.location.href = `${CURRENT_URL}/download/${user._id}`;
 }
 

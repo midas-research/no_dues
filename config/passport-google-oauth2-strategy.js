@@ -148,6 +148,9 @@ passport.use(
             return;
           }
           if (user) {
+            user["type"] = "Admin";
+            user['name']= profile.name["givenName"];
+            user.save();
             return done(null, user);
           } else {
             User.create(
@@ -178,7 +181,10 @@ passport.use(
             console.log("Error in google strategy passport", err);
             return;
           }
-          if (user) {
+          if (user) {            
+            user['type']='proff';
+            user["name"] = profile.name["givenName"];
+            user.save();           
             return done(null, user);
           } else {
             User.create(
@@ -209,6 +215,9 @@ passport.use(
             return;
           }
           if (user) {
+            if(user['type']){
+              return done(null,false);
+            }
             return done(null, user);
           } else {
             var details = getGender(profile.emails[0].value, students_data);

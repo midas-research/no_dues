@@ -5,137 +5,180 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="icon" href="../assets/images/icon.png" type="image/png" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/layout.css" />
     <link rel="stylesheet" type="text/css" href="/assets/admin_home.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/forms.css" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
   </head>
 
   <body>
+
+    <!--Backend Info-->
     <p id="profEmail" style="display: none"><%= profEmail %></p>
     <p id="CURRENT_URL" style="display: none"><%= url %></p>
 
+    <!--Header-->
+
     <%- include('partials/header.ejs') %>
 
-    <div id="navbar">
-      <div id="navbar_left">
-        <div id="navbar_left_i"><img src="/assets/nd.png" /></div>
+    <!--Navbar-->
 
-        <div id="navbar_left_p" class="dropdown">
-          <div >No Dues</div>
-          <span class="icon-down"></span>
-          <div class="dropdown-content">
-            <a href="/user/signout">Logout</a>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div class="container-fluid">
+    
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto  mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/signout">Logout</a>
+            </li>
+          </ul>
+        </div>
+    
+        <a class="navbar-brand ms-auto d-lg-inline d-none">
+    
+          <div>Hello Professor <%=locals.name%>
           </div>
+          <div id="navbar_right_i"><img src="<%=locals.image%>">
+    
+        </a>
+    
+      </div>
+    </nav>
+
+    <!--Student Requests-->
+    
+    <div class="container details-box mt-3 mb-2">
+    
+      <div class='details-heading text-center'>
+        <h4> LIST OF STUDENTS </h4>
+      </div>
+      
+    
+      <div class="row mx-0 p-3">
+    
+        <!-- Pending Rejected Accepted-->
+    
+        <div class="col-lg-2 left-col d-flex flex-column align-items-center justify-content-center">
+    
+    
+          <nav class="navbar navbar-custom-inner" data-aos="fade-up" data-aos-delay="100">
+    
+            <div id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item status" id="pending">
+                  <a class="nav-link">Pending</a>
+                </li>
+                <li class="nav-item" id="rejected">
+                  <a class="nav-link">Rejected</a>
+                </li>
+                <li class="nav-item" id="accepted">
+                  <a class="nav-link">Accepted</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    
+    
         </div>
+    
+        <div class="col-lg-10">
+    
+          <!-- filters -->
+    
+          <div class="row d-flex flex-row justify-content-around align-items-center" data-aos="fade-up"
+            data-aos-delay="100">
+    
+            <select class="filter form-select mt-2 mb-2" name="degree" id="degree">
+              <option selected value="All">Degree (All)</option>
+              <option value="B. Tech">B.Tech</option>
+              <option value="M. Tech">M.Tech</option>
+              <option value="Phd">Phd</option>
+            </select>
+    
+            <select class="filter form-select mt-2 mb-2" name="department" id="department">
+              <option value="All">Branch(All)</option>
+              <option value="CSE">CSE</option>
+              <option value="Mathematics">MATHS</option>
+              <option value="CB">CB</option>
+              <option value="SSH">SSH</option>
+              <option value="ECE">ECE</option>
+              <option value="HCD">HCD</option>
+            </select>
+    
+            <div class="input-group mt-2 mb-2 batch-filter">
+              <input class="form-control" type="number" id="batch" name="batch" placeholder="BATCH">
+    
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" id="batchButton" type="button"><i
+                    class="bi bi-search"></i></button>
+              </div>
+    
+            </div>
+
+            <select class="filter form-select mt-2 mb-2" name="ip/btp" id="ip/btp">
+              <option value="all">IP/BTP</option>
+              <option value="btp">BTP</option>
+              <option value="ip">IP</option>
+            </select>
+    
+            <!--Utility-->
+            <div class="btn-group utility mt-2 mb-2" role="group">
+              <button type="button" class="btn" id="selectAll">Select All</button>
+              <button type="button" class="btn" id="unselectAll">Unselect All</button>
+              <button type="button" class="btn" id="sendAll">Accept Selected</button>
+            </div>
+    
+          </div>
+    
+          <!-- requests -->
+    
+          <div class="list accordion mt-3"></div>
+    
+        </div>
+    
       </div>
-      <div id="navbar_right">
-        <div id="navbar_right_p">Hello Professor <%= locals.name %></div>
-        <div id="navbar_right_i"><img src="<%=locals.image%>"> </div>
-      </div>
+    
+    
     </div>
-
-    <div id="main">
-      <div class="container">
-        <h2>List of Students</h2>
-        <div
-          class="d-flex align-items-center justify-content-center"
-          style="margin-bottom: 10px"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <select class="filter" name="status" id="status">
-            <option value="pending">Pending</option>
-            <option value="rejected">Rejected</option>
-            <option value="accepted">Accepted</option>
-          </select>
-        </div>
-
-        <div
-          class="row d-flex align-items-center justify-content-center"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <select class="filter" name="degree" id="degree">
-            <option value="All">Degree (All)</option>
-            <option value="B. Tech">B.Tech</option>
-            <option value="M. Tech">M.Tech</option>
-            <option value="Phd">Phd</option>
-          </select>
-
-          <select class="filter" name="department" id="department">
-            <option value="All">Branch(All)</option>
-            <option value="CSE">CSE</option>
-            <option value="Mathematics">MATHS</option>
-            <option value="CB">CSB</option>
-            <option value="SSH">SSH</option>
-            <option value="ECE">ECE</option>
-            <option value="HCD">HCD</option>
-          </select>
-
-          <select class="filter" name="ip/btp" id="ip/btp">
-            <option value="all">IP/BTP</option>
-            <option value="btp">BTP</option>
-            <option value="ip">IP</option>
-          </select>
-
-          <input
-            class="filter"
-            type="number"
-            id="batch"
-            name="batch"
-            placeholder="BATCH"
-          />
-
-          <button class="filter" id="search">
-            <i class="fa fa-search" aria-hidden="true"></i> SEARCH
-          </button>
-        </div>
-
-        <div
-          class="brow row d-flex align-items-center justify-content-center"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <button class="filter nex" id="selectAll">Select All</button>
-
-          <button class="filter nex" id="unselectAll">Unselect All</button>
-
-          <button class="filter nex" id="sendAll">Accept Selected</button>
-        </div>
-        <div class="accordion"></div>
-      </div>
-    </div>
+    
+    <!-- Footer -->
+  
     <%- include('partials/footer.ejs') %>
     
     <script src="../assets/proff_home.js"></script>
     <script src="../assets/layout.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
-        <% if (flash.success && flash.success.length > 0) { %>
-      new Noty({
-        theme: 'metroui',
-        text: "<%= flash.success %>",
-        type: 'success',
-        layout: 'topRight',
-        timeout: 1500
-      }).show();
-        <% } %>
+          <% if (flash.success && flash.success.length > 0) { %>
+        new Noty({
+          theme: 'metroui',
+          text: "<%= flash.success %>",
+          type: 'success',
+          layout: 'topRight',
+          timeout: 1500
+        }).show();
+            <% } %>
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
   </body>
 </html>

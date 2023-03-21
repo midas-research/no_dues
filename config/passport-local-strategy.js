@@ -6,6 +6,7 @@ const getProffName = require("../data/getProffName");
 
 const User = require("../models/user");
 const { EMAIL_ID, SUPER_ADMIN_EMAIL } = require("../config/config");
+const { ADMIN_BLOCK, STUDENT_BLOCK } = require("../controllers/home_controller");
 
 function add(temp, x) {
   if (x != true) {
@@ -70,6 +71,7 @@ passport.checkAuthentication = (req, res, next) => {
 
 //check if it's admin
 passport.checkAdminAuthentication = (req, res, next) => {
+  
   if (req.isAuthenticated()) {
     if (
       req.user.email == `${SUPER_ADMIN_EMAIL}` ||
@@ -89,6 +91,7 @@ passport.checkAdminAuthentication = (req, res, next) => {
 
 //check if it's a normal User
 passport.checkUserAuthentication = (req, res, next) => {
+  
   if (req.isAuthenticated()) {
     if (req.user.email == `${SUPER_ADMIN_EMAIL}`) {
       return res.redirect("/super_admin");
@@ -107,6 +110,7 @@ passport.checkUserAuthentication = (req, res, next) => {
 
 //check if it's Proffesor
 passport.checkProffAuthentication = (req, res, next) => {
+  
   if (req.isAuthenticated()) {
     if (Admin.checkAdmin(req.user.email)) {
       return res.redirect("/admin_home");
@@ -198,28 +202,54 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Batch",
     "Leaving Reason",
     "Design Lab",
+    "Design Lab Fine",
     "Library",
+    "Library Fine",
     "Admin Facilities",
+    "Admin Facilities Fine",
     "System Admin",
+    "System Admin Fine",
     "Sports",
+    "Sports Fine",
     "Hostel",
+    "Hostel Fine",
     "ECE Labs",
+    "ECE Labs Fine",
     "Placement",
+    "Placement Fine",
     "Incubation",
+    "Incubation Fine",
     "Finance",
+    "Finance Fine",
     "Academics",
+    "Academics Fine",
     "IP",
     "BTP",
-    "Total",
-    "NoDues",
+    "Overall",
+    "Total Fine",
+    "Donation Department",
+    "Donation Amount",
+    "NoDues Given",
     "Bank Name",
     "Branch Name",
     "Account Holder Name",
     "Account No",
-    "IFSC Code"
+    "IFSC Code",
   ]);
   var docs = await User.find({});
   for (var i in docs) {
+
+    if (docs[i]['nodues'] && docs[i]["noduesApprovedAt"]) {
+      let d1=new Date(docs[i]["noduesApprovedAt"]);
+      let d2= new Date();
+      d2.setFullYear(d2.getFullYear()-1);
+      
+      if( d1.getTime()<d2.getTime()){
+        continue;
+      }
+    }
+
+
     if (!docs[i]["type"]) {
       var temp = { array: [] };
       add2(temp, docs[i]["name"]);
@@ -231,16 +261,27 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add2(temp, docs[i]["batch"]);
       add2(temp, docs[i]["personalDetails"]);
       add(temp, docs[i]["designLab"]);
+      add2(temp, docs[i]["designLabFine"]);
       add(temp, docs[i]["library"]);
+      add2(temp, docs[i]["libraryFine"]);
       add(temp, docs[i]["adminFacilities"]);
+      add2(temp, docs[i]["adminFacilitiesFine"]);
       add(temp, docs[i]["systemAdminAndNetworking"]);
+      add2(temp, docs[i]["systemAdminAndNetworkingFine"]);
       add(temp, docs[i]["sportsAndStudentFacilities"]);
+      add2(temp, docs[i]["sportsAndStudentFacilitiesFine"]);
       add(temp, docs[i]["hostel"]);
+      add2(temp, docs[i]["hostelFine"]);
       add(temp, docs[i]["eceLabs"]);
+      add2(temp, docs[i]["eceLabsFine"]);
       add(temp, docs[i]["placementIncharge"]);
+      add2(temp, docs[i]["placementInchargeFine"]);
       add(temp, docs[i]["incubationCenter"]);
+      add2(temp, docs[i]["incubationCenterFine"]);
       add(temp, docs[i]["finance"]);
+      add2(temp, docs[i]["financeFine"]);
       add(temp, docs[i]["academics"]);
+      add2(temp, docs[i]["academicsFine"]);
       var checkIp = true;
       for (var j in docs[i]["ipList"]) {
         if (!(docs[i]["ipList"][j] == true)) {
@@ -258,6 +299,9 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       }
       add(temp, checkBtp);
       add(temp, adminsLeft(docs[i]));
+      add2(temp, docs[i]["totalFine"]);
+      add2(temp, docs[i]["donationAdmin"]);
+      add2(temp, docs[i]["donationAmount"]);
       add(temp, docs[i]["nodues"]);
       add2(temp, docs[i]["bankName"]);
       add2(temp, docs[i]["bankBranch"]);

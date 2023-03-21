@@ -144,6 +144,17 @@ module.exports.getStudents = (req, res) => {
     for (var i in users) {
       
       if (users[i]["type"] == undefined && checkSuperAdmin(users[i],status,'nodues')) {
+
+        if (status == "accepted" && users[i]['nodues'] && users[i]["noduesApprovedAt"]) {
+          let d1=new Date(users[i]["noduesApprovedAt"]);
+          let d2= new Date();
+          d2.setFullYear(d2.getFullYear()-1);
+          
+          if( d1.getTime()<d2.getTime()){
+            continue;
+          }
+
+        }
         studentList.push(users[i]);
       }
     }
@@ -181,6 +192,17 @@ module.exports.getStudentsAdmin = (req, res) => {
         users[i][`${adminName}Applied`] == true)
       {
         if(check(users[i],status,adminName)){
+
+          if (status == "accepted" && users[i]['nodues'] && users[i]["noduesApprovedAt"]) {
+            let d1=new Date(users[i]["noduesApprovedAt"]);
+            let d2= new Date();
+            d2.setFullYear(d2.getFullYear()-1);
+            
+            if( d1.getTime()<d2.getTime()){
+              continue;
+            }
+
+          }
           studentList.push(users[i]);
         }
       }
@@ -203,6 +225,16 @@ module.exports.getStudentsProfessor = (req, res) => {
     }
 
     for (var i in users) {
+      if (status == "accepted" && users[i]['nodues'] && users[i]["noduesApprovedAt"]) {
+        let d1=new Date(users[i]["noduesApprovedAt"]);
+        let d2= new Date();
+        d2.setFullYear(d2.getFullYear()-1);
+        
+        if( d1.getTime()<d2.getTime()){
+          continue;
+        }
+
+      }
       if (users[i]["type"] == undefined) {
         let check = true;
         for (var j in users[i]["ipList"]) {

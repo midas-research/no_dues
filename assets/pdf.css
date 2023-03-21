@@ -5,6 +5,7 @@ body {
     justify-content: center;
     align-items: center;
     max-width:100vw;
+    font-family: 'Times New Roman', Times, serif;
     
 
 }
@@ -83,14 +84,23 @@ td, th {
 #form, #dwld{
     padding: 15px;
     background-color: white; 
-    width: 50vw;  
+    width:50vw;
+    
 }
 
 @media only screen and (max-width: 768px) {
     #form{
         width:90vw;
     }
+}
 
+@media print {
+    #download{
+        display:none;
+    }
 
+    #form{
+        width:678px;
+    }
 }
 
