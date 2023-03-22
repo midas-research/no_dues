@@ -81,7 +81,7 @@ var schemaObject = {
   other_email: { type: String },
   date_of_leaving: { type: String },
   reason_of_leaving: { type: String },
-  nodues: { type: Boolean, default: false },
+  nodues: { type: Boolean},
   noduesMessage: { type: String },
   noduesApprovedAt: { type: String },
   hostelTaken: { type: Boolean, default: undefined },
