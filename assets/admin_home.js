@@ -334,6 +334,9 @@ function clickAlternate(e){
 function sendMessage(e) {
   
   var fine = e.target.previousElementSibling.value;
+  if(fine==null){
+    fine=0;
+  }
   var dues = e.target.previousElementSibling.previousElementSibling.previousElementSibling.value;
   
   if (dues == "") {

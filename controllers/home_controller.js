@@ -19,6 +19,7 @@ var xhr = new XMLHttpRequest();
 const axios = require("axios");
 const { CURRENT_URL, NODEMAILER_EMAIL_ID } = require("../config/config");
 const fs = require("fs");
+const { update } = require("../models/user");
 
 
 //Super Admin Operations
@@ -45,14 +46,12 @@ module.exports.superSendMessage = (req, res) => {
     }
     var id = user._id;
     var attribute = obj[0].admin + "Message";
-    var updatedObject = {};
-    updatedObject[obj[0].admin] = false;
-    updatedObject[attribute] = obj[0].message;
-    updatedObject[obj[0].admin + "ApprovedAt"] = null;
+    
+    user[obj[0].admin] = false;
+    user[attribute] = obj[0].message;
+    user[obj[0].admin + "ApprovedAt"] = null;
 
-    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
-      user.save();
-    });
+    user.save();
     super_message_mailer.newMessage(obj[0].message, obj[0].email);
     res.status = 200;
     return res.end();
@@ -79,12 +78,10 @@ module.exports.superApproveDues = (req, res) => {
     var time =
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date + " " + time;
-    updateObject[obj[0].admin] = true;
-    updateObject[obj[0].admin + "ApprovedAt"] = dateTime;
-
-    User.findByIdAndUpdate(id, updateObject, (err, user) => {
-      user.save();
-    });
+    user[obj[0].admin] = true;
+    user[obj[0].admin + "ApprovedAt"] = dateTime;
+    
+    user.save();    
     super_approved_mailer.approvedDues(obj[0].email);
     res.status = 200;
     return res.end();
@@ -386,16 +383,17 @@ module.exports.sendMessage = (req, res) => {
     var fine=obj[0].admin+"Fine";
 
     
-    var updatedObject = {};
-    updatedObject[obj[0].admin] = false;
-    updatedObject[msg] = obj[0].message;
-    updatedObject[fine] = obj[0].fine;
-    updatedObject['totalFine']=user.totalFine+fine;
-    updatedObject[obj[0].admin + "ApprovedAt"] = null;
+    
+    user[obj[0].admin] = false;
+    user[msg] = obj[0].message;
+    user["totalFine"] = user.totalFine - user.fine;
+    user[fine] = obj[0].fine;
+    user['totalFine']=user.totalFine+obj[0].fine;
+    user[obj[0].admin + "ApprovedAt"] = null;
 
-    User.findByIdAndUpdate(id, updatedObject, (err, user) => {
-      user.save();
-    });
+    
+    user.save();
+    
     if (obj[0].admin == "academics") {
       obj[0].admin += user.degree[0];
     }
@@ -427,12 +425,13 @@ module.exports.approveDues = (req, res) => {
     var time =
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date + " " + time;
-    updateObject[obj[0].admin] = true;
-    updateObject[obj[0].admin + "ApprovedAt"] = dateTime;
-
-    User.findByIdAndUpdate(id, updateObject, (err, user) => {
-      user.save();
-    });
+    user[obj[0].admin] = true;
+    user[obj[0].admin + "ApprovedAt"] = dateTime;
+    user['totalFine']=user['totalFine']-user[obj[0].admin+'Fine'];
+    user[obj[0].admin+'Fine']=0;
+   
+    user.save();
+    
     if (obj[0].admin == "academics") {
       obj[0].admin += user.degree[0];
     }
@@ -461,6 +460,7 @@ module.exports.approveManyDues = (req, res) => {
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date + " " + time;
     updateObject[adminName + "ApprovedAt"] = dateTime;
+    
 
     User.findOneAndUpdate(
       { email: studentEmail },
@@ -469,6 +469,9 @@ module.exports.approveManyDues = (req, res) => {
         if (err) {
           console.log("Error in Approving many Dues by Admin");
         }
+
+        user['totalFine']-=user[adminName+'Fine'];
+        user[adminName+'Fine']=0;
         user.save();
         if (adminName == "academics") {
           adminName += user.degree[0];

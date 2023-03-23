@@ -67,55 +67,56 @@ function createRequest(admin) {
   request.send(null);
   if (request.status === 200) {
     details = JSON.parse(request.responseText)[0];
-  }
-  let originalName = details["originalAdminName"];
-  let displayName = details["displayName"];
-  let displayAddress = details["displayAddress"];
-  if (displayAddress == "") {
-    displayAddress = "NA";
-  }
-  let displayMessage ="There are no comments from the admin of this department.";
+  
+    let originalName = details["originalAdminName"];
+    let displayName = details["displayName"];
+    let displayAddress = details["displayAddress"];
+    if (displayAddress == "") {
+      displayAddress = "NA";
+    }
+    let displayMessage ="There are no comments from the admin of this department.";
 
-  if(user[0][adminName+'Messgae']){
-    displayMessage=user[0][adminName+'Message'];    
-  }
+    if(user[0][adminName+'Messgae']){
+      displayMessage=user[0][adminName+'Message'];    
+    }
 
-  let displayFine ="NA";
+    let displayFine ="NA";
 
-  if (user[0][adminName + "Fine"]) {
-    displayFine = user[0][adminName + "Fine"];
-  }
+    if (user[0][adminName + "Fine"]) {
+      displayFine = user[0][adminName + "Fine"];
+    }
 
-  container.innerHTML += `
-  <div class="accordion-item container">
-    <button class="row" type="button" aria-expanded="false">
+    container.innerHTML += `
+    <div class="accordion-item container">
+      <button class="row" type="button" aria-expanded="false">
 
-          <div class="accordion-title col-8">${originalName}</div>
+            <div class="accordion-title col-8">${originalName}</div>
 
-          <div class="col-3 text-center"> 
-            <div class="status-button btn request ${admin + 'Status'} " onclick="requestFunction(event)">Request </div> 
+            <div class="col-3 text-center"> 
+              <div class="status-button btn request ${admin + 'Status'} " onclick="requestFunction(event)">Request </div> 
+            </div>
+            
+            <div class="col-1 text-center">     
+              <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
+              <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
+            </div>      
+          
+      </button>
+      <div class="accordion-content row">
+
+          <div class="accordion-body">
+
+            ${customInfo(admin)}        
+            <p>Admin :  ${displayName} [${displayAddress}]</p>
+            <p>Message: <span class="${admin+'Message'}"> ${displayMessage}</span></p>
+            <p>Fine: <span class="${admin+'Fine'}">${displayFine}</span></p>
+          
+          
           </div>
           
-          <div class="col-1 text-center">     
-            <i class="bi bi-caret-down-fill down" aria-hidden="true"></i>
-            <i class="bi bi-caret-up-fill up" aria-hidden="true"></i>
-          </div>      
-        
-    </button>
-    <div class="accordion-content row">
-
-        <div class="accordion-body">
-
-          ${customInfo(admin)}        
-          <p>Admin :  ${displayName} [${displayAddress}]</p>
-          <p>Message: <span class="${admin+'Message'}"> ${displayMessage}</span></p>
-          <p>Fine: <span class="${admin+'Fine'}">${displayFine}</span></p>
-        
-        
-        </div>
-        
-    </div>
-  </div>`;
+      </div>
+    </div>`;
+  }
 }
 
 //Custom requirement of each admin
