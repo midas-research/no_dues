@@ -386,9 +386,8 @@ module.exports.sendMessage = (req, res) => {
     
     user[obj[0].admin] = false;
     user[msg] = obj[0].message;
-    user["totalFine"] = user.totalFine - user.fine;
-    user[fine] = obj[0].fine;
-    user['totalFine']=user.totalFine+obj[0].fine;
+    user["totalFine"] = Number(user.totalFine) - Number(user.fine) + Number(obj[0].fine);
+    user[fine] = obj[0].fine;    
     user[obj[0].admin + "ApprovedAt"] = null;
 
     
@@ -427,7 +426,7 @@ module.exports.approveDues = (req, res) => {
     var dateTime = date + " " + time;
     user[obj[0].admin] = true;
     user[obj[0].admin + "ApprovedAt"] = dateTime;
-    user['totalFine']=user['totalFine']-user[obj[0].admin+'Fine'];
+    user['totalFine']=Number(user['totalFine'])-Number(user[obj[0].admin+'Fine']);
     user[obj[0].admin+'Fine']=0;
    
     user.save();
@@ -470,7 +469,7 @@ module.exports.approveManyDues = (req, res) => {
           console.log("Error in Approving many Dues by Admin");
         }
 
-        user['totalFine']-=user[adminName+'Fine'];
+        user['totalFine']=Number(user['totalFine'])-Number(user[adminName+'Fine']);
         user[adminName+'Fine']=0;
         user.save();
         if (adminName == "academics") {
