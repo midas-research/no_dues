@@ -18,11 +18,15 @@ const professorURL = JSON.parse(document.getElementById("professorURL").innerHTM
 
 var updateAccess = document.getElementById("updateAccess");
 updateAccess.addEventListener("click", () => {
+  document.getElementById("updateAccess").disabled=true;
+  document.getElementById("sheetAccess").disabled=true;
   var status = document.querySelectorAll(".active a")[0].getAttribute("id");
   var request = new XMLHttpRequest();
   request.open("GET", `${CURRENT_URL}/super_admin/update${status}`, false);
   request.send();
   if (request.status === 200) {
+    document.getElementById("updateAccess").disabled = false;
+    document.getElementById("sheetAccess").disabled = false;
     console.log('success');
     new Noty({
       theme: "metroui",
