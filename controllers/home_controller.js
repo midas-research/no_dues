@@ -381,20 +381,23 @@ module.exports.sendMessage = (req, res) => {
    
     var msg = obj[0].admin + "Message";
     var fine=obj[0].admin+"Fine";
-
+    
+    
     
     
     user[obj[0].admin] = false;
     user[msg] = obj[0].message;
-    user["totalFine"] = Number(user.totalFine) - Number(user.fine) + Number(obj[0].fine);
-    user[fine] = obj[0].fine;    
-    user[obj[0].admin + "ApprovedAt"] = null;
-
-    
-    user.save();
+    user["totalFine"] = Number(user.totalFine) - Number(user[fine]) + Number(obj[0].fine);
+    user[fine] = Number(obj[0].fine);    
+    user[obj[0].admin + "ApprovedAt"] = null;    
+    user.save();    
     
     if (obj[0].admin == "academics") {
       obj[0].admin += user.degree[0];
+    }
+
+    if(user[fine]!=0){
+      obj[0].message += `<br> Fine: Rs. ${user[fine]}`;
     }
 
     message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);

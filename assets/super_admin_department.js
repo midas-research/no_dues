@@ -171,6 +171,12 @@ function clickAdminFilter() {
       message = "You have not sent any message currently.";
     }
 
+     if (currentList[i][adminName + "Fine"]!=0) {
+       message += `<br> Fine: Rs. ${currentList[i][curr_admin + "Fine"]} `;
+     } else {
+       message += `<br> Fine: NA`;
+     }
+
     if (curr_status == "accepted") {
       //html code for accepted filter
       accordion.innerHTML += addAcceptCode(currentList[i], message, curr_admin);
