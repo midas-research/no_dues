@@ -91,6 +91,7 @@ module.exports.superApproveDues = (req, res) => {
 
 module.exports.superApproveManyDues = (req, res) => {
   var obj = JSON.parse(req.params.dues)[0];
+  
  
   for (var i in obj) {
   
@@ -476,9 +477,12 @@ module.exports.approveManyDues = (req, res) => {
         user[adminName+'Fine']=0;
         user.save();
         if (adminName == "academics") {
-          adminName += user.degree[0];
+          approved_mailer.approvedDues(adminName+ user.degree[0], studentEmail);
         }
-        approved_mailer.approvedDues(adminName, studentEmail);
+        else{
+          approved_mailer.approvedDues(adminName, studentEmail);
+        }
+        
       }
     );
   }

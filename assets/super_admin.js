@@ -496,12 +496,14 @@ unselectAll.addEventListener("click", () => {
 var sendAll = document.getElementById("sendAll");
 sendAll.addEventListener("click", () => {
   var checkboxes = document.getElementsByClassName("tickbox");
+  
   var obj = [];
+  
   for (var i in checkboxes) {
  
     if (checkboxes[i].checked == true) {
       if (checkboxes[i].nextSibling) {
-        var obj = [];
+        
         var text = checkboxes[i].parentElement.nextElementSibling.innerHTML;
         var index = text.indexOf(" -");
         var studentEmail = text.substring(0, index);
@@ -513,9 +515,11 @@ sendAll.addEventListener("click", () => {
       }
     }
   }
+  
   if (obj.length != 0) {
     var obj2 = [];
     obj2.push(obj);
+
 
     var request = new XMLHttpRequest();
     request.open(
