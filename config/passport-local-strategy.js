@@ -7,6 +7,7 @@ const getProffName = require("../data/getProffName");
 const User = require("../models/user");
 const { EMAIL_ID, SUPER_ADMIN_EMAIL } = require("../config/config");
 const { ADMIN_BLOCK, STUDENT_BLOCK } = require("../controllers/home_controller");
+const { head } = require("request-promise");
 
 function add(temp, x) {
   if (x != true) {
@@ -192,7 +193,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     range: "Sheet1",
   });
   values = [];
-  values.push([
+  let headings = [
     "Name",
     "Roll no.",
     "Email",
@@ -200,29 +201,23 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Degree",
     "Department",
     "Batch",
-    "Leaving Reason",
-    "Design Lab",
-    "Design Lab Fine",
-    "Library",
-    "Library Fine",
-    "Admin Facilities",
-    "Admin Facilities Fine",
-    "System Admin",
-    "System Admin Fine",
-    "Sports",
-    "Sports Fine",
-    "Hostel",
-    "Hostel Fine",
-    "ECE Labs",
-    "ECE Labs Fine",
-    "Placement",
-    "Placement Fine",
-    "Incubation",
-    "Incubation Fine",
-    "Finance",
-    "Finance Fine",
-    "Academics",
-    "Academics Fine",
+    "Leaving Reason"
+  ];  
+  
+
+  for(var i in Admin.admins){
+    if(Admin.admins[i]=='academics'){
+      continue;
+    }
+    let name=Admin.getOriginalAdmin(Admin.admins[i]);
+   
+    headings.push(name);
+    headings.push(name+' Fine');
+  }
+  headings.push('Academics');
+  headings.push('Academics Fine');
+
+  headings.push(
     "IP",
     "BTP",
     "Overall",
@@ -234,8 +229,10 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Branch Name",
     "Account Holder Name",
     "Account No",
-    "IFSC Code",
-  ]);
+    "IFSC Code"
+  );
+  values.push(headings);
+  
   var docs = await User.find({});
   for (var i in docs) {
 
@@ -260,28 +257,12 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add2(temp, docs[i]["department"]);
       add2(temp, docs[i]["batch"]);
       add2(temp, docs[i]["personalDetails"]);
-      add(temp, docs[i]["designLab"]);
-      add2(temp, docs[i]["designLabFine"]);
-      add(temp, docs[i]["library"]);
-      add2(temp, docs[i]["libraryFine"]);
-      add(temp, docs[i]["adminFacilities"]);
-      add2(temp, docs[i]["adminFacilitiesFine"]);
-      add(temp, docs[i]["systemAdminAndNetworking"]);
-      add2(temp, docs[i]["systemAdminAndNetworkingFine"]);
-      add(temp, docs[i]["sportsAndStudentFacilities"]);
-      add2(temp, docs[i]["sportsAndStudentFacilitiesFine"]);
-      add(temp, docs[i]["hostel"]);
-      add2(temp, docs[i]["hostelFine"]);
-      add(temp, docs[i]["eceLabs"]);
-      add2(temp, docs[i]["eceLabsFine"]);
-      add(temp, docs[i]["placementIncharge"]);
-      add2(temp, docs[i]["placementInchargeFine"]);
-      add(temp, docs[i]["incubationCenter"]);
-      add2(temp, docs[i]["incubationCenterFine"]);
-      add(temp, docs[i]["finance"]);
-      add2(temp, docs[i]["financeFine"]);
-      add(temp, docs[i]["academics"]);
-      add2(temp, docs[i]["academicsFine"]);
+
+      for (var j in Admin.admins){
+        add(temp, docs[i][Admin.admins[j]]);
+        add2(temp, docs[i][Admin.admins[j]+'Fine']);
+      }
+      
       var checkIp = true;
       for (var j in docs[i]["ipList"]) {
         if (!(docs[i]["ipList"][j] == true)) {
