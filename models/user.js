@@ -90,7 +90,7 @@ var schemaObject = {
   totalFine: {type:Number, default: 0},
 };
 
-for (var i = 0; i < names.length - 2; i++) {
+for (var i = 0; i < names.length; i++) {
   schemaObject[names[i]] = { type: Boolean };
   schemaObject[names[i] + "Applied"] = { type: Boolean };
   schemaObject[names[i] + "AppliedAt"] = { type: String };
