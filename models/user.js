@@ -77,6 +77,7 @@ var schemaObject = {
   bankAccountNo: { type: String },
   bankAccountHolder: { type: String },
   bankIfscCode: { type: String },
+  cancelledCheque:{type:String},
   mobile: { type: String },
   other_email: { type: String },
   date_of_leaving: { type: String },

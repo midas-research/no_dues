@@ -229,7 +229,8 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Branch Name",
     "Account Holder Name",
     "Account No",
-    "IFSC Code"
+    "IFSC Code",
+    "Cancelled Cheque Link"
   );
   values.push(headings);
   
@@ -289,6 +290,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add2(temp, docs[i]["bankAccountHolder"]);
       add2(temp, docs[i]["bankAccountNo"]);
       add2(temp, docs[i]["bankIfscCode"]);
+      add2(temp, docs[i]["cancelledCheque"]);
 
       values.push(temp.array);
     }

@@ -79,24 +79,24 @@
                 <div class='details-box'>
                     <div class='details-heading text-center'>                            
                         <h4> PERSONAL DETAILS </h4>
-                        <sub>You can save only once.</sub>
+                        <!-- <sub>You can save only once.</sub> -->
                     </div>
                     <div class='details-info'>
                         <center><img class="rounded-circle mt-3 personal-image" alt="profilePicture"
                                 src="<%=locals.image%>" /></center>
-                        <form>
+                        <form onsubmit="submitPersonalForm(event)">
                             <fieldset id="personalDetails">
                                 <div class="form-row px-5">
                                     <div class="col mt-3 mx-3">
                                         <label class="inp" for="personalMobile">
-                                            <input placeholder="" id="personalMobile" type="text" class='form-control' required>
+                                            <input placeholder="" id="personalMobile" type="number" class='form-control' required>
                                             <span class="label">Mobile Number</span>
                                             <span class="focus-bg"></span>
                                         </label>
                                     </div>
                                     <div class="col mt-3 mx-3">
                                         <label class="inp" for="personalEmail">
-                                            <input placeholder="" id="personalEmail" type="text" class='form-control' required>
+                                            <input placeholder="" id="personalEmail" type="email" class='form-control' required>
                                             <span class="label">Email ID</span>
                                             <span class="focus-bg"></span>
                                         </label>
@@ -110,16 +110,16 @@
                                     </div>
                                     <div class="form-check form-check-inline mt-3">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="completed"
-                                            value="completed">
+                                            value="completed" required>
                                         <label class="form-check-label" for="completed">Completed</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="withdrawal"
-                                            value="withdrawal">
+                                            value="withdrawal" required>
                                         <label class="form-check-label" for="withdrawal">Withdrawal</label>
                                     </div>
                                 </div>
-                                <center><button id='submitPersonalDetails' type='button' class='mt-4 submit-btn'>SAVE</button></center>
+                                <center><button id='submitPersonalDetails' type='submit' class='mt-4 submit-btn'>SAVE</button></center>
                             </fieldset>
                         </form>
                     </div>
@@ -131,10 +131,10 @@
                 <div class='details-box '>
                     <div class='details-heading text-center'>                            
                         <h4> BANK DETAILS </h4>  
-                        <sub>You can save only once</sub>                         
+                        <!-- <sub>You can save only once</sub>                          -->
                     </div>
                     <div class='details-info'>
-                        <form >
+                        <form onsubmit="submitBankForm(event)">
                             <fieldset id="bankDetails">
                                 <div class="form-row">
                                     <div class="col mt-3 mx-3">
@@ -153,26 +153,33 @@
                                     </div>
                                     <div class="col mt-3 mx-3">
                                         <label class="inp" for="bankAccountHolder">
-                                            <input placeholder="" id="bankAccountHolder" type="text" class='form-control'>
+                                            <input placeholder="" id="bankAccountHolder" type="text" class='form-control' required>
                                             <span class="label">Account holder name</span>
                                             <span class="focus-bg"></span>
                                         </label>
                                     </div>
                                     <div class="col mt-3 mx-3">
                                         <label class="inp" for="bankAccountNo">
-                                            <input placeholder="" id="bankAccountNo" type="text" class='form-control'>
+                                            <input placeholder="" id="bankAccountNo" type="text" class='form-control' required>
                                             <span class="label">Account number</span>
                                             <span class="focus-bg"></span>
                                         </label>
                                     </div>
                                     <div class="col mt-3 mx-3">
                                         <label class="inp" for="bankIfscCode">
-                                            <input placeholder="" id="bankIfscCode" type="text" class='form-control'>
+                                            <input placeholder="" id="bankIfscCode" type="text" class='form-control' required>
                                             <span class="label">IFSC Code</span>
                                             <span class="focus-bg"></span>
                                         </label>
                                     </div>
-                                    <center><button id='submitBankDetails' type='button' class='mt-4 submit-btn'>SAVE</button></center>
+                                    <div class="col mt-3 mx-3">
+                                        <label class="inp" for="cancelledCheque">
+                                            <input placeholder="" id="cancelledCheque" type="text" class='form-control' required>
+                                            <span class="label">Link for Cancelled Cheque</span>
+                                            <span class="focus-bg"></span>
+                                        </label>
+                                    </div>
+                                    <center><button id='submitBankDetails' type='submit'  class='mt-4 submit-btn'>SAVE</button></center>
                                 </div>
                             </fieldset>
                         </form>

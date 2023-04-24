@@ -6,7 +6,6 @@ const getProffName = require("../data/getProffName");
 const Admin = require("../models/admin");
 const fs = require("fs");
 const { google } = require("googleapis");
-const students_data = require("../data/students.json");
 const {
   CURRENT_URL,
   GOOGLE_SIGNIN_CLIENT_ID,
@@ -14,9 +13,12 @@ const {
   SUPER_ADMIN_EMAIL,
 } = require("../config/config");
 
-function getGender(email, students) {
+function getGender(email) {
+  let students = require("../data/students.json");
+  console.log(students);
   for (var i in students) {
     if (students[i][5] == email) {
+      console.log(students[i]);
       var gender = students[i][4];
       var department = students[i][3];
       var degree = students[i][0];
@@ -63,7 +65,7 @@ function getGender(email, students) {
       if (
         department == "Electronics and Communication Engineering" ||
         department == "Electronics & Communication Engineering" ||
-        department == "ECE"
+        department == "ECE" || department.substring(0,11)=="Electronics"
       ) {
         department = "ECE";
       }
@@ -84,7 +86,7 @@ function getGender(email, students) {
       if (
         department == "Computer Science and Social Sciences" ||
         department == "Computer Science and Social Sciences" ||
-        department == "CSSS"
+        department == "CSSS"|| department=="Information Technology and Social Sciences"
       ) {
         department = "SSH";
       }
@@ -97,6 +99,7 @@ function getGender(email, students) {
       if (degree == "PhD") {
         degree = "PhD";
       }
+      console.log([gender, department, degree, roll, name]);
       return [gender, department, degree, roll, name];
     }
   }
@@ -220,7 +223,7 @@ passport.use(
             }
             return done(null, user);
           } else {
-            var details = getGender(profile.emails[0].value, students_data);
+            var details = getGender(profile.emails[0].value);
             if (!details) {
               return done(null, false);
             }

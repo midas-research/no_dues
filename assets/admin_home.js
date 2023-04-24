@@ -216,7 +216,7 @@ function addNormalCode(student, msg) {
               <label>Message: </label>
               <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
               <label>Fine:  </label>
-              <input type="number" class="mt-2 form-control" placeholder="Fine..." >
+              <input type="number" min='0' class="mt-2 form-control" placeholder="Fine..." >
               <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event)" > Reject</button>
             </form>            
 
@@ -336,6 +336,10 @@ function sendMessage(e) {
   var fine = e.target.previousElementSibling.value;
   if(fine==null){
     fine=0;
+  }
+  else if(fine<0){
+    alert("Please enter a fine more than or equal to 0, if you want to give any.");
+    return;
   }
   var dues = e.target.previousElementSibling.previousElementSibling.previousElementSibling.value;
   

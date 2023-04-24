@@ -14,6 +14,7 @@ homebtn.addEventListener("click", () => {
 
 //Personal Details
 var submitPersonalDetails = document.getElementById("submitPersonalDetails");
+// var editPersonalDetails = document.getElementById("editPersonalDetails");
 var personalMobile,
   personalEmail,
   leavingDate,
@@ -21,8 +22,8 @@ var personalMobile,
   completed,
   withdrawal;
 
-
-submitPersonalDetails.onclick = function () {
+function submitPersonalForm(event) {
+  event.preventDefault();
   let personalDetails={};
   personalMobile = document.getElementById("personalMobile").value;
   personalEmail = document.getElementById("personalEmail").value;
@@ -44,14 +45,17 @@ submitPersonalDetails.onclick = function () {
   personalDetails.email = user[0]["email"];
 
   var request = new XMLHttpRequest();
-  request.open("GET", `${CURRENT_URL}/sendPersonalDetails/${JSON.stringify(
-    personalDetails
-  )}`,false);
-  request.send(null);
+  request.open("POST", `${CURRENT_URL}/sendPersonalDetails`, false);
+  request.setRequestHeader("Content-Type", "application/json");
+
+  request.onreadystatechange = function () {
+    if (request.readyState === 4 && request.status === 200) {
+      // console.log(request.responseText);
+    }
+  };
+  request.send(JSON.stringify(personalDetails));
 
   window.location.href = `${CURRENT_URL}/profile`;
-
-  
 
 };
 
@@ -76,24 +80,28 @@ function updatePersonalDetails(){
     personalMobile.value = user[0].mobile;
     personalEmail.value = user[0].other_email;  
     leavingDate.value = user[0].date_of_leaving;
-    submitPersonalDetails.style.display='none';
-    document.getElementById("personalDetails").disabled = true;
+    submitPersonalDetails.innerHTML='Save Changes';
+    
   }
+  
 }
-
 //Bank Details
 
 var submitBankDetails = document.getElementById(
   "submitBankDetails"
 );
+
 var bankName, bankBranch, bankAccountNo, bankIfscCode, bankAccountHolder;
 
-submitBankDetails.onclick = function () {
+function submitBankForm(event) {
+  event.preventDefault();
+
   bankName = document.getElementById("bankName").value;
   bankBranch = document.getElementById("bankBranch").value;
   bankAccountNo = document.getElementById("bankAccountNo").value;
   bankIfscCode = document.getElementById("bankIfscCode").value;
   bankAccountHolder = document.getElementById("bankAccountHolder").value;
+  cancelledCheque=document.getElementById("cancelledCheque").value;
   
   var bankDetails = {};
   bankDetails.bankName = bankName;
@@ -102,18 +110,24 @@ submitBankDetails.onclick = function () {
   bankDetails.bankIfscCode = bankIfscCode;
   bankDetails.bankAccountHolder = bankAccountHolder;
   bankDetails.email = user[0]["email"];
+  bankDetails.cancelledCheque=cancelledCheque;
   var request = new XMLHttpRequest();
+ 
   request.open(
-    "GET",
-    `${CURRENT_URL}/sendBankDetails/${JSON.stringify(bankDetails)}`,
-    false
-  );
-  request.send(null);
+    "POST",
+    `${CURRENT_URL}/sendBankDetails`,false );
+  request.setRequestHeader("Content-Type", "application/json");
+  
+  request.onreadystatechange = function() {
+    if (request.readyState === 4 && request.status === 200) {
+      // console.log(request.responseText);
+    }
+  };
+  request.send(JSON.stringify(bankDetails)); 
 
   window.location.href = `${CURRENT_URL}/profile`;
 
 };
-
 
 function updateBankDetails() {
 
@@ -122,6 +136,7 @@ function updateBankDetails() {
   bankAccountNo = document.getElementById("bankAccountNo").value;
   bankIfscCode = document.getElementById("bankIfscCode").value;
   bankAccountHolder = document.getElementById("bankAccountHolder").value;
+  cancelledCheque = document.getElementById("cancelledCheque").value;
   
   if (user[0].bankName != undefined) {
     document.getElementById("bankName").value = user[0].bankName;
@@ -129,11 +144,12 @@ function updateBankDetails() {
     document.getElementById("bankAccountNo").value = user[0].bankAccountNo;
     document.getElementById("bankIfscCode").value = user[0].bankIfscCode;
     document.getElementById("bankAccountHolder").value =user[0].bankAccountHolder;
-    submitBankDetails.style.display = "none";
-    document.getElementById("bankDetails").disabled=true;
+    document.getElementById("cancelledCheque").value=user[0].cancelledCheque;
+
+    submitBankDetails.innerHTML='Save Changes';
+    
   }
-
-
+ 
 };
 
 updateBankDetails();

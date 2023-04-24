@@ -9,28 +9,50 @@ var accordion = document.getElementsByClassName("accordion")[0];
 
 
 function adminsLeft(student) {
+  let check=0;
   for (var i in adminList) {
     if (!(student[adminList[i]] == true)) {
-      return false;
+      return check;
+    }
+    else{
+      check=2;
     }
   }
 
   for (var i in student["ipList"]) {
     if (!(student["ipList"][i] == true)) {
-      return false;
+      return check;
+    }
+    else{
+      check=2;
     }
   }
 
   for (var i in student["btpList"]) {
     if (!(student["btpList"][i] == true)) {
-      return false;
+      return check;
+    }
+    else{
+      check=2;
     }
   }
 
-  return true;
+  return 1;
 }
 
-function addAcceptCode(student, msg,k) {
+function generateTag(student){
+  let num=adminsLeft(student);
+  if(num==0){
+    return '<span class="tag tag-red">None Clear</span>';
+  }
+  else if(num==1){
+    return '<span class="tag tag-green">All Clear</span>';
+
+  }
+  return '<span class="tag tag-yellow">Some Clear</span>';
+}
+
+function addAcceptCode(student, msg) {
   return `
         <div class="accordion-item container">
           <button class="row accordion-heading" type="button" aria-expanded="false">
@@ -38,9 +60,14 @@ function addAcceptCode(student, msg,k) {
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             </div>
 
-            <div class="accordion-title col-8">${student.email} - ${
+            <div class="accordion-title col-6">${student.email} - ${
     student.roll
-  } - ${student.name} <span class="tag tag-tertiary">${k}</span></div>
+  } - ${student.name} 
+            </div>
+
+            <div class="col-2 text-center">
+            ${generateTag(student)}
+            </div>
 
             <!--Accept-->
             <div class="col-1 text-center"> 
@@ -67,6 +94,7 @@ function addAcceptCode(student, msg,k) {
               <span class="message">${msg}</span>
 
               <div class="admins-status">
+                ${addBankAndPersonalContent(student)}
                 ${addDonationContent(student)}
                 ${addFineContent(student)} 
                 ${addClearanceContent(student)} 
@@ -77,7 +105,6 @@ function addAcceptCode(student, msg,k) {
           </div>
         </div> `;
 }
-
 
 function addClearanceContent(student) {
   uncleared = `<hr>
@@ -158,6 +185,22 @@ function addDonationContent(student) {
   return content;
 }
 
+function addBankAndPersonalContent(student) {
+  let bank='Not Filled';
+  let personal='Not Filled';
+  if (student["bankAccountHolder"]){
+    bank='Filled';
+  }
+  if(student['reason_of_leaving']){
+    personal='Filled';
+  }
+  content = `<hr>
+          <p>Bank Details: ${bank} </p>
+          <p>Personal Details: ${personal}</p>  `;
+
+  return content;
+}
+
 function check(student, curr_status) {
   if (curr_status == "pending") {
     return student[superAdminName] == null;
@@ -175,9 +218,12 @@ function isTrue(student) {
   var curr_batch = document.getElementById("batch").value;
   var clearance = document.getElementById("clearance").value;
 
-  var k = "not cleared";
-  if (adminsLeft(student)) {
-    k = "cleared";
+  var k = "none";
+  if (adminsLeft(student)==1) {
+    k = "complete";
+  }
+  else if(adminsLeft(student)==2){
+    k= "some"
   }
 
   var checkDegree = curr_degree == student["degree"];
@@ -261,31 +307,28 @@ function clickFilter() {
       message = "You have not sent any message currently.";
     }
 
-    k = "Not Clear";
-
-    if (adminsLeft(currentList[i])) {
-      k = "All Clear";
-    }
-
+    
     if (check(currentList[i], curr_status) && curr_status == "accepted") {
-      accordion.innerHTML += addAcceptCode(currentList[i], message,k);
+      accordion.innerHTML += addAcceptCode(currentList[i], message);
     } 
     else if (check(currentList[i], curr_status)) {      
       
 
       accordion.innerHTML += `
         <div class="accordion-item container">
-          <button class="row accordion-heading" type="button" aria-expanded="false">
+          <button class="row accordion-heading align-items-center" type="button" aria-expanded="false">
 
             <div class="col-1 text-center">
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             </div>
 
-            <div class="accordion-title col-8">${currentList[i].email} - ${
+            <div class="accordion-title col-6">${currentList[i].email} - ${
         currentList[i].roll
-      } - ${
-        currentList[i].name
-      } <span class="tag tag-tertiary">${k}</span></div>
+      } - ${currentList[i].name} 
+            </div>
+            <div class="col-2 text-center">
+            ${generateTag(currentList[i])}
+            </div>
 
             <!--Accept-->
 
@@ -319,6 +362,7 @@ function clickFilter() {
               <span class="message">${message}</span>
 
               <div class="admins-status">
+                ${addBankAndPersonalContent(currentList[i])}
                 ${addDonationContent(currentList[i])}
                 ${addFineContent(currentList[i])} 
                 ${addClearanceContent(currentList[i])} 
@@ -387,7 +431,7 @@ function sendMessage(e) {
 
 //Functionality if request accepted
 function approved(e) {
-  var emailroll = e.parentElement.previousElementSibling.innerHTML;
+  var emailroll = e.parentElement.previousElementSibling.previousElementSibling.innerHTML;
   var email = emailroll.substring(0, emailroll.indexOf(" -"));
 
   var studentId;

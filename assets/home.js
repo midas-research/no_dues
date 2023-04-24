@@ -644,26 +644,27 @@ profilebtn.addEventListener("click", () => {
 
   var donationAdmin, donationAmount;
 
-  submitDonationDetails.onclick = function () {
+   function submitDonationForm(event) {
+    event.preventDefault();
     let donationDetails = {};
     donationAdmin = document.getElementById("donationAdmin").value;
     donationAmount = document.getElementById("donationAmount").value;
 
-    if(donationAmount<1 || donationAmount>10000){
-      return;
-    }
-
+    
     donationDetails.donationAdmin = donationAdmin;
     donationDetails.donationAmount = donationAmount;
     donationDetails.email = user[0]["email"];
 
     var request = new XMLHttpRequest();
-    request.open(
-      "GET",
-      `${CURRENT_URL}/sendDonationDetails/${JSON.stringify(donationDetails)}`,
-      false
-    );
-    request.send(null);
+    request.open("POST", `${CURRENT_URL}/sendDonationDetails`, false);
+    request.setRequestHeader("Content-Type", "application/json");
+
+    request.onreadystatechange = function () {
+      if (request.readyState === 4 && request.status === 200) {
+        // console.log(request.responseText);
+      }
+    };
+    request.send(JSON.stringify(donationDetails)); 
 
     window.location.href = `${CURRENT_URL}/`;
   };
@@ -675,8 +676,7 @@ profilebtn.addEventListener("click", () => {
     if (user[0].donationAdmin != 'None') {
       donationAdmin.value = user[0].donationAdmin;
       donationAmount.value = user[0].donationAmount;
-      submitDonationDetails.style.display = "none";
-      document.getElementById("donationDetails").disabled = true;
+      submitDonationDetails.innerHTML='Save Changes';
     }
   }
 

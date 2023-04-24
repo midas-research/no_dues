@@ -100,10 +100,10 @@
         <div class='details-box mt-3'>
           <div class='details-heading text-center'>            
             <h4> DONATION (IF ANY)</h4> 
-            <sub> You Can Save Only Once</sub>          
+            <!-- <sub> You Can Save Only Once</sub>           -->
           </div>
           <div class='details-info'>  
-            <form>
+            <form onsubmit="submitDonationForm(event)">
               <fieldset id="donationDetails">
                 <div class="form-row px-5">
                   <div class="col mt-3 mx-3">
@@ -129,7 +129,7 @@
                     </label>
                   </div>
                 </div>
-                <center><button id='submitDonationDetails' type='button' class='mt-4 submit-btn'>SAVE</button></center>
+                <center><button id='submitDonationDetails' type='submit' class='mt-4 submit-btn'>SAVE</button></center>
               </fieldset>
             </form> 
           </div>
