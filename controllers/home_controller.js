@@ -39,7 +39,7 @@ module.exports.superAdmin = (req, res) => {
 module.exports.superSendMessage = (req, res) => {
   var obj = JSON.parse(req.params.dues);
 
-  User.findOne({ email: obj[0].email }, (err, user) => {
+  User.findOne({ email: obj[0].email }, async (err, user) => {
     if (err) {
       console.log("Error in finding student from email id");
       return;
@@ -51,7 +51,7 @@ module.exports.superSendMessage = (req, res) => {
     user[attribute] = obj[0].message;
     user[obj[0].admin + "ApprovedAt"] = null;
 
-    user.save();
+    await user.save();
     super_message_mailer.newMessage(obj[0].message, obj[0].email);
     res.status = 200;
     return res.end();
@@ -60,12 +60,12 @@ module.exports.superSendMessage = (req, res) => {
 
 module.exports.superApproveDues = (req, res) => {
   var obj = JSON.parse(req.params.dues);
-  User.findOne({ email: obj[0].email }, (err, user) => {
+  User.findOne({ email: obj[0].email }, async(err, user) => {
     if (err) {
       console.log("Error in finding student from email id");
       return;
     }
-
+    
     var id = user._id;
     var updateObject = {};
     var today = new Date();
@@ -81,7 +81,7 @@ module.exports.superApproveDues = (req, res) => {
     user[obj[0].admin] = true;
     user[obj[0].admin + "ApprovedAt"] = dateTime;
     
-    user.save();    
+    await user.save();    
     super_approved_mailer.approvedDues(obj[0].email);
     res.status = 200;
     return res.end();
@@ -114,12 +114,12 @@ module.exports.superApproveManyDues = (req, res) => {
     User.findOneAndUpdate(
       { email: studentEmail },
       updateObject,
-      (err, user) => {
+      async (err, user) => {
         if (err) {
           console.log("Error in Approving many Dues by SuperAdmin");
           
         }
-        user.save();
+        await user.save();
         super_approved_mailer.approvedDues(studentEmail);
       }
     );
@@ -371,7 +371,7 @@ module.exports.adminHome = (req, res) => {
 module.exports.sendMessage = (req, res) => {
   var obj = JSON.parse(req.params.dues);
 
-  User.findOne({ email: obj[0].email }, (err, user) => {
+  User.findOne({ email: obj[0].email }, async(err, user) => {
    
     if (err) {
       console.log("Error in finding student from email id");
@@ -391,7 +391,7 @@ module.exports.sendMessage = (req, res) => {
     user["totalFine"] = Number(user.totalFine) - Number(user[fine]) + Number(obj[0].fine);
     user[fine] = Number(obj[0].fine);    
     user[obj[0].admin + "ApprovedAt"] = null;    
-    user.save();    
+    await user.save();    
     
     if (obj[0].admin == "academics") {
       obj[0].admin += user.degree[0];
@@ -411,7 +411,7 @@ module.exports.sendMessage = (req, res) => {
 module.exports.approveDues = (req, res) => {
   var obj = JSON.parse(req.params.dues);
 
-  User.findOne({ email: obj[0].email }, (err, user) => {
+  User.findOne({ email: obj[0].email }, async(err, user) => {
     if (err) {
       console.log("Error in finding student from email id");
       return;
@@ -433,7 +433,7 @@ module.exports.approveDues = (req, res) => {
     user['totalFine']=Number(user['totalFine'])-Number(user[obj[0].admin+'Fine']);
     user[obj[0].admin+'Fine']=0;
    
-    user.save();
+    await user.save();
     
     if (obj[0].admin == "academics") {
       obj[0].admin += user.degree[0];
@@ -468,14 +468,14 @@ module.exports.approveManyDues = (req, res) => {
     User.findOneAndUpdate(
       { email: studentEmail },
       updateObject,
-      (err, user) => {
+      async(err, user) => {
         if (err) {
           console.log("Error in Approving many Dues by Admin");
         }
 
         user['totalFine']=Number(user['totalFine'])-Number(user[adminName+'Fine']);
         user[adminName+'Fine']=0;
-        user.save();
+        await user.save();
         if (adminName == "academics") {
           approved_mailer.approvedDues(adminName+ user.degree[0], studentEmail);
         }
@@ -536,7 +536,7 @@ module.exports.approveEmailProf = (req, res) => {
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date + " " + time;
 
-  User.findOne({ email: studentEmail }, (err, user) => {
+  User.findOne({ email: studentEmail }, async(err, user) => {
     if (err) {
       console.log("Error in saving profEmail in approveManyProff: ", err);
       return;
@@ -551,7 +551,7 @@ module.exports.approveEmailProf = (req, res) => {
       ) {
         user[`${adminName}List`][idx][adminName] = true;
         user[`${adminName}List`][idx][adminName + "ApprovedAt"] = dateTime;
-        user.save();
+        await user.save();
 
         if (adminName == "btp") {
           btpApproved_mailer.btpApproved_mailer(
@@ -601,7 +601,7 @@ module.exports.sendMessageBtp = (req, res) => {
   var message = obj[0]["message"];
   var idx = obj[0]["idx"];
 
-  User.findOne({ email: studentEmail }, (err, user) => {
+  User.findOne({ email: studentEmail }, async(err, user) => {
     if (err) {
       console.log("Error in finding student in sendMessageBtp: ", err);
       return;
@@ -610,7 +610,7 @@ module.exports.sendMessageBtp = (req, res) => {
     user["btpList"][idx]["btp"] = false;
     user["btpList"][idx]["btpMessage"] = message;
 
-    user.save();
+    await user.save();
     sendBtpMessage_mailer.sendBtpMessage_mailer(
       message,
       studentEmail,
@@ -629,7 +629,7 @@ module.exports.sendMessageIp = (req, res) => {
   var message = obj[0]["message"];
   var idx = obj[0]["idx"];
 
-  User.findOne({ email: studentEmail }, (err, user) => {
+  User.findOne({ email: studentEmail }, async(err, user) => {
     if (err) {
       console.log("Error in finding student in sendMessageIp: ", err);
       return;
@@ -638,7 +638,7 @@ module.exports.sendMessageIp = (req, res) => {
     user["ipList"][idx]["ip"] = false;
     user["ipList"][idx]["ipMessage"] = message;
 
-    user.save();
+    await user.save();
     sendIpMessage_mailer.sendIpMessage_mailer(
       message,
       studentEmail,
@@ -661,7 +661,7 @@ module.exports.btpApproved = (req, res) => {
   var idx = obj["idx"];
   var studentEmail = obj["email"];
 
-  User.findOne({ email: studentEmail }, (err, user) => {
+  User.findOne({ email: studentEmail }, async(err, user) => {
     if (err) {
       console.log("Error in finding student in btpApproved: ", err);
       return;
@@ -671,7 +671,7 @@ module.exports.btpApproved = (req, res) => {
     user["btpList"][idx]["btpApprovedAt"] = dateTime;
     user["btpList"][idx]["profEmail"] = obj["profEmail"];
 
-    user.save();
+    await user.save();
     btpApproved_mailer.btpApproved_mailer(obj["profEmail"], obj["email"], idx);
     res.status = 200;
     return res.end();
@@ -689,7 +689,7 @@ module.exports.ipApproved = (req, res) => {
   var idx = obj["idx"];
   var studentEmail = obj["email"];
 
-  User.findOne({ email: studentEmail }, (err, user) => {
+  User.findOne({ email: studentEmail }, async (err, user) => {
     if (err) {
       console.log("Error in finding student in ipApproved: ", err);
       return;
@@ -699,7 +699,7 @@ module.exports.ipApproved = (req, res) => {
     user["ipList"][idx]["ipApprovedAt"] = dateTime;
     user["ipList"][idx]["profEmail"] = obj["profEmail"];
 
-    user.save();
+    await user.save();
     ipApproved_mailer.ipApproved_mailer(obj["profEmail"], obj["email"], idx);
     res.status = 200;
     return res.end();
@@ -724,7 +724,7 @@ module.exports.ipApprovedThroughMail = (req, res) => {
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date + " " + time;
 
-  User.findById(studentId, (err, user) => {
+  User.findById(studentId, async(err, user) => {
     if (err) {
       console.log("Error finding user in ipApprovedThroughMail: ", err);
       return res.redirect("/proff_home");
@@ -738,7 +738,7 @@ module.exports.ipApprovedThroughMail = (req, res) => {
     user["ipList"][idx]["ipApprovedAt"] = dateTime;
     user["ipList"][idx]["profEmail"] = profEmail;
 
-    user.save();
+    await user.save();
     ipApproved_mailer.ipApproved_mailer(profEmail, user.email, idx);
     return res.redirect("/ip/btp/success");
   });
@@ -756,7 +756,7 @@ module.exports.btpApprovedThroughMail = (req, res) => {
     today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   var dateTime = date + " " + time;
 
-  User.findById(studentId, (err, user) => {
+  User.findById(studentId, async(err, user) => {
     if (err) {
       console.log("Error finding user in btpApprovedThroughMail: ", err);
       return res.redirect("/proff_home");
@@ -770,7 +770,7 @@ module.exports.btpApprovedThroughMail = (req, res) => {
     user["btpList"][idx]["btpApprovedAt"] = dateTime;
     user["btpList"][idx]["profEmail"] = profEmail;
 
-    user.save();
+    await user.save();
     btpApproved_mailer.btpApproved_mailer(profEmail, user.email, idx);
     return res.redirect("/ip/btp/success");
   });
@@ -804,7 +804,7 @@ module.exports.home_profile = (req, res) => {
   });
 };
 
-module.exports.request = (req, res) => {
+module.exports.request = async(req, res) => {
   var obj = JSON.parse(req.params.obj)[0];
 
   var studentEmail = obj.studentEmail;
@@ -822,7 +822,7 @@ module.exports.request = (req, res) => {
   var dateTime = date + " " + time;
   updateObject[adminName + "AppliedAt"] = dateTime;
   updateObject["hostelTaken"] = hostelTaken;
-  User.findOneAndUpdate(
+  await User.findOneAndUpdate(
     { email: obj["studentEmail"] },
     updateObject,
     (err, user) => {
@@ -831,14 +831,16 @@ module.exports.request = (req, res) => {
         return;
       }
       user.save();
+      
     }
   );
   return res.redirect("/");
+  
 };
 
-module.exports.sendBtpRequest = (req, res) => {
+module.exports.sendBtpRequest = async (req, res) => {
   var obj = JSON.parse(req.params.obj);
-  User.findOne({ email: obj[0]["studentEmail"] }, (err, user) => {
+  await User.findOne({ email: obj[0]["studentEmail"] }, async(err, user) => {
     if (err) {
       console.log("Error in finding student in sendBtpRequest: ", err);
       return;
@@ -861,7 +863,7 @@ module.exports.sendBtpRequest = (req, res) => {
     updatedObject["projectName"] = obj[0]["projectName"];
     updatedObject["projectDescription"] = obj[0]["projectDescription"];
     user.btpList.push(updatedObject);
-    user.save();
+    await user.save();
     sendBtpRequest_mailer.sendBtpRequest(
       obj[0]["profEmail"],
       obj[0]["studentEmail"],
@@ -869,14 +871,15 @@ module.exports.sendBtpRequest = (req, res) => {
       obj[0]["projectDescription"],
       user.btpList.length - 1
     );
+    
   });
   return res.redirect("/");
 };
 
-module.exports.sendIpRequest = (req, res) => {
+module.exports.sendIpRequest = async(req, res) => {
   var obj = JSON.parse(req.params.obj); 
 
-  User.findOne({ email: obj[0]["studentEmail"] }, (err, user) => {
+  await User.findOne({ email: obj[0]["studentEmail"] }, async (err, user) => {
     if (err) {
       console.log("Error in finding student in sendBtpRequest: ", err);
       return;
@@ -899,7 +902,7 @@ module.exports.sendIpRequest = (req, res) => {
     updatedObject["projectName"] = obj[0]["projectName"];
     updatedObject["projectDescription"] = obj[0]["projectDescription"];
     user.ipList.push(updatedObject);
-    user.save();
+    await user.save();
     sendIpRequest_mailer.sendIpRequest(
       obj[0]["profEmail"],
       obj[0]["studentEmail"],
@@ -907,9 +910,11 @@ module.exports.sendIpRequest = (req, res) => {
       obj[0]["projectDescription"],
       user.ipList.length - 1
     );
+    
   });
-  
   return res.redirect("/");
+  
+  
 };
 
 function modifyAdminName(s) {
@@ -945,13 +950,15 @@ module.exports.download = async (req, res) => {
 };
 
 module.exports.sendBankDetails = (req, res) => {
-  var obj = JSON.parse(req.params.bankDetails);
+  
+  const obj=req.body;  
   var updateObject = {};
   updateObject.bankName = obj.bankName;
   updateObject.bankBranch = obj.bankBranch;
   updateObject.bankAccountNo = obj.bankAccountNo;
   updateObject.bankIfscCode = obj.bankIfscCode;
   updateObject.bankAccountHolder = obj.bankAccountHolder;
+  updateObject.cancelledCheque=obj.cancelledCheque;
   User.findOneAndUpdate({ email: obj["email"] }, updateObject, (err, user) => {
     if (err) {
       console.log("Error in finding student in sendBankDetails: ", err);
@@ -964,15 +971,13 @@ module.exports.sendBankDetails = (req, res) => {
   return res.end();
 };
 
-module.exports.sendDonationDetails = (req, res) => {
-  var obj = JSON.parse(req.params.donationDetails);
+module.exports.sendDonationDetails = async (req, res) => {
+  var obj = req.body;
   var updateObject = {};
   updateObject.donationAdmin = obj.donationAdmin;
   updateObject.donationAmount = obj.donationAmount;
-
-  console.log(obj);
  
-  User.findOneAndUpdate({ email: obj["email"] }, updateObject, (err, user) => {
+  await User.findOneAndUpdate({ email: obj["email"] }, updateObject, (err, user) => {
     if (err) {
       console.log("Error in finding student in sendDonationDetails: ", err);
       return;
@@ -984,14 +989,14 @@ module.exports.sendDonationDetails = (req, res) => {
   return res.end();
 };
 
-module.exports.sendPersonalDetails = (req, res) => {
-  var obj = JSON.parse(req.params.personalDetails);
+module.exports.sendPersonalDetails = async (req, res) => {
+  var obj = req.body;
   var updateObject = {};
   updateObject.mobile = obj.personalMobile;
   updateObject.other_email = obj.personalEmail;
   updateObject.date_of_leaving = obj.leavingDate;
   updateObject.reason_of_leaving = obj.leavingReason;
-  User.findOneAndUpdate({ email: obj["email"] }, updateObject, (err, user) => {
+  await User.findOneAndUpdate({ email: obj["email"] }, updateObject, (err, user) => {
     if (err) {
       console.log("Error in finding student in sendPersonalDetails: ", err);
       return;

@@ -48,7 +48,9 @@ function addAcceptCode(student, msg, curr_admin) {
               <input type="checkbox" class="tickbox" onclick="event.stopPropagation()">
             </div>
 
-            <div class="accordion-title col-8">${displayCustomText(student)}</div>
+            <div class="accordion-title col-8">${displayCustomText(
+              student
+            )}</div>
 
             <!--Accept-->
 
@@ -72,7 +74,7 @@ function addAcceptCode(student, msg, curr_admin) {
               <label>Message: </label>
               <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
               <label>Fine:  </label>
-              <input type="number" class="mt-2 form-control" placeholder="Fine..." >
+              <input type="number" min='0' class="mt-2 form-control" placeholder="Fine..." >
               <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event)" > Reject</button>
             </form>  
             <hr class="mt-2 mb-2">
@@ -216,7 +218,7 @@ function clickAdminFilter() {
                 <label>Message: </label>
                 <input class="mt-2 form-control message" type="text" placeholder="Send a message ...">
                 <label>Fine:  </label>
-                <input type="number" class="mt-2 form-control" placeholder="Fine..." >
+                <input type="number" min='0' class="mt-2 form-control" placeholder="Fine..." >
                 <button class="form-button btn btn-danger mt-3" type='button'  onclick="sendMessage(event,'${curr_admin}')" > Reject</button>
               </form>            
 
@@ -303,10 +305,17 @@ function approved(e) {
 function sendMessage(e) {
   var curr_admin = document.getElementById("admins").value;
   var fine = e.target.previousElementSibling.value;
+  
   var dues = e.target.previousElementSibling.previousElementSibling.previousElementSibling.value;
   
   if (dues == "") {
     alert("You need to give a message before rejecting!");
+    return;
+  }
+  if (fine == null) {
+    fine = 0;
+  } else if (fine < 0) {
+    alert("Please enter a fine more than or equal to 0, if you want to give any.");
     return;
   }
 

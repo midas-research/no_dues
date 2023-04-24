@@ -32,10 +32,10 @@
     width: 100%;
 }
 
-.navbar-custom-inner .navbar-nav .active::after{
+.navbar-custom-inner .navbar-nav .active2::after{
     width:100%;   
 }
-.navbar-custom-inner .navbar-nav .active{
+.navbar-custom-inner .navbar-nav .active2{
     color: #000000;
 }
 

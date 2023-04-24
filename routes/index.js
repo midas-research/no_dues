@@ -151,21 +151,52 @@ router.get(
   passport.checkUserAuthentication,
   homeController.sendIpRequest
 );
-router.get(
-  "/sendBankDetails/:bankDetails",
+router.post(
+  "/sendBankDetails",
   passport.checkAuthentication,
+  (req, res, next) => {
+    let data = '';
+    req.on('data', chunk => {
+      data += chunk;
+    });
+    req.on('end', () => {
+      req.body = JSON.parse(data);
+      next();
+    });
+  },
   homeController.sendBankDetails
 );
-router.get(
-  "/sendDonationDetails/:donationDetails",
+router.post(
+  "/sendPersonalDetails",
   passport.checkAuthentication,
-  homeController.sendDonationDetails
-);
-router.get(
-  "/sendPersonalDetails/:personalDetails",
-  passport.checkAuthentication,
+  (req, res, next) => {
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+    });
+    req.on("end", () => {
+      req.body = JSON.parse(data);
+      next();
+    });
+  },
   homeController.sendPersonalDetails
 );
+router.post(
+  "/sendDonationDetails",
+  passport.checkAuthentication,
+  (req, res, next) => {
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+    });
+    req.on("end", () => {
+      req.body = JSON.parse(data);
+      next();
+    });
+  },
+  homeController.sendDonationDetails
+);
+
 router.get("/download/:id", homeController.download);
 
 router.get(

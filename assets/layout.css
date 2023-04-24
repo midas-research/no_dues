@@ -170,6 +170,23 @@ footer a:hover{
     color: #60aca6;
 }
 
+.tag-green{
+    border: 1px solid #28b90b;
+    color:#28b90b;
+}
+
+.tag-red {
+    border: 1px solid #f11010;
+    color: #f11010;
+}
+
+.tag-yellow {
+    border: 1px solid #c0bd14;
+    color: #c0bd14;
+}
+
+
+
 
 
 

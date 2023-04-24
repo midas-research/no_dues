@@ -20,14 +20,13 @@ var updateAccess = document.getElementById("updateAccess");
 updateAccess.addEventListener("click", () => {
   document.getElementById("updateAccess").disabled=true;
   document.getElementById("sheetAccess").disabled=true;
-  var status = document.querySelectorAll(".active a")[0].getAttribute("id");
+  var status = document.querySelectorAll(".active2 a")[0].getAttribute("id");
   var request = new XMLHttpRequest();
   request.open("GET", `${CURRENT_URL}/super_admin/update${status}`, false);
   request.send();
   if (request.status === 200) {
     document.getElementById("updateAccess").disabled = false;
     document.getElementById("sheetAccess").disabled = false;
-    console.log('success');
     new Noty({
       theme: "metroui",
       text: "Changes Saved",
@@ -53,7 +52,7 @@ sheetAccess.addEventListener("click", () => {
 });
 
 function updateIframe(){
-  var status = document.querySelectorAll(".active a")[0].getAttribute("id");
+  var status = document.querySelectorAll(".active2 a")[0].getAttribute("id");
   var url=JSON.parse(document.getElementById(`${status}URL`).innerHTML);  
 
   iframe.setAttribute(
@@ -72,9 +71,10 @@ items.forEach((item) => item.addEventListener("click", ()=>{
         layout: "topRight",
         timeout: 1500,
       }).show();
-      var ele =document.getElementsByClassName("active")[0];
-      ele.classList.remove("active");
-      item.classList.add("active");
+      var ele =document.getElementsByClassName("active2")[0];
+      
+      ele.classList.remove("active2");
+      item.classList.add("active2");
       updateIframe();
     }
   )
