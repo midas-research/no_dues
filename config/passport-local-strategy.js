@@ -58,39 +58,7 @@ passport.deserializeUser((id, done) => {
       console.log("Error in finding user in passport");
       return done(err);
     }
-    let email=user.email;
-    
-    if (user.email == SUPER_ADMIN_EMAIL){
-      return done(null,user);
-    }
-    
-    if ((user.type == "Admin")) {
-      if (Admin.checkAdmin(user.email)) {
-        return done(null, user);
-      } else {
-        return done(null, false);
-      }
-    }
-    if(user.type=='proff'){
-      if(getProffName.isProff(user.email)){
-        return done(null,user);
-      }
-      else{
-        return done(null,false);
-      }
-    }
-    
- 
-    let students = require("../data/students.json");
-    for (var i in students) {
-      if (students[i][5] == email){
-       
-        return done(null, user);
-      }
-    }
-  
-
-    return done(null,false);
+    return done(null,user);   
   });
 });
 
