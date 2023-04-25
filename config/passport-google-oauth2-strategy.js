@@ -87,8 +87,11 @@ function getGender(email) {
       }
       if (
         department == "Computer Science and Social Sciences" ||
-        department == "Computer Science and Social Sciences" ||
-        department == "CSSS"|| department=="Information Technology and Social Sciences" || department=="SSH"
+        department == "Computer Science and Social Science" ||
+        department == "CSSS" ||
+        department == "Information Technology and Social Sciences" ||
+        department == "Information Technology and Social Science" ||
+        department == "SSH"
       ) {
         department = "SSH";
       }
@@ -101,7 +104,6 @@ function getGender(email) {
       if (degree == "PhD") {
         degree = "PhD";
       }
-      console.log([gender, department, degree, roll, name]);
       return [gender, department, degree, roll, name];
     }
   }
