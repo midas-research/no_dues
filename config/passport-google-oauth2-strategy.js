@@ -15,10 +15,8 @@ const {
 
 function getGender(email) {
   let students = require("../data/students.json");
-  console.log(students);
   for (var i in students) {
     if (students[i][5] == email) {
-      console.log(students[i]);
       var gender = students[i][4];
       var department = students[i][3];
       var degree = students[i][0];
