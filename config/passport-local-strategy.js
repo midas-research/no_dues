@@ -79,13 +79,16 @@ passport.deserializeUser((id, done) => {
         return done(null,false);
       }
     }
+    
  
     let students = require("../data/students.json");
     for (var i in students) {
       if (students[i][5] == email){
+       
         return done(null, user);
       }
     }
+  
 
     return done(null,false);
   });
