@@ -89,7 +89,7 @@ module.exports.createSession = (req, res) => {
 };
 
 module.exports.failedSignIn = (req, res) => {
-  req.flash("error", "Invalid Credentials");
+  req.flash("error", "Invalid SignIn");
   return res.redirect("/user/signin");
 };
 

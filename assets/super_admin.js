@@ -9,45 +9,78 @@ var accordion = document.getElementsByClassName("accordion")[0];
 
 
 function adminsLeft(student) {
-  let check=0;
+  var check=1;
   for (var i in adminList) {
     if (!(student[adminList[i]] == true)) {
-      return check;
+      if(check==2){
+        check=2;
+      }
+      else{
+        check=0;
+      }
     }
     else{
-      check=2;
+      if(check==0){
+        check=2;
+      }
+    }
+  }
+
+  if(student['ipList'].length==0){
+    if (check == 0) {
+      check = 2;
     }
   }
 
   for (var i in student["ipList"]) {
     if (!(student["ipList"][i] == true)) {
-      return check;
+      if (check == 2) {
+        check = 2;
+      }
+      else{
+        check=0;
+      }
     }
     else{
-      check=2;
+      if (check == 0) {
+        check = 2;
+      }
+    }
+  }
+
+  if (student["btpList"].length == 0) {
+    if (check == 0) {
+      check = 2;
     }
   }
 
   for (var i in student["btpList"]) {
     if (!(student["btpList"][i] == true)) {
-      return check;
+      if (check == 2) {
+        check = 2;
+      }
+      else{
+        check=0;
+      }
     }
     else{
-      check=2;
+      if (check == 0) {
+        check = 2;
+      }
     }
   }
 
-  return 1;
+  return check;
 }
 
 function generateTag(student){
   let num=adminsLeft(student);
+  
   if(num==0){
     return '<span class="tag tag-red">None Clear</span>';
   }
   else if(num==1){
     return '<span class="tag tag-green">All Clear</span>';
-
   }
   return '<span class="tag tag-yellow">Some Clear</span>';
 }
