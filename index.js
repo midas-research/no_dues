@@ -198,7 +198,7 @@ app.listen(port, async (err) => {
   students_data = data.data.values;
   fs.readFile("./data/students.json", (err, data) => {
     if (err) {
-      console.log("Error in writing to admins file: ", err);
+      console.log("Error in writing to studnts file: ", err);
       return;
     }
     if (data != JSON.stringify(students_data)) {
@@ -207,7 +207,7 @@ app.listen(port, async (err) => {
         JSON.stringify(students_data),
         (err) => {
           if (err) {
-            console.log("Error in writing to admins file: ", err);
+            console.log("Error in writing to students file: ", err);
             return;
           }
         }

@@ -39,7 +39,7 @@ updateAccess.addEventListener("click", () => {
 
 var sheetAccess = document.getElementById("sheetAccess");
 sheetAccess.addEventListener("click", () => {
-  var status = document.querySelectorAll(".active a")[0].getAttribute("id");
+  var status = document.querySelectorAll(".active2 a")[0].getAttribute("id");
   var url = JSON.parse(document.getElementById(`${status}URL`).innerHTML);
   new Noty({
     theme: "metroui",
