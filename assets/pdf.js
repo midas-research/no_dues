@@ -8,13 +8,25 @@ date.innerHTML =
   today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
 
 // Add Admin To Certificate
-let admins_list;
+let admins_list=[];
+let admins_temp=[];
 
 var request = new XMLHttpRequest();
 request.open("GET", `${CURRENT_URL}/user/getAdmins`, false);
 request.send(null);
 if (request.status === 200) {
-  admins_list = JSON.parse(request.responseText);
+  admins_temp = JSON.parse(request.responseText);
+
+  for (var i in admins_temp) {
+    if (i >= 11 && i <= 16) {
+      //skipping admin CSE, admin ECE etc.
+      continue;
+    }
+
+    admins_list.push(admins_temp[i]);
+  }
+  admins_list.push(`admin${user['department']}`);
+  
 }
 
 tabledata = document.getElementById("contentTable");

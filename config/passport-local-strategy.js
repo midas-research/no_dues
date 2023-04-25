@@ -67,8 +67,6 @@ passport.checkAuthentication = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  req.flash("error", "Invalid Access");
-
   return res.redirect("/user/signin");
 };
 
@@ -147,7 +145,20 @@ passport.setAuthenticatedUser = (req, res, next) => {
 };
 
 function adminsLeft(student) {
-  var admins_list = Admin.admins;
+  var admins_temp = Admin.admins;
+
+  admins_list = [];
+
+  for (var i in admins_temp) {
+    if (i >= 11 && i <= 16) {
+      //skipping admin CSE, admin ECE etc.
+      continue;
+    }
+
+    admins_list.push(admins_temp[i]);
+  }
+  admins_list.push(`admin${student.department}`);
+
 
   var check = true;
 
@@ -205,10 +216,9 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     "Batch",
     "Leaving Reason"
   ];  
-  
 
   for(var i in Admin.admins){
-    if(Admin.admins[i]=='academics'){
+    if(Admin.admins[i]=='academics' || (i>=11 && i<=16)){
       continue;
     }
     let name=Admin.getOriginalAdmin(Admin.admins[i]);
@@ -216,8 +226,11 @@ passport.checkSheetAuthentication = async (req, res, next) => {
     headings.push(name);
     headings.push(name+' Fine');
   }
+ 
   headings.push('Academics');
   headings.push('Academics Fine');
+  headings.push("Admin Department");
+  headings.push("Admin Department Fine");
 
   headings.push(
     "IP",
@@ -262,9 +275,14 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add2(temp, docs[i]["personalDetails"]);
 
       for (var j in Admin.admins){
+        if(j>=11 && j<=16){
+          continue;
+        }
         add(temp, docs[i][Admin.admins[j]]);
         add2(temp, docs[i][Admin.admins[j]+'Fine']);
       }
+      add(temp, docs[i][`admin${docs[i]['department']}`]);
+      add2(temp, docs[i][`admin${docs[i]['department']}`+ "Fine"]);
       
       var checkIp = true;
       for (var j in docs[i]["ipList"]) {

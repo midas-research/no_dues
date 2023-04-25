@@ -2,7 +2,7 @@
 
 .requests-list{
   overflow-y: auto;
-  min-height: 50vh;
+  min-height: 60vh;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
