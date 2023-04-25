@@ -42,13 +42,15 @@ function getGender(email) {
       if (
         department == "Computer Science and Applied Mathematics" ||
         department == "Computer Science & Applied Mathematics" ||
-        department == "CSAM"
+        department == "CSAM" ||
+        department == "Maths"
       ) {
-        department = "Mathematics";
+        department = "Maths";
       }
       if (
         department == "Computer Science and Engineering" ||
         department == "Computer Science & Engineering" ||
+        department == "CSE" ||
         department == "CSE"
       ) {
         department = "CSE";
@@ -56,7 +58,8 @@ function getGender(email) {
       if (
         department == "Computer Science and Design" ||
         department == "Computer Science & Design" ||
-        department == "CSD"
+        department == "CSD" ||
+        department == "HCD"
       ) {
         department = "HCD";
       }
@@ -70,21 +73,22 @@ function getGender(email) {
       if (
         department == "Computer Science and Biosciences" ||
         department == "Computer Science and Biosciences" ||
-        department == "CSB"
+        department == "CSB"||department=="CB"
       ) {
         department = "CB";
       }
       if (
         department == "Computer Science and Artificial Intelligence" ||
         department == "Computer Science and Artificial Intelligence" ||
-        department == "CSAI"
+        department == "CSAI" ||
+        department == "AI"
       ) {
         department = "CSE";
       }
       if (
         department == "Computer Science and Social Sciences" ||
         department == "Computer Science and Social Sciences" ||
-        department == "CSSS"|| department=="Information Technology and Social Sciences"
+        department == "CSSS"|| department=="Information Technology and Social Sciences" || department=="SSH"
       ) {
         department = "SSH";
       }

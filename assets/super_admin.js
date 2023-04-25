@@ -1,7 +1,8 @@
 const CURRENT_URL = JSON.parse(
   document.getElementById("CURRENT_URL").innerHTML
 );
-var adminList = JSON.parse(document.getElementById("adminList").innerHTML);
+var admins_temp = JSON.parse(document.getElementById("adminList").innerHTML);
+var adminList=[];
 var id = document.getElementById("id").innerHTML;
 var superAdminName = document.getElementById("adminName").innerHTML;
 
@@ -9,6 +10,18 @@ var accordion = document.getElementsByClassName("accordion")[0];
 
 
 function adminsLeft(student) {
+  adminList=[];
+
+  for (var i in admins_temp) {
+    if (i >= 11 && i <= 16) {
+      //skipping admin CSE, admin ECE etc.
+      continue;
+    }
+
+    adminList.push(admins_temp[i]);
+  }
+  adminList.push(`admin${student.department}`);
+
   var check=1;
   for (var i in adminList) {
     if (!(student[adminList[i]] == true)) {
@@ -147,6 +160,19 @@ function addClearanceContent(student) {
   <hr>
   <p><em>Cleared Status: </em></p> 
             <ul>`;
+
+  adminList=[];
+
+  for (var i in admins_temp) {
+    if (i >= 11 && i <= 16) {
+      //skipping admin CSE, admin ECE etc.
+      continue;
+    }
+
+    adminList.push(admins_temp[i]);
+  }
+  adminList.push(`admin${student.department}`);
+
   for (var i in adminList) {
     var j = student[adminList[i]];
     if (j == null) {
@@ -197,7 +223,17 @@ function addFineContent(student) {
             <p>Total Fine : ${student['totalFine']} </p>
             <ul>
             `;
-  
+  adminList = [];
+
+  for (var i in admins_temp) {
+     if (i >= 11 && i <= 16) {
+       //skipping admin CSE, admin ECE etc.
+       continue;
+     }
+
+     adminList.push(admins_temp[i]);
+  }
+  adminList.push(`admin${student.department}`);
   for (var i in adminList) {
     var j = student[adminList[i]+'Fine'];
     if (j == 0) {
