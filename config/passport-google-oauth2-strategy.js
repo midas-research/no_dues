@@ -47,7 +47,7 @@ function getGender(email) {
       ) {
         department = "Maths";
       }
-      if (
+      else if (
         department == "Computer Science and Engineering" ||
         department == "Computer Science & Engineering" ||
         department == "CSE" ||
@@ -55,7 +55,7 @@ function getGender(email) {
       ) {
         department = "CSE";
       }
-      if (
+      else if (
         department == "Computer Science and Design" ||
         department == "Computer Science & Design" ||
         department == "CSD" ||
@@ -63,21 +63,21 @@ function getGender(email) {
       ) {
         department = "HCD";
       }
-      if (
+      else if (
         department == "Electronics and Communication Engineering" ||
         department == "Electronics & Communication Engineering" ||
         department == "ECE" || department.substring(0,11)=="Electronics"
       ) {
         department = "ECE";
       }
-      if (
+      else if (
         department == "Computer Science and Biosciences" ||
         department == "Computer Science and Biosciences" ||
         department == "CSB"||department=="CB"
       ) {
         department = "CB";
       }
-      if (
+      else if (
         department == "Computer Science and Artificial Intelligence" ||
         department == "Computer Science and Artificial Intelligence" ||
         department == "CSAI" ||
@@ -85,7 +85,7 @@ function getGender(email) {
       ) {
         department = "CSE";
       }
-      if (
+      else if (
         department == "Computer Science and Social Sciences" ||
         department == "Computer Science and Social Science" ||
         department == "CSSS" ||
@@ -95,14 +95,20 @@ function getGender(email) {
       ) {
         department = "SSH";
       }
+      else{
+        return null;
+      }
       if (degree == "B.Tech" || degree == "B.Tech.") {
         degree = "B. Tech";
       }
-      if (degree == "M.Tech" || degree == "M.Tech.") {
+      else if (degree == "M.Tech" || degree == "M.Tech.") {
         degree = "M. Tech";
       }
-      if (degree == "PhD") {
+      else if (degree == "PhD") {
         degree = "PhD";
+      }
+      else{
+        return null;
       }
       return [gender, department, degree, roll, name];
     }
