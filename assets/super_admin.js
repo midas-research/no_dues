@@ -25,7 +25,7 @@ function adminsLeft(student) {
   var check=1;
   for (var i in adminList) {
     if (!(student[adminList[i]] == true)) {
-      if(check==2){
+      if(check!=0){
         check=2;
       }
       else{
@@ -47,7 +47,7 @@ function adminsLeft(student) {
 
   for (var i in student["ipList"]) {
     if (!(student["ipList"][i] == true)) {
-      if (check == 2) {
+      if (check != 0) {
         check = 2;
       }
       else{
@@ -69,7 +69,7 @@ function adminsLeft(student) {
 
   for (var i in student["btpList"]) {
     if (!(student["btpList"][i] == true)) {
-      if (check == 2) {
+      if (check != 0) {
         check = 2;
       }
       else{
