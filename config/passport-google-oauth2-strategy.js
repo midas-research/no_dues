@@ -228,14 +228,25 @@ passport.use(
             return;
           }
           if (user) {
-            if(user['type']){
-              return done(null,false);
+            if (user["type"]) {
+              return done(null, false);
             }
             return done(null, user);
           } else {
             var details = getGender(profile.emails[0].value);
+
             if (!details) {
               return done(null, false);
+            }
+            var degree = details[2];
+            var batchNum = 0;
+            if (degree == "B. Tech") {
+              batchNum = Number(details[3].substring(0, 4)) + 4;
+            } else if (degree == "M. Tech") {
+              batchNum = 2000 + Number(details[3].substring(2, 4)) + 2;
+            } else {
+              //Phd
+              batchNum = 2000 + Number(details[3].substring(3, 5));
             }
 
             User.create(
@@ -262,7 +273,7 @@ passport.use(
                 department: details[1],
                 degree: details[2],
                 roll: details[3],
-                batch: Number(details[3].substring(0, 4)) + 4,
+                batch: batchNum,
               },
               (err, user) => {
                 if (err) {
