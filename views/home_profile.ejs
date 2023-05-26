@@ -205,6 +205,17 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        <% if (flash.error && flash.error.length > 0) { %>
+                new Noty({
+                    theme: 'metroui',
+                    text: "<%= flash.error %>",
+                    type: 'error',
+                    layout: 'topRight',
+                    timeout: 1500
+                }).show();
+        <% } %>
+
         <% if (flash.success && flash.success.length > 0) { %>
                 new Noty({
                     theme: 'metroui',

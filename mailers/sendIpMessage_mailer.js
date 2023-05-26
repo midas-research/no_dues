@@ -18,7 +18,7 @@ exports.sendIpMessage_mailer = (message, email, admin, idx) => {
   var projectDescription;
 
   User.findOne({ email: email }, (err, user) => {
-    if (err) {
+    if (err || !user) {
       console.log("Error in ipSendMessage");
     }
     projectName = user["ipList"][idx]["projectName"];

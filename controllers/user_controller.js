@@ -114,7 +114,7 @@ module.exports.getProfessorName = (req, res) => {
 module.exports.getUser = async (req, res) => {
   var id = req.params.id;
   await User.findById(id, (err, user) => {
-    if (err) {
+    if (err || !user) {
       console.log("Error in finding user in getuser ", err);
       return;
     }

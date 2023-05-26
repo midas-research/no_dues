@@ -19,7 +19,7 @@ exports.sendBtpMessage_mailer = (message, email, admin, idx) => {
   var projectDescription;
 
   User.findOne({ email: email }, (err, user) => {
-    if (err) {
+    if (err || !user) {
       console.log("Error in sendBtpMessage");
     }
     projectName = user["btpList"][idx]["projectName"];
