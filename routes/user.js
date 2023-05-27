@@ -61,7 +61,7 @@ router.get(
   userController.getStudentsLoggedIn
 );
 router.all("*", function (req, res) {
-  req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+  req.flash("error", "Please Try Again or Later!");
   res.redirect("/");
 });
 
