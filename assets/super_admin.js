@@ -367,7 +367,6 @@ function clickFilter() {
   }
 
   accordion.innerHTML = "";
-
   for (var i in currentList) {
     var message;
     if (currentList[i][superAdminName + "Message"]) {
@@ -376,13 +375,9 @@ function clickFilter() {
       message = "You have not sent any message currently.";
     }
 
-    
     if (check(currentList[i], curr_status) && curr_status == "accepted") {
       accordion.innerHTML += addAcceptCode(currentList[i], message);
-    } 
-    else if (check(currentList[i], curr_status)) {      
-      
-
+    } else if (check(currentList[i], curr_status)) {
       accordion.innerHTML += `
         <div class="accordion-item container">
           <button class="row accordion-heading align-items-center" type="button" aria-expanded="false">
@@ -402,12 +397,12 @@ function clickFilter() {
             <!--Accept-->
 
             <div class="col-1 text-center"> 
-               <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;approved(this)" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
+              <i class="bi bi-check-circle" style="color:  #198754;" onclick="event.stopPropagation() ;approved(this)" data-toggle="tooltip" data-placement="bottom" title="Accept"></i>
             </div>
             
             <!--Reject-->
             <div class="col-1 text-center"> 
-               <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
+              <i class="bi bi-x-circle"  style="color:  #dc3545;" onclick="clickAlternate(event)" data-toggle="tooltip" data-placement="bottom" title="Reject"></i>
             </div>
             
             <div class="col-1 text-center">     
@@ -441,9 +436,9 @@ function clickFilter() {
             
           </div>
         </div> `;
-    }
+    }    
   }
-
+  
   const items = document.querySelectorAll(".accordion button");
 
   function toggleAccordion() {

@@ -60,9 +60,9 @@ router.get(
   passport.checkAuthentication,
   userController.getStudentsLoggedIn
 );
-
 router.all("*", function (req, res) {
-  res.status(404).send("Sorry! Couldn't find this URL");
+  req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+  res.redirect("/");
 });
 
 module.exports = router;
