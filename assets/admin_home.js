@@ -342,9 +342,9 @@ function sendMessage(e) {
     return;
   }
   var dues = e.target.previousElementSibling.previousElementSibling.previousElementSibling.value;
-  
-  if (dues == "") {
-    alert("You need to give a message before rejecting!");
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
+  if (dues == "" || !pattern.test(dues)) {
+    alert("You need to give a message before rejecting and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
   }
 

@@ -307,11 +307,13 @@ function sendMessage(e) {
   var fine = e.target.previousElementSibling.value;
   
   var dues = e.target.previousElementSibling.previousElementSibling.previousElementSibling.value;
-  
-  if (dues == "") {
-    alert("You need to give a message before rejecting!");
+
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
+  if (dues == "" || !pattern.test(dues)) {
+    alert("You need to give a message before rejecting and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
   }
+  
   if (fine == null) {
     fine = 0;
   } else if (fine < 0) {
@@ -518,12 +520,12 @@ for (var i in professorsList) {
 function sendMessageBtp(e, idx) {
   var profEmail = document.getElementById("profFilter").value;
   var dues = e.target.previousElementSibling.value;
-
-  if (dues == "") {
-    alert("You need to give a message before rejecting!");
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
+  if (dues == "" || !pattern.test(dues)) {
+    alert("You need to give a message before rejecting and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
   }
-  
+
   var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;
   var index = email.indexOf(" ");
   var obj = [];
@@ -549,11 +551,11 @@ function sendMessageBtp(e, idx) {
 function sendMessageIp(e, idx) {
   var profEmail = document.getElementById("profFilter").value;
   var dues = e.target.previousElementSibling.value;
-
-  if (dues == "") {
-    alert("You need to give a message before rejecting!");
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
+  if (dues == "" || !pattern.test(dues)) {
+    alert("You need to give a message before rejecting and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
-  }  
+  }
   var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;
   var index = email.indexOf(" ");
   var obj = [];
