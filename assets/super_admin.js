@@ -468,8 +468,9 @@ function applyStatus() {
 //Functionality if request rejected
 function sendMessage(e) {
   var dues = e.target.previousElementSibling.value;
-  if (dues == "") {
-    alert("You need to give a message before rejecting!");
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
+  if (dues == "" || !pattern.test(dues)) {
+    alert("You need to give a message before rejecting and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
   }
   var email = e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].innerHTML;

@@ -309,13 +309,22 @@ function sendBtpRequest(num) {
     alert("Kindly choose a professor!");
     return;
   }
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
 
-  if (projectName.value == "None" || projectName.value == "") {
-    alert("Kindly Enter Project Name!");
+
+  if (projectName.value == "None" || projectName.value == "" || !pattern.test(projectName.value) ){
+    alert("Kindly Enter Project Name and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
   }
-  if (projectDescription.value == "None" || projectDescription.value == "") {
-    alert("Kindly Enter Project Description!");
+  
+  if (
+    projectDescription.value == "None" ||
+    projectDescription.value == "" ||
+    !pattern.test(projectDescription.value)
+  ) {
+    alert(
+      "Kindly Enter Project Description and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!!"
+    );
     return;
   }
   var obj = [];
@@ -342,14 +351,25 @@ function sendIpRequest(num) {
     return;
   }
 
-  if (projectName.value == "None" || projectName.value == "") {
-    alert("Kindly Enter Project Name!");
+  const pattern = /^[a-zA-Z0-9.,-]+$/;
+
+
+  if (projectName.value == "None" || projectName.value == "" || !pattern.test(projectName.value) ){
+    alert("Kindly Enter Project Name and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
     return;
   }
-  if (projectDescription.value == "None" || projectDescription.value == "") {
-    alert("Kindly Enter Project Description!");
-    project;
+  
+  if (
+    projectDescription.value == "None" ||
+    projectDescription.value == "" ||
+    !pattern.test(projectDescription.value)
+  ) {
+    alert(
+      "Kindly Enter Project Description and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!!"
+    );
+    return;
   }
+  
   var obj = [];
   obj.push({
     admin: "ip",
