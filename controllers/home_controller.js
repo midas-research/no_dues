@@ -20,6 +20,7 @@ const axios = require("axios");
 const { CURRENT_URL, NODEMAILER_EMAIL_ID } = require("../config/config");
 const fs = require("fs");
 const { update } = require("../models/user");
+const { ConsoleMessage } = require("puppeteer");
 
 
 //Super Admin Operations
@@ -42,24 +43,32 @@ module.exports.superSendMessage = (req, res) => {
 
     User.findOne({ email: obj[0].email }, async (err, user) => {
       if (err) {
-        console.log("Error in finding student from email id");
-        return;
+        console.log(err);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
       }
-      if(!user){
-        console.log("User is not defined");
-        return;
-      }
-      var id = user._id;
-      var attribute = obj[0].admin + "Message";
       
-      user[obj[0].admin] = false;
-      user[attribute] = obj[0].message;
-      user[obj[0].admin + "ApprovedAt"] = null;
+      try{
+        var id = user._id;
+        var attribute = obj[0].admin + "Message";
+        
+        user[obj[0].admin] = false;
+        user[attribute] = obj[0].message;
+        user[obj[0].admin + "ApprovedAt"] = null;
 
-      await user.save();
-      super_message_mailer.newMessage(obj[0].message, obj[0].email);
-      res.status = 200;
-      return res.end();
+        await user.save();
+        super_message_mailer.newMessage(obj[0].message, obj[0].email);
+        res.status = 200;
+        return res.end();
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
+
+      }
     });
   }
   catch (err){
@@ -76,33 +85,39 @@ module.exports.superApproveDues = (req, res) => {
     var obj = JSON.parse(req.params.dues);
     User.findOne({ email: obj[0].email }, async (err, user) => {
       if (err) {
-        console.log("Error in finding student from email id");
-        return;
-      }
-      if (!user) {
-        console.log("User is not defined");
-        return;
+        console.log(err);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
+        
       }
 
-      var id = user._id;
-      var updateObject = {};
-      var today = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date + " " + time;
-      user[obj[0].admin] = true;
-      user[obj[0].admin + "ApprovedAt"] = dateTime;
+      try{
+        var id = user._id;
+        var updateObject = {};
+        var today = new Date();
+        var date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        var time =
+          today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date + " " + time;
+        user[obj[0].admin] = true;
+        user[obj[0].admin + "ApprovedAt"] = dateTime;
 
-      await user.save();
-      super_approved_mailer.approvedDues(obj[0].email);
-      res.status = 200;
-      return res.end();
+        await user.save();
+        super_approved_mailer.approvedDues(obj[0].email);
+        res.status = 200;
+        return res.end();
+      }catch (e) {
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
+      }
     });
   } catch (err) {
     console.log(err);
@@ -140,12 +155,14 @@ module.exports.superApproveManyDues = (req, res) => {
         { email: studentEmail },
         updateObject,
         async (err, user) => {
-          if (err) {
-            console.log("Error in Approving many Dues by SuperAdmin");
-            
+          if (err ||!user) {
+            console.log("Error in Approving many Dues by SuperAdmin");          
           }
-          await user.save();
-          super_approved_mailer.approvedDues(studentEmail);
+          else{
+            await user.save();
+            super_approved_mailer.approvedDues(studentEmail);
+          }
+          
         }
       );
     }
@@ -393,12 +410,12 @@ module.exports.superAdminDepartment = (req, res) => {
 module.exports.adminHome = (req, res) => {
   var studentList = [];
   User.find({}, (err, users) => {
-    if (err) {
+    if (err || !users) {
       console.log("Error in loading all the users");
       return;
     }
     for (var i in users) {
-      if (!users[i]["type"]) {
+      if (users[i] && !users[i]["type"]) {
         studentList.push(users[i]);
       }
     }
@@ -428,36 +445,39 @@ module.exports.sendMessage = (req, res) => {
         console.log("Error in finding student from email id");
         return;
       }
-      if(!user){
-        console.log("User is not defined");
-        return;
+      try{
+        var id = user._id;
 
+        var msg = obj[0].admin + "Message";
+        var fine = obj[0].admin + "Fine";
+
+        user[obj[0].admin] = false;
+        user[msg] = obj[0].message;
+        user["totalFine"] =
+          Number(user.totalFine) - Number(user[fine]) + Number(obj[0].fine);
+        user[fine] = Number(obj[0].fine);
+        user[obj[0].admin + "ApprovedAt"] = null;
+        await user.save();
+
+        if (obj[0].admin == "academics") {
+          obj[0].admin += user.degree[0];
+        }
+
+        if (user[fine] != 0) {
+          obj[0].message += `<br> Fine: Rs. ${user[fine]}`;
+        }
+
+        message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
+
+        res.status = 200;
+        return res.end();
       }
-      var id = user._id;
-
-      var msg = obj[0].admin + "Message";
-      var fine = obj[0].admin + "Fine";
-
-      user[obj[0].admin] = false;
-      user[msg] = obj[0].message;
-      user["totalFine"] =
-        Number(user.totalFine) - Number(user[fine]) + Number(obj[0].fine);
-      user[fine] = Number(obj[0].fine);
-      user[obj[0].admin + "ApprovedAt"] = null;
-      await user.save();
-
-      if (obj[0].admin == "academics") {
-        obj[0].admin += user.degree[0];
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
       }
-
-      if (user[fine] != 0) {
-        obj[0].message += `<br> Fine: Rs. ${user[fine]}`;
-      }
-
-      message_mailer.newMessage(obj[0].message, obj[0].email, obj[0].admin);
-
-      res.status = 200;
-      return res.end();
     });
   } catch (err) {
     console.log(err);
@@ -474,35 +494,46 @@ module.exports.approveDues = (req, res) => {
 
     User.findOne({ email: obj[0].email }, async (err, user) => {
       if (err) {
-        console.log("Error in finding student from email id");
+        console.log(err);
         return;
       }
-      var id = user._id;
-      var updateObject = {};
-      var today = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date + " " + time;
-      user[obj[0].admin] = true;
-      user[obj[0].admin + "ApprovedAt"] = dateTime;
-      user["totalFine"] =
-        Number(user["totalFine"]) - Number(user[obj[0].admin + "Fine"]);
-      user[obj[0].admin + "Fine"] = 0;
+      try {
+        var id = user._id;
+        var updateObject = {};
+        var today = new Date();
+        var date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        var time =
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds();
+        var dateTime = date + " " + time;
+        user[obj[0].admin] = true;
+        user[obj[0].admin + "ApprovedAt"] = dateTime;
+        user["totalFine"] =
+          Number(user["totalFine"]) - Number(user[obj[0].admin + "Fine"]);
+        user[obj[0].admin + "Fine"] = 0;
 
-      await user.save();
+        await user.save();
 
-      if (obj[0].admin == "academics") {
-        obj[0].admin += user.degree[0];
+        if (obj[0].admin == "academics") {
+          obj[0].admin += user.degree[0];
+        }
+        approved_mailer.approvedDues(obj[0].admin, obj[0].email);
+        res.status = 200;
+        return res.end();
+      } catch (e) {
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
       }
-      approved_mailer.approvedDues(obj[0].admin, obj[0].email);
-      res.status = 200;
-      return res.end();
     });
   } catch (err) {
     console.log(err);
@@ -541,21 +572,27 @@ module.exports.approveManyDues = (req, res) => {
         async (err, user) => {
           if (err) {
             console.log("Error in Approving many Dues by Admin");
+            console.log(err);
           }
-
-          user["totalFine"] =
-            Number(user["totalFine"]) - Number(user[adminName + "Fine"]);
-          user[adminName + "Fine"] = 0;
-          await user.save();
-          if (adminName == "academics") {
-            approved_mailer.approvedDues(
-              adminName + user.degree[0],
-              studentEmail
-            );
-          } else {
-            approved_mailer.approvedDues(adminName, studentEmail);
+          try{
+            user["totalFine"] =
+              Number(user["totalFine"]) - Number(user[adminName + "Fine"]);
+            user[adminName + "Fine"] = 0;
+            await user.save();
+            if (adminName == "academics") {
+              approved_mailer.approvedDues(
+                adminName + user.degree[0],
+                studentEmail
+              );
+            } else {
+              approved_mailer.approvedDues(adminName, studentEmail);
+            }
+          }
+          catch(e){
+            console.log(e);
           }
         }
+
       );
     }
     res.status = 200;
@@ -626,36 +663,43 @@ module.exports.approveEmailProf = (req, res) => {
         console.log("Error in saving profEmail in approveManyProff: ", err);
         return;
       }
+      try{
+        for (var idx in user[`${adminName}List`]) {
+          var ipObj = user[`${adminName}List`][idx];
 
-      for (var idx in user[`${adminName}List`]) {
-        var ipObj = user[`${adminName}List`][idx];
+          if (
+            ipObj[`projectName`] == projectName &&
+            ipObj[`profEmail`] == profEmail
+          ) {
+            user[`${adminName}List`][idx][adminName] = true;
+            user[`${adminName}List`][idx][adminName + "ApprovedAt"] = dateTime;
+            await user.save();
 
-        if (
-          ipObj[`projectName`] == projectName &&
-          ipObj[`profEmail`] == profEmail
-        ) {
-          user[`${adminName}List`][idx][adminName] = true;
-          user[`${adminName}List`][idx][adminName + "ApprovedAt"] = dateTime;
-          await user.save();
+            if (adminName == "btp") {
+              btpApproved_mailer.btpApproved_mailer(
+                obj["profEmail"],
+                obj["studentEmail"],
+                idx
+              );
+            }
+            if (adminName == "ip") {
+              ipApproved_mailer.ipApproved_mailer(
+                obj["profEmail"],
+                obj["studentEmail"],
+                idx
+              );
+            }
 
-          if (adminName == "btp") {
-            btpApproved_mailer.btpApproved_mailer(
-              obj["profEmail"],
-              obj["studentEmail"],
-              idx
-            );
+            res.status = 200;
+            res.end();
           }
-          if (adminName == "ip") {
-            ipApproved_mailer.ipApproved_mailer(
-              obj["profEmail"],
-              obj["studentEmail"],
-              idx
-            );
-          }
-
-          res.status = 200;
-          res.end();
         }
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
       }
     });
   } catch (err) {
@@ -693,19 +737,26 @@ module.exports.sendMessageBtp = (req, res) => {
         console.log("Error in finding student in sendMessageBtp: ", err);
         return;
       }
+      try{
+        user["btpList"][idx]["btp"] = false;
+        user["btpList"][idx]["btpMessage"] = message;
 
-      user["btpList"][idx]["btp"] = false;
-      user["btpList"][idx]["btpMessage"] = message;
-
-      await user.save();
-      sendBtpMessage_mailer.sendBtpMessage_mailer(
-        message,
-        studentEmail,
-        profEmail,
-        idx
-      );
-      res.status = 200;
-      return res.end();
+        await user.save();
+        sendBtpMessage_mailer.sendBtpMessage_mailer(
+          message,
+          studentEmail,
+          profEmail,
+          idx
+        );
+        res.status = 200;
+        return res.end();
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
+      }
     });
   } catch (err) {
     console.log(err);
@@ -729,19 +780,26 @@ module.exports.sendMessageIp = (req, res) => {
         console.log("Error in finding student in sendMessageIp: ", err);
         return;
       }
+      try{
+        user["ipList"][idx]["ip"] = false;
+        user["ipList"][idx]["ipMessage"] = message;
 
-      user["ipList"][idx]["ip"] = false;
-      user["ipList"][idx]["ipMessage"] = message;
-
-      await user.save();
-      sendIpMessage_mailer.sendIpMessage_mailer(
-        message,
-        studentEmail,
-        profEmail,
-        idx
-      );
-      res.status = 200;
-      return res.end();
+        await user.save();
+        sendIpMessage_mailer.sendIpMessage_mailer(
+          message,
+          studentEmail,
+          profEmail,
+          idx
+        );
+        res.status = 200;
+        return res.end();
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();        
+      }
     });
   } catch (err) {
     console.log(err);
@@ -774,19 +832,26 @@ module.exports.btpApproved = (req, res) => {
         console.log("Error in finding student in btpApproved: ", err);
         return;
       }
+      try{
+        user["btpList"][idx]["btp"] = true;
+        user["btpList"][idx]["btpApprovedAt"] = dateTime;
+        user["btpList"][idx]["profEmail"] = obj["profEmail"];
 
-      user["btpList"][idx]["btp"] = true;
-      user["btpList"][idx]["btpApprovedAt"] = dateTime;
-      user["btpList"][idx]["profEmail"] = obj["profEmail"];
-
-      await user.save();
-      btpApproved_mailer.btpApproved_mailer(
-        obj["profEmail"],
-        obj["email"],
-        idx
-      );
-      res.status = 200;
-      return res.end();
+        await user.save();
+        btpApproved_mailer.btpApproved_mailer(
+          obj["profEmail"],
+          obj["email"],
+          idx
+        );
+        res.status = 200;
+        return res.end();
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
+      }
     });
   } catch (err) {
     console.log(err);
@@ -794,8 +859,6 @@ module.exports.btpApproved = (req, res) => {
     res.status = 500;
     return res.end();
   }
-
-  
 };
 
 module.exports.ipApproved = (req, res) => {
@@ -819,15 +882,22 @@ module.exports.ipApproved = (req, res) => {
         console.log("Error in finding student in ipApproved: ", err);
         return;
       }
+      try{
+        user["ipList"][idx]["ip"] = true;
+        user["ipList"][idx]["ipApprovedAt"] = dateTime;
+        user["ipList"][idx]["profEmail"] = obj["profEmail"];
 
-      user["ipList"][idx]["ip"] = true;
-      user["ipList"][idx]["ipApprovedAt"] = dateTime;
-      user["ipList"][idx]["profEmail"] = obj["profEmail"];
-
-      await user.save();
-      ipApproved_mailer.ipApproved_mailer(obj["profEmail"], obj["email"], idx);
-      res.status = 200;
-      return res.end();
+        await user.save();
+        ipApproved_mailer.ipApproved_mailer(obj["profEmail"], obj["email"], idx);
+        res.status = 200;
+        return res.end();
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();        
+      }
     });
   } catch (err) {
     console.log(err);
@@ -841,6 +911,9 @@ module.exports.ipApproved = (req, res) => {
 
 module.exports.afterMailPage = (req, res) => {
   var status = req.params.status;
+  if(!status){
+    res.redirect("/");
+  }
 
   res.render("afterMailPage", { title: "No Dues",status: status, layout: "afterMailPage" });
 };
@@ -867,22 +940,27 @@ module.exports.ipApprovedThroughMail = (req, res) => {
         console.log("Error finding user in ipApprovedThroughMail: ", err);
         return res.redirect("/proff_home");
       }
-      var ipObj = user["ipList"][idx];
+      try{
+        var ipObj = user["ipList"][idx];
 
-      if (ipObj["ip"] != undefined) {
+        if (ipObj["ip"] != undefined) {
+          return res.redirect("/ip/btp/error");
+        }
+        user["ipList"][idx]["ip"] = true;
+        user["ipList"][idx]["ipApprovedAt"] = dateTime;
+        user["ipList"][idx]["profEmail"] = profEmail;
+
+        await user.save();
+        ipApproved_mailer.ipApproved_mailer(profEmail, user.email, idx);
+        return res.redirect("/ip/btp/success");
+      }
+      catch(e){
+        console.log(e);
         return res.redirect("/ip/btp/error");
       }
-      user["ipList"][idx]["ip"] = true;
-      user["ipList"][idx]["ipApprovedAt"] = dateTime;
-      user["ipList"][idx]["profEmail"] = profEmail;
-
-      await user.save();
-      ipApproved_mailer.ipApproved_mailer(profEmail, user.email, idx);
-      return res.redirect("/ip/btp/success");
     });
   } catch (err) {
-    console.log(err);
-    
+    console.log(err);    
     return res.redirect("/ip/btp/error");
   }
   
@@ -910,18 +988,24 @@ module.exports.btpApprovedThroughMail = (req, res) => {
         console.log("Error finding user in btpApprovedThroughMail: ", err);
         return res.redirect("/proff_home");
       }
-      var btpObj = user["btpList"][idx];
+      try{
+        var btpObj = user["btpList"][idx];
 
-      if (btpObj["btp"] != undefined) {
+        if (btpObj["btp"] != undefined) {
+          return res.redirect("/ip/btp/error");
+        }
+        user["btpList"][idx]["btp"] = true;
+        user["btpList"][idx]["btpApprovedAt"] = dateTime;
+        user["btpList"][idx]["profEmail"] = profEmail;
+
+        await user.save();
+        btpApproved_mailer.btpApproved_mailer(profEmail, user.email, idx);
+        return res.redirect("/ip/btp/success");
+      }
+      catch(e){
+        console.log(e);
         return res.redirect("/ip/btp/error");
       }
-      user["btpList"][idx]["btp"] = true;
-      user["btpList"][idx]["btpApprovedAt"] = dateTime;
-      user["btpList"][idx]["profEmail"] = profEmail;
-
-      await user.save();
-      btpApproved_mailer.btpApproved_mailer(profEmail, user.email, idx);
-      return res.redirect("/ip/btp/success");
     });
   } catch (err) {
     console.log(err);
@@ -988,7 +1072,11 @@ module.exports.request = async(req, res) => {
       (err, user) => {
         if (err) {
           console.log("Error in updating request status: ", err);
-          return;
+          return res.redirect("/");
+        }
+        if(!user){
+          console.log("User not defined");
+          return res.redirect("/");
         }
         user.save();
       }
@@ -1008,34 +1096,41 @@ module.exports.sendBtpRequest = async (req, res) => {
     await User.findOne({ email: obj[0]["studentEmail"] }, async (err, user) => {
       if (err) {
         console.log("Error in finding student in sendBtpRequest: ", err);
-        return;
+        return res.redirect("/");
       }
-      var id = user._id;
-      var today = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date + " " + time;
-      var updatedObject = {};
-      updatedObject["btpApplied"] = true;
-      updatedObject["btpAppliedAt"] = dateTime;
-      updatedObject["profEmail"] = obj[0]["profEmail"];
-      updatedObject["projectName"] = obj[0]["projectName"];
-      updatedObject["projectDescription"] = obj[0]["projectDescription"];
-      user.btpList.push(updatedObject);
-      await user.save();
-      sendBtpRequest_mailer.sendBtpRequest(
-        obj[0]["profEmail"],
-        obj[0]["studentEmail"],
-        obj[0]["projectName"],
-        obj[0]["projectDescription"],
-        user.btpList.length - 1
-      );
+      try{
+        var id = user._id;
+        var today = new Date();
+        var date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        var time =
+          today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date + " " + time;
+        var updatedObject = {};
+        updatedObject["btpApplied"] = true;
+        updatedObject["btpAppliedAt"] = dateTime;
+        updatedObject["profEmail"] = obj[0]["profEmail"];
+        updatedObject["projectName"] = obj[0]["projectName"];
+        updatedObject["projectDescription"] = obj[0]["projectDescription"];
+        user.btpList.push(updatedObject);
+        await user.save();
+        sendBtpRequest_mailer.sendBtpRequest(
+          obj[0]["profEmail"],
+          obj[0]["studentEmail"],
+          obj[0]["projectName"],
+          obj[0]["projectDescription"],
+          user.btpList.length - 1
+        );
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        return res.redirect("/");
+      }
     });
 
     return res.redirect("/");
@@ -1051,36 +1146,44 @@ module.exports.sendIpRequest = async(req, res) => {
     var obj = JSON.parse(req.params.obj);
 
     await User.findOne({ email: obj[0]["studentEmail"] }, async (err, user) => {
-      if (err) {
-        console.log("Error in finding student in sendBtpRequest: ", err);
-        return;
+      if (err ) {
+        console.log("Error in finding student in sendIpRequest: ", err);
+        return res.redirect("/");
       }
-      var id = user._id;
-      var today = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date + " " + time;
-      var updatedObject = {};
-      updatedObject["ipApplied"] = true;
-      updatedObject["ipAppliedAt"] = dateTime;
-      updatedObject["profEmail"] = obj[0]["profEmail"];
-      updatedObject["projectName"] = obj[0]["projectName"];
-      updatedObject["projectDescription"] = obj[0]["projectDescription"];
-      user.ipList.push(updatedObject);
-      await user.save();
-      sendIpRequest_mailer.sendIpRequest(
-        obj[0]["profEmail"],
-        obj[0]["studentEmail"],
-        obj[0]["projectName"],
-        obj[0]["projectDescription"],
-        user.ipList.length - 1
-      );
+      
+      try{
+        var id = user._id;
+        var today = new Date();
+        var date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        var time =
+          today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date + " " + time;
+        var updatedObject = {};
+        updatedObject["ipApplied"] = true;
+        updatedObject["ipAppliedAt"] = dateTime;
+        updatedObject["profEmail"] = obj[0]["profEmail"];
+        updatedObject["projectName"] = obj[0]["projectName"];
+        updatedObject["projectDescription"] = obj[0]["projectDescription"];
+        user.ipList.push(updatedObject);
+        await user.save();
+        sendIpRequest_mailer.sendIpRequest(
+          obj[0]["profEmail"],
+          obj[0]["studentEmail"],
+          obj[0]["projectName"],
+          obj[0]["projectDescription"],
+          user.ipList.length - 1
+        );
+      }
+      catch(e){
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        return res.redirect("/");
+      }
     });
     return res.redirect("/");
   } catch (err) {
@@ -1111,7 +1214,11 @@ module.exports.download = async (req, res) => {
     User.findOne({ _id: id }, (err, user) => {
       if (err) {
         console.log("Error in finding user in download: ", err);
-        return;
+        return res.redirect("/");
+      }
+      if(!user){
+        console.log("User is not defined");
+        return res.redirect("/");
       }
 
       return res.render("pdf", {
@@ -1148,6 +1255,10 @@ module.exports.sendBankDetails = (req, res) => {
           console.log("Error in finding student in sendBankDetails: ", err);
           return;
         }
+        if(!user){
+          console.log("user not defined");
+          return;
+        }
         user.save();
       }
     );
@@ -1173,8 +1284,12 @@ module.exports.sendDonationDetails = async (req, res) => {
       { email: obj["email"] },
       updateObject,
       (err, user) => {
-        if (err) {
+        if (err ) {
           console.log("Error in finding student in sendDonationDetails: ", err);
+          return;
+        }
+        if (!user) {
+          console.log("user not defined");
           return;
         }
         user.save();
@@ -1205,6 +1320,10 @@ module.exports.sendPersonalDetails = async (req, res) => {
       (err, user) => {
         if (err) {
           console.log("Error in finding student in sendPersonalDetails: ", err);
+          return;
+        }
+        if (!user) {
+          console.log("user not defined");
           return;
         }
         user.save();
