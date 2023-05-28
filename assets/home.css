@@ -85,6 +85,10 @@
   box-shadow: none;
 }
 
+.accordion input{
+  min-width: 40vw;
+}
+
 
 /* ADD IP / BTP buttons */
 

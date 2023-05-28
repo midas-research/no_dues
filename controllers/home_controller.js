@@ -564,7 +564,7 @@ module.exports.approveManyDues = (req, res) => {
       var time =
         today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       var dateTime = date + " " + time;
-      updateObject[adminName + "ApprovedAt"] = dateTime;
+      updateObject[adminName + "ApprovedAt"] = dateTime;      
 
       User.findOneAndUpdate(
         { email: studentEmail },

@@ -309,11 +309,10 @@ function sendBtpRequest(num) {
     alert("Kindly choose a professor!");
     return;
   }
-  const pattern = /^[a-zA-Z0-9.,-]+$/;
-
-
+  const pattern = /^[a-zA-Z0-9.,-\s]+$/;
+ 
   if (projectName.value == "None" || projectName.value == "" || !pattern.test(projectName.value) ){
-    alert("Kindly Enter Project Name and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
+    alert("Kindly Enter Project Name and use only Alphanumeric characters and either of [periods(.), commas(,), hypen(-)]");
     return;
   }
   
@@ -322,11 +321,10 @@ function sendBtpRequest(num) {
     projectDescription.value == "" ||
     !pattern.test(projectDescription.value)
   ) {
-    alert(
-      "Kindly Enter Project Description and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!!"
-    );
+    alert("Kindly Enter Project Description and use only Alphanumeric characters and either of [periods(.), commas(,), hypen(-)]");
     return;
   }
+  
   var obj = [];
   obj.push({
     admin: "btp",
@@ -351,11 +349,10 @@ function sendIpRequest(num) {
     return;
   }
 
-  const pattern = /^[a-zA-Z0-9.,-]+$/;
-
-
+  const pattern = /^[a-zA-Z0-9.,-\s]+$/;
+ 
   if (projectName.value == "None" || projectName.value == "" || !pattern.test(projectName.value) ){
-    alert("Kindly Enter Project Name and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!");
+    alert("Kindly Enter Project Name and use only Alphanumeric characters and either of [periods(.), commas(,), hypen(-)]");
     return;
   }
   
@@ -364,9 +361,7 @@ function sendIpRequest(num) {
     projectDescription.value == "" ||
     !pattern.test(projectDescription.value)
   ) {
-    alert(
-      "Kindly Enter Project Description and use only Alphabets(a-z, A-Z), digits(0-9), periods(.), hypen(-) and commas(,)!!"
-    );
+    alert("Kindly Enter Project Description and use only Alphanumeric characters and either of [periods(.), commas(,), hypen(-)]");
     return;
   }
   
@@ -415,7 +410,7 @@ function createIpRequest() {
             <br>
             
             <label for="projectDescription">Project Description:
-              <textarea class="form-control" id="ipProjectDescription${ipCount}" rows="3" cols="30" ></textarea>
+              <input type="text" class="form-control" id="ipProjectDescription${ipCount}" placeholder="Enter Project Description">
             </label> 
             <br>   
           </div>  
@@ -469,7 +464,7 @@ function createBtpRequest() {
           <br>
           
           <label for="projectDescription">Project Description:
-            <textarea class="form-control" id="btpProjectDescription${btpCount}" rows="3" cols="30" ></textarea>
+            <input class="form-control" id="btpProjectDescription${btpCount}" placeholder="Enter Project Description">
           </label>
           <br>  
         </div>
