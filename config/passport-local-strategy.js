@@ -283,15 +283,15 @@ passport.checkSheetAuthentication = async (req, res, next) => {
         }
         add(temp, docs[i][Admin.admins[j]]);
         add2(temp, docs[i][Admin.admins[j]+'Fine']);
-        add2(temp, docs[i][Admin.admins[j] + "AppliedAt"].split(" ")[0]);
+        add2(temp, docs[i][Admin.admins[j] + "AppliedAt"]);
       }
       add(temp, docs[i][`academics`]);
       add2(temp, docs[i]["academicsFine"]);
-      add2(temp, docs[i]["academicsAppliedAt"].split(" ")[0]);
+      add2(temp, docs[i]["academicsAppliedAt"]);
 
       add(temp, docs[i][`admin${docs[i]['department']}`]);
       add2(temp, docs[i][`admin${docs[i]['department']}`+ "Fine"]);
-      add2(temp, docs[i][`admin${docs[i]["department"]}` + "AppliedAt"].split(" ")[0]);
+      add2(temp, docs[i][`admin${docs[i]["department"]}` + "AppliedAt"]);
       
       var checkIp = true;
       for (var j in docs[i]["ipList"]) {
