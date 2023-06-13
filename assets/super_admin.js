@@ -13,7 +13,7 @@ function adminsLeft(student) {
   adminList=[];
 
   for (var i in admins_temp) {
-    if (i >= 11 && i <= 16) {
+    if(["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD"].includes(admins_temp[i])){
       //skipping admin CSE, admin ECE etc.
       continue;
     }
@@ -46,7 +46,7 @@ function adminsLeft(student) {
   }
 
   for (var i in student["ipList"]) {
-    if (!(student["ipList"][i] == true)) {
+    if (!(student["ipList"][i]['ip'] == true)) {
       if (check != 0) {
         check = 2;
       }
@@ -68,7 +68,7 @@ function adminsLeft(student) {
   }
 
   for (var i in student["btpList"]) {
-    if (!(student["btpList"][i] == true)) {
+    if (!(student["btpList"][i]['btp'] == true)) {
       if (check != 0) {
         check = 2;
       }
@@ -164,7 +164,7 @@ function addClearanceContent(student) {
   adminList=[];
 
   for (var i in admins_temp) {
-    if (i >= 11 && i <= 16) {
+    if(["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD"].includes(admins_temp[i])){
       //skipping admin CSE, admin ECE etc.
       continue;
     }
@@ -226,7 +226,7 @@ function addFineContent(student) {
   adminList = [];
 
   for (var i in admins_temp) {
-     if (i >= 11 && i <= 16) {
+     if(["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD"].includes(admins_temp[i])){
        //skipping admin CSE, admin ECE etc.
        continue;
      }
