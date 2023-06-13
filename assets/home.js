@@ -21,7 +21,7 @@ if (request.status === 200) {
   
   for(var i in admins_temp){
    
-    if(i>=11 && i<=16){
+    if(["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD"].includes(admins_temp[i])){
       //skipping admin CSE, admin ECE etc.
       continue;
     }

@@ -150,7 +150,7 @@ function adminsLeft(student) {
   admins_list = [];
 
   for (var i in admins_temp) {
-    if (i >= 11 && i <= 16) {
+    if(["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD"].includes(admins_temp[i])){
       //skipping admin CSE, admin ECE etc.
       continue;
     }
@@ -171,14 +171,14 @@ function adminsLeft(student) {
   }
 
   for (var j in student["ipList"]) {
-    if (!(student["ipList"][j] == true)) {
+    if (!(student["ipList"][j]['ip'] == true)) {
       check = false;
       break;
     }
   }
 
   for (var j in student["btpList"]) {
-    if (!(student["btpList"][j] == true)) {
+    if (!(student["btpList"][j]['btp'] == true)) {
       check = false;
       break;
     }
@@ -218,28 +218,31 @@ passport.checkSheetAuthentication = async (req, res, next) => {
   ];  
 
   for(var i in Admin.admins){
-    if(Admin.admins[i]=='academics' || (i>=11 && i<=16)){
+    if(Admin.admins[i]=='academics' || (["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD"].includes(Admin.admins[i]))){
       continue;
     }
     let name=Admin.getOriginalAdmin(Admin.admins[i]);
    
     headings.push(name);
     headings.push(name+' Fine');
+    headings.push(name + " Applying Date");
   }
  
   headings.push('Academics');
   headings.push('Academics Fine');
+  headings.push("Academics Applying Date");
   headings.push("Admin Department");
   headings.push("Admin Department Fine");
+  headings.push("Admin Department Applying Date");
 
   headings.push(
     "IP",
     "BTP",
     "Overall",
+    "NoDues Given",
     "Total Fine",
     "Donation Department",
     "Donation Amount",
-    "NoDues Given",
     "Bank Name",
     "Branch Name",
     "Account Holder Name",
@@ -275,18 +278,24 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add2(temp, docs[i]["personalDetails"]);
 
       for (var j in Admin.admins){
-        if(j>=11 && j<=16){
+        if(["adminECE","adminSSH","adminCSE","adminMaths","adminCB","adminHCD","academics"].includes(Admin.admins[j])){
           continue;
         }
         add(temp, docs[i][Admin.admins[j]]);
         add2(temp, docs[i][Admin.admins[j]+'Fine']);
+        add2(temp, docs[i][Admin.admins[j] + "AppliedAt"].split(" ")[0]);
       }
+      add(temp, docs[i][`academics`]);
+      add2(temp, docs[i]["academicsFine"]);
+      add2(temp, docs[i]["academicsAppliedAt"].split(" ")[0]);
+
       add(temp, docs[i][`admin${docs[i]['department']}`]);
       add2(temp, docs[i][`admin${docs[i]['department']}`+ "Fine"]);
+      add2(temp, docs[i][`admin${docs[i]["department"]}` + "AppliedAt"].split(" ")[0]);
       
       var checkIp = true;
       for (var j in docs[i]["ipList"]) {
-        if (!(docs[i]["ipList"][j] == true)) {
+        if (!(docs[i]["ipList"][j]['ip'] == true)) {
           checkIp = false;
           break;
         }
@@ -294,17 +303,17 @@ passport.checkSheetAuthentication = async (req, res, next) => {
       add(temp, checkIp);
       var checkBtp = true;
       for (var j in docs[i]["btpList"]) {
-        if (!(docs[i]["btpList"][j] == true)) {
+        if (!(docs[i]["btpList"][j]['btp'] == true)) {
           checkBtp = false;
           break;
         }
       }
       add(temp, checkBtp);
       add(temp, adminsLeft(docs[i]));
+      add(temp, docs[i]["nodues"]);
       add2(temp, docs[i]["totalFine"]);
       add2(temp, docs[i]["donationAdmin"]);
       add2(temp, docs[i]["donationAmount"]);
-      add(temp, docs[i]["nodues"]);
       add2(temp, docs[i]["bankName"]);
       add2(temp, docs[i]["bankBranch"]);
       add2(temp, docs[i]["bankAccountHolder"]);
