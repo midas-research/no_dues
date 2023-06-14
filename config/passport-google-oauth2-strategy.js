@@ -240,13 +240,22 @@ passport.use(
             }
             var degree = details[2];
             var batchNum = 0;
-            if (degree == "B. Tech") {
-              batchNum = Number(details[3].substring(0, 4)) + 4;
-            } else if (degree == "M. Tech") {
-              batchNum = 2000 + Number(details[3].substring(2, 4)) + 2;
-            } else {
-              //Phd
-              batchNum = 2000 + Number(details[3].substring(3, 5));
+            try{
+              
+              if (details[3].substring(0, 3) == "PhD") {
+                //Phd
+                batchNum = 2000 + Number(details[3].substring(3, 5));
+              } else if (details[3].substring(0, 2) == "MT") {
+                //MTech
+                batchNum = 2000 + Number(details[3].substring(2, 4)) + 2;
+              } else {
+                //Btech
+                batchNum = Number(details[3].substring(0, 4)) + 4;
+              }
+            }
+            catch(e){
+              console.log("Batch error",e);
+              return;
             }
 
             User.create(
