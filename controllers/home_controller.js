@@ -17,7 +17,7 @@ const admins = require("../data/admins");
 var XMLHttpRequest = require("xhr2");
 var xhr = new XMLHttpRequest();
 const axios = require("axios");
-const { CURRENT_URL, NODEMAILER_EMAIL_ID } = require("../config/config");
+const { CURRENT_URL, NODEMAILER_EMAIL_ID, STUDENT_EXCEL_URL, ADMIN_EXCEL_URL, PROFESSOR_EXCEL_URL, ADMIN_EXCEL_ID, STUDENT_EXCEL_ID, PROFESSOR_EXCEL_ID, BANK_EXCEL_URL, MAIN_EXCEL_URL } = require("../config/config");
 const fs = require("fs");
 const { update } = require("../models/user");
 const { ConsoleMessage } = require("puppeteer");
@@ -184,13 +184,13 @@ module.exports.updateAccess = (req, res) => {
     title: "Update Access",
     adminName: "nodues",
     studentURL: JSON.stringify(
-      "https://docs.google.com/spreadsheets/d/1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY/edit?usp=sharing"
+      STUDENT_EXCEL_URL
     ),
     adminURL: JSON.stringify(
-      "https://docs.google.com/spreadsheets/d/1hXUEUHWGt3TyrhvWPh25U8KlmutxcTVx2qfAdPHyCEY/edit?usp=sharing"
+      ADMIN_EXCEL_URL
     ),
     professorURL: JSON.stringify(
-      "https://docs.google.com/spreadsheets/d/1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM/edit?usp=sharing"
+      PROFESSOR_EXCEL_URL
     ),
     id: req.user._id,
     url: JSON.stringify(CURRENT_URL),
@@ -202,7 +202,7 @@ module.exports.updateAccess = (req, res) => {
 module.exports.updateAdmin=async (req,res)=>{
   try {
     var admins_data;
-    var spreadsheetId = "1hXUEUHWGt3TyrhvWPh25U8KlmutxcTVx2qfAdPHyCEY";
+    var spreadsheetId = ADMIN_EXCEL_ID;
     var auth = new google.auth.GoogleAuth({
       keyFile: "credentials.json",
       scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -250,7 +250,7 @@ module.exports.updateAdmin=async (req,res)=>{
 
 module.exports.updateStudent = async (req, res) => {
   try {
-    var spreadsheetId = "1NfsIc8CO7n4CvqkmtmGhoOQgL7lGKAmlbk3konSuCxY";
+    var spreadsheetId = STUDENT_EXCEL_ID;
     var auth = new google.auth.GoogleAuth({
       keyFile: "credentials.json",
       scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -300,7 +300,7 @@ module.exports.updateStudent = async (req, res) => {
 
 module.exports.updateProfessor = async (req, res) => {
   try {
-    var spreadsheetId = "1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM";
+    var spreadsheetId = PROFESSOR_EXCEL_ID;
     var auth = new google.auth.GoogleAuth({
       keyFile: "credentials.json",
       scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -1349,13 +1349,13 @@ module.exports.getFunction = (req, res) => {
 
 module.exports.sheet = (req, res) => {
   return res.redirect(
-    "https://docs.google.com/spreadsheets/d/1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk/edit?usp=sharing"
+    MAIN_EXCEL_URL
   );
 };
 
 module.exports.bankAccountDetails = (req, res) => {
   return res.redirect(
-    "https://docs.google.com/spreadsheets/d/1Fn5EplhqwEB5c0chYqhhWCal5Kzs7hT4zNFCwkAkZpE/edit?usp=sharing"
+    BANK_EXCEL_URL
   );
 };
 

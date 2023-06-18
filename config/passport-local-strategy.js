@@ -5,7 +5,7 @@ const Admin = require("../models/admin");
 const getProffName = require("../data/getProffName");
 
 const User = require("../models/user");
-const { EMAIL_ID, SUPER_ADMIN_EMAIL } = require("../config/config");
+const { EMAIL_ID, SUPER_ADMIN_EMAIL,MAIN_EXCEL_ID,BANK_EXCEL_ID } = require("../config/config");
 const { ADMIN_BLOCK, STUDENT_BLOCK } = require("../controllers/home_controller");
 const { head } = require("request-promise");
 
@@ -188,7 +188,7 @@ function adminsLeft(student) {
 }
 
 passport.checkSheetAuthentication = async (req, res, next) => {
-  const spreadsheetId = "1zRLMi10k1zxMyv2uygSUhcxSEJsova76t8fBXi3GiSk";
+  const spreadsheetId = MAIN_EXCEL_ID;
   const auth = new google.auth.GoogleAuth({
     keyFile: "credentials.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -338,7 +338,7 @@ passport.checkSheetAuthentication = async (req, res, next) => {
 
 passport.checkBankAuthentication = async (req, res, next) => {
   //Account Details
-  const spreadsheetId = "1Fn5EplhqwEB5c0chYqhhWCal5Kzs7hT4zNFCwkAkZpE";
+  const spreadsheetId = BANK_EXCEL_ID;
   const auth = new google.auth.GoogleAuth({
     keyFile: "credentials.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",
